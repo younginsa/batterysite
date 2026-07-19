@@ -54,16 +54,19 @@
   .navlinks a.active{color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
   .navcta{padding:9px 18px !important;border-radius:999px !important;background:var(--accent);color:var(--accent-ink) !important;font-weight:600}
   .navcta:hover{color:var(--accent-ink) !important}
+  .langtog{display:flex;gap:2px;border:1px solid var(--border);border-radius:999px;padding:3px;margin-left:6px}
+  .langtog button{border:none;background:transparent;color:var(--mute);font-size:11px;font-weight:700;padding:4px 9px;border-radius:999px;cursor:pointer;font-family:var(--data);letter-spacing:.04em}
+  .langtog button.on{background:var(--accent);color:var(--accent-ink)}
   @media(max-width:780px){.navlinks a{padding:8px 9px;font-size:12px}.navlinks a:not(.active):not(.navcta){display:none}.brand span:last-child{display:none}}
 
   /* ============ PAGE SHELL ============ */
   .page{display:none}.page.show{display:block}
   .wrap{max-width:1280px;margin:0 auto;padding:0 32px}
-  @media(max-width:760px){.wrap{padding:0 18px}}
+  @media(max-width:760px){.wrap{padding:0 28px}}
   .pagepad{padding-top:120px}
 
   /* ============ HERO ============ */
-  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:140px 0 80px;position:relative}
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:140px;padding-bottom:80px;position:relative}
   .eyebrow{font-family:var(--data);font-size:13px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;margin-bottom:24px}
   .hero .eyebrow,.hero h1,.hero p.lead,.hero .herocta{position:relative;z-index:2}
   .hero h1{font-family:var(--display);font-weight:700;font-size:clamp(40px,7vw,82px);line-height:1.02;letter-spacing:-.03em;margin-bottom:28px;max-width:760px;overflow-wrap:break-word;word-break:break-word;hyphens:auto}
@@ -85,7 +88,7 @@
 
 
   /* ============ SECTIONS ============ */
-  section.block{padding:90px 0}
+  section.block{padding-top:90px;padding-bottom:90px}
   .sec-label{font-family:var(--data);font-size:13px;color:var(--mute);letter-spacing:.16em;text-transform:uppercase;margin-bottom:14px}
   .sec-title{font-family:var(--display);font-weight:600;font-size:clamp(28px,4vw,44px);letter-spacing:-.02em;margin-bottom:18px;max-width:680px;overflow-wrap:break-word;word-break:break-word}
   .sec-sub{color:var(--mute);max-width:600px;font-size:17px;margin-bottom:48px}
@@ -250,10 +253,12 @@
   .duedate{display:inline-flex;align-items:center;gap:8px;font-family:var(--data);font-size:12px;color:var(--accent2);border:1px solid var(--border);padding:6px 14px;border-radius:999px;margin-bottom:18px}
 
   /* ============ CONTACT/FOOTER ============ */
-  .contact{text-align:center;padding:100px 0}
+  .contact{text-align:center;padding-top:100px;padding-bottom:100px}
   .contact h2{font-family:var(--display);font-size:clamp(30px,5vw,52px);font-weight:700;letter-spacing:-.02em;margin-bottom:20px;overflow-wrap:break-word;word-break:break-word}
   .contact p{color:var(--mute);max-width:480px;margin:0 auto 32px}
   footer{border-top:1px solid var(--border);padding:32px;text-align:center;color:var(--mute);font-size:13px;font-family:var(--data)}
+  html[lang="ko"] .hero h1,html[lang="ko"] .sec-title,html[lang="ko"] .contact h2{word-break:keep-all}
+  html[lang="ko"] body{word-break:keep-all}
   .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
   .reveal.show{opacity:1;transform:none}
   @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
@@ -276,6 +281,7 @@
     <a data-go="library">Cell Library</a>
     <a data-go="compare">Compare</a>
     <a data-go="contact" class="navcta">Enter the Lab</a>
+    <div class="langtog"><button data-lang="en" class="on">EN</button><button data-lang="ko">KO</button></div>
   </div>
 </nav>
 
@@ -547,6 +553,9 @@ const CELLS=[
  {manufacturer:"CATL",model:"L73 (LFP)",formFactor:"Prismatic",cellType:"LFP",country:"China",year:"2023",nominalVoltage:3.22,maxVoltage:3.65,minVoltage:2.5,energy:512,capacity:160,gDen:160,vDen:380,gPow:500,vPow:1200,chgA:160,chgC:1,maxDischargeA:480,disC:3,minChgT:0,maxChgT:55,minDisT:-30,maxDisT:60,mass:3200,vol:1350,height:173,diameter:0,pos:"LFP",neg:"Graphite",status:"coming",chem:"LFP"},
  {manufacturer:"Toshiba",model:"SCiB 23Ah (LTO)",formFactor:"Prismatic",cellType:"LTO",country:"Japan",year:"2021",nominalVoltage:2.40,maxVoltage:2.7,minVoltage:1.5,energy:55.2,capacity:23,gDen:96,vDen:200,gPow:3000,vPow:6200,chgA:115,chgC:5,maxDischargeA:230,disC:10,minChgT:-30,maxChgT:55,minDisT:-30,maxDisT:60,mass:550,vol:276,height:116,diameter:0,pos:"NMC",neg:"LTO",status:"coming",chem:"LTO"},
 ];
+let lang=(navigator.language||'').toLowerCase().startsWith('ko')?'ko':'en';
+let pipeIdx=0;
+const BDG={ready:{en:'Ready',ko:'제공 중'},premium:{en:'Premium',ko:'프리미엄'},coming:{en:'Coming Soon',ko:'준비 중'}};
 function cellSVG(){
   const a=getComputedStyle(document.body).getPropertyValue('--accent').trim()||'#c6ff4a';
   const a2=getComputedStyle(document.body).getPropertyValue('--accent2').trim()||'#4ad6ff';
@@ -595,10 +604,10 @@ function renderTable(){
   let rows=CELLS.map((c,i)=>({c,i})).filter(({c})=>(c.manufacturer+" "+c.model+" "+c.formFactor).toLowerCase().includes(query.toLowerCase()));
   if(sortKey)rows.sort((a,b)=>{let x=a.c[sortKey],y=b.c[sortKey];return typeof x==='string'?x.localeCompare(y)*sortDir:(x-y)*sortDir;});
   tbody.innerHTML=rows.map(({c,i})=>{
-    const badge=c.status==='ready'?'<span class="badge ready">Ready</span>':c.status==='premium'?'<span class="badge premium">Premium</span>':'<span class="badge coming">Coming Soon</span>';
+    const badge='<span class="badge '+c.status+'">'+BDG[c.status][lang]+'</span>';
     return `<tr data-i="${i}"><td class="mfr">${c.manufacturer}</td><td class="model">${c.model}</td><td>${c.formFactor}</td><td class="num">${c.nominalVoltage.toFixed(2)}</td><td class="num">${c.energy}</td><td class="num">${c.capacity.toFixed(2)}</td><td class="num">${c.maxDischargeA}</td><td>${badge}</td><td><div class="acts"><span title="Favorite">☆</span><span title="Add to compare" data-cmp="${i}">＋</span></div></td></tr>`;
   }).join('');
-  rowcount.textContent=`${rows.length} cells`;
+  rowcount.textContent=lang==='ko'?`${rows.length}개 셀`:`${rows.length} cells`;
   tbody.querySelectorAll('tr').forEach(tr=>tr.onclick=e=>{
     if(e.target.dataset.cmp!==undefined){toggleCompare(+e.target.dataset.cmp);e.stopPropagation();e.target.style.color='var(--accent)';setTimeout(()=>e.target.style.color='',600);return;}
     openDetail(+tr.dataset.i);
@@ -616,7 +625,7 @@ function openDetail(i){
   document.getElementById('lib-detail').style.display='block';window.scrollTo(0,0);
   $('d-pic').innerHTML=cellSVG();
   $('d-model').textContent=c.model;$('d-mfr').textContent=c.manufacturer;
-  const st=$('d-status');st.className='badge '+c.status;st.textContent=c.status==='ready'?'Ready':c.status==='premium'?'Premium Cell':'Coming Soon';
+  const st=$('d-status');st.className='badge '+c.status;st.textContent=c.status==='premium'?(lang==='ko'?'프리미엄 셀':'Premium Cell'):BDG[c.status][lang];
   $('o-mfr').textContent=c.manufacturer;$('o-model').textContent=c.model;$('o-type').textContent=c.cellType;$('o-form').textContent=c.formFactor;$('o-country').textContent=c.country;$('o-year').textContent=c.year;
   $('t-minc').textContent=c.minChgT+' °C';$('t-maxc').textContent=c.maxChgT+' °C';$('t-mind').textContent=c.minDisT+' °C';$('t-maxd').textContent=c.maxDisT+' °C';
   $('m-mass').textContent=c.mass+' g';$('m-vol').textContent=c.vol+' cm³';$('m-h').textContent=c.height+' mm';$('m-d').textContent=c.diameter?c.diameter+' mm':'—';
@@ -681,10 +690,10 @@ function hexRGB(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(x=>x+x)
 function mix(a,b,k){return [a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k,a[2]+(b[2]-a[2])*k];}
 const run=$('run'),runlog=$('runlog');
 run.onclick=()=>{
-  run.disabled=true;run.textContent='⟳ Running…';
+  run.disabled=true;run.textContent=lang==='ko'?'⟳ 해석 중…':'⟳ Running…';
   const steps=['→ POST /api/solve','→ queued job #'+(Math.random()*9000+1000|0),'→ solver: '+chem+' model','→ writing results…'];
   let i=0;runlog.textContent='';
-  const iv=setInterval(()=>{runlog.textContent=steps[i]||runlog.textContent;if(++i>=steps.length){clearInterval(iv);lastResult=compute();draw();$('mEnergy').textContent=lastResult.energy+' kWh';$('mTime').textContent=lastResult.runtime+' min';$('mPeak').textContent=lastResult.peak+' °C';runlog.textContent='✓ done — result rendered ('+lastResult.energy+' kWh)';run.disabled=false;run.textContent='▶ Run analysis';}},340);
+  const iv=setInterval(()=>{runlog.textContent=steps[i]||runlog.textContent;if(++i>=steps.length){clearInterval(iv);lastResult=compute();draw();$('mEnergy').textContent=lastResult.energy+' kWh';$('mTime').textContent=lastResult.runtime+' min';$('mPeak').textContent=lastResult.peak+' °C';runlog.textContent='✓ done — result rendered ('+lastResult.energy+' kWh)';run.disabled=false;run.textContent=lang==='ko'?'▶ 해석 실행':'▶ Run analysis';}},340);
 };
 lastResult=compute();draw();$('mEnergy').textContent=lastResult.energy+' kWh';$('mTime').textContent=lastResult.runtime+' min';$('mPeak').textContent=lastResult.peak+' °C';
 
@@ -693,20 +702,20 @@ let cmpSel=[];
 function toggleCompare(i){if(cmpSel.includes(i))cmpSel=cmpSel.filter(x=>x!==i);else{if(cmpSel.length>=4)cmpSel.shift();cmpSel.push(i);}renderCompare();}
 function renderCompare(){
   const pick=document.getElementById('cmp-pick');
-  pick.innerHTML='<span class="lbl">SELECT CELLS:</span>'+CELLS.map((c,i)=>`<span class="chip ${cmpSel.includes(i)?'on':''}" data-ci="${i}">${c.model}</span>`).join('');
+  pick.innerHTML='<span class="lbl">'+(lang==='ko'?'셀 선택:':'SELECT CELLS:')+'</span>'+CELLS.map((c,i)=>`<span class="chip ${cmpSel.includes(i)?'on':''}" data-ci="${i}">${c.model}</span>`).join('');
   pick.querySelectorAll('.chip').forEach(ch=>ch.onclick=()=>toggleCompare(+ch.dataset.ci));
   const out=document.getElementById('cmp-out');
-  if(cmpSel.length===0){out.innerHTML='<div class="cmp-table"><div class="cmp-empty">Pick cells above to compare them side by side.</div></div>';return;}
+  if(cmpSel.length===0){out.innerHTML='<div class="cmp-table"><div class="cmp-empty">'+(lang==='ko'?'위에서 셀을 선택하면 나란히 비교됩니다.':'Pick cells above to compare them side by side.')+'</div></div>';return;}
   const sel=cmpSel.map(i=>CELLS[i]);
   const rows=[
-    {label:'Nominal Voltage',key:'nominalVoltage',unit:' V',hi:false,fmt:v=>v.toFixed(2)},
-    {label:'Energy',key:'energy',unit:' Wh',hi:true},{label:'Capacity',key:'capacity',unit:' Ah',hi:true},
-    {label:'Grav. Energy Density',key:'gDen',unit:' Wh/kg',hi:true},{label:'Vol. Energy Density',key:'vDen',unit:' Wh/L',hi:true},
-    {label:'Grav. Power Density',key:'gPow',unit:' W/kg',hi:true},{label:'Max Discharge',key:'maxDischargeA',unit:' A',hi:true},
-    {label:'Max Discharge (C)',key:'disC',unit:' C',hi:true},{label:'Mass',key:'mass',unit:' g',hi:false,low:true},{label:'Max Charge Temp',key:'maxChgT',unit:' °C',hi:true},
+    {label:{en:'Nominal Voltage',ko:'공칭 전압'},key:'nominalVoltage',unit:' V',hi:false,fmt:v=>v.toFixed(2)},
+    {label:{en:'Energy',ko:'에너지'},key:'energy',unit:' Wh',hi:true},{label:{en:'Capacity',ko:'용량'},key:'capacity',unit:' Ah',hi:true},
+    {label:{en:'Grav. Energy Density',ko:'중량 에너지 밀도'},key:'gDen',unit:' Wh/kg',hi:true},{label:{en:'Vol. Energy Density',ko:'부피 에너지 밀도'},key:'vDen',unit:' Wh/L',hi:true},
+    {label:{en:'Grav. Power Density',ko:'중량 출력 밀도'},key:'gPow',unit:' W/kg',hi:true},{label:{en:'Max Discharge',ko:'최대 방전'},key:'maxDischargeA',unit:' A',hi:true},
+    {label:{en:'Max Discharge (C)',ko:'최대 방전 (C)'},key:'disC',unit:' C',hi:true},{label:{en:'Mass',ko:'질량'},key:'mass',unit:' g',hi:false,low:true},{label:{en:'Max Charge Temp',ko:'최고 충전 온도'},key:'maxChgT',unit:' °C',hi:true},
   ];
-  let html='<div class="cmp-table"><table><thead><tr><th>Spec</th>'+sel.map(c=>`<th>${c.model}<small>${c.manufacturer}</small></th>`).join('')+'</tr></thead><tbody>';
-  rows.forEach(r=>{const vals=sel.map(c=>c[r.key]);let bestIdx=-1;if(r.hi)bestIdx=vals.indexOf(Math.max(...vals));else if(r.low)bestIdx=vals.indexOf(Math.min(...vals));html+=`<tr><td>${r.label}</td>`+sel.map((c,k)=>{const v=r.fmt?r.fmt(c[r.key]):c[r.key];return `<td class="${k===bestIdx?'best':''}">${v}${r.unit}</td>`;}).join('')+'</tr>';});
+  let html='<div class="cmp-table"><table><thead><tr><th>'+(lang==='ko'?'사양':'Spec')+'</th>'+sel.map(c=>`<th>${c.model}<small>${c.manufacturer}</small></th>`).join('')+'</tr></thead><tbody>';
+  rows.forEach(r=>{const vals=sel.map(c=>c[r.key]);let bestIdx=-1;if(r.hi)bestIdx=vals.indexOf(Math.max(...vals));else if(r.low)bestIdx=vals.indexOf(Math.min(...vals));html+=`<tr><td>${r.label[lang]}</td>`+sel.map((c,k)=>{const v=r.fmt?r.fmt(c[r.key]):c[r.key];return `<td class="${k===bestIdx?'best':''}">${v}${r.unit}</td>`;}).join('')+'</tr>';});
   html+='</tbody></table></div>';out.innerHTML=html;
 }
 
@@ -720,14 +729,21 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 renderTable();
 
 // ================= V2 INTERACTIONS =================
-const PIPE=[
+const PIPE={
+en:[
  {h:'Stage 01 — Testing',lines:['The physical cell arrives and goes through charge–discharge cycling on the bench.','Capacity, internal resistance and thermal response are characterized across C-rates and temperatures.'],tags:['charge–discharge','characterization','baseline dataset']},
  {h:'Stage 02 — Teardown analysis',lines:['The cell is disassembled and every model input is measured directly — electrode geometry, materials, loadings.','The measurements become a digital twin: a virtual cell that reproduces the physical one\'s behavior.'],tags:['teardown','parameter extraction','digital twin','30p report']},
  {h:'Stage 03 — Model',lines:['Measured data drives the physics-based model — run it in the browser through the simulator.','Compare cells virtually before committing hardware, for EV, ESS, UAM or micromobility.'],tags:['physics solver','virtual comparison','C / MATLAB / Python']},
-];
+],
+ko:[
+ {h:'1단계 — 실험',lines:['실물 셀을 수령하여 벤치에서 충방전 사이클링을 수행합니다.','다양한 C-rate와 온도 조건에서 용량, 내부 저항, 열 응답을 특성 평가합니다.'],tags:['충방전','특성 평가','기준 데이터셋']},
+ {h:'2단계 — 분해(해체) 분석',lines:['셀을 분해하여 전극 형상, 소재, 로딩량 등 모든 모델 입력값을 직접 측정합니다.','측정값은 디지털 트윈이 됩니다 — 실물 셀의 거동을 그대로 재현하는 가상 셀.'],tags:['분해 분석','파라미터 추출','디지털 트윈','30p 리포트']},
+ {h:'3단계 — 모델',lines:['측정 데이터로 물리 기반 모델을 구동하고, 시뮬레이터를 통해 브라우저에서 실행합니다.','전기차, ESS, UAM, 마이크로모빌리티 — 하드웨어 결정 전에 셀을 가상으로 비교하세요.'],tags:['물리 솔버','가상 비교','C / MATLAB / Python']},
+]};
 function setPipe(i){
+  pipeIdx=i;
   document.querySelectorAll('#pipe .pipe-step').forEach(s=>s.classList.toggle('on',+s.dataset.step===i));
-  const d=PIPE[i];
+  const d=PIPE[lang][i];
   document.getElementById('pipeDetail').innerHTML=`<h4>${d.h}</h4><ul>${d.lines.map(l=>`<li>${l}</li>`).join('')}</ul>`+d.tags.map(t=>`<span class="tag">${t}</span>`).join('');
 }
 document.querySelectorAll('#pipe .pipe-step').forEach(s=>s.onclick=()=>setPipe(+s.dataset.step));
@@ -748,6 +764,137 @@ const io2=new IntersectionObserver(es=>es.forEach(e=>{
 }),{threshold:.3});
 const sb=document.querySelector('.statbar');if(sb)io2.observe(sb);
 document.getElementById('toProcess').onclick=()=>document.getElementById('process2').scrollIntoView({behavior:'smooth'});
+
+// ================= I18N =================
+const LEAF={ // spec/table leaf labels, EN → KO
+ 'Manufacturer':'제조사','Model':'모델','Form Factor':'폼팩터','Nom. V':'공칭 전압','Energy [Wh]':'에너지 [Wh]','Cap. [Ah]':'용량 [Ah]','Max Discharge [A]':'최대 방전 [A]','Simulate':'시뮬레이션','Actions':'동작',
+ 'Overview':'개요','Thermal':'열 특성','Mechanical':'기계 특성','Chemistry':'화학 조성','Electrical — Energy':'전기 — 에너지','Power':'출력','Current':'전류','Voltage':'전압',
+ 'Cell Type':'셀 타입','Country of Origin':'원산지','Release Year':'출시 연도',
+ 'Min Charge Temp':'최저 충전 온도','Max Charge Temp':'최고 충전 온도','Min Discharge Temp':'최저 방전 온도','Max Discharge Temp':'최고 방전 온도',
+ 'Mass':'질량','Volume':'부피','Height':'높이','Diameter':'직경','Positive Electrode':'양극','Negative Electrode':'음극',
+ 'Nominal Energy':'공칭 에너지','Nominal Capacity':'공칭 용량','Gravimetric Density':'중량 에너지 밀도','Volumetric Density':'부피 에너지 밀도',
+ 'Gravimetric Power':'중량 출력 밀도','Volumetric Power':'부피 출력 밀도',
+ 'Max Cont. Charge':'최대 연속 충전','Max Cont. Charge (C)':'최대 연속 충전 (C)','Max Cont. Discharge':'최대 연속 방전','Max Cont. Discharge (C)':'최대 연속 방전 (C)',
+ 'Nominal Voltage':'공칭 전압','Max Voltage':'최대 전압','Min Voltage':'최소 전압'
+};
+const PAIRS=[
+ ['.navlinks a[data-go="home"]',{en:'Home',ko:'홈'}],
+ ['.navlinks a[data-go="sim"]',{en:'Simulator',ko:'시뮬레이터'}],
+ ['.navlinks a[data-go="library"]',{en:'Cell Library',ko:'셀 라이브러리'}],
+ ['.navlinks a[data-go="compare"]',{en:'Compare',ko:'비교'}],
+ ['.navcta',{en:'Enter the Lab',ko:'시작하기'}],
+ // ---- home v1
+ ['#page-home .eyebrow',{en:'Virtual Battery Analysis Platform',ko:'가상 배터리 분석 플랫폼'}],
+ ['#heroH1',{html:1,en:'Run electrochemical<br>models <span class="grad">in the browser.</span>',ko:'전기화학 모델을<br><span class="grad">브라우저에서 실행하다.</span>'}],
+ ['#page-home .lead',{en:'Pick a cell, set your operating conditions, run a physics-based solver on our servers, and read the results back as voltage curves and thermal contour maps — no install, no setup.',ko:'셀을 선택하고 운전 조건을 설정하면, 서버의 물리 기반 솔버가 실행되어 전압 곡선과 열 분포 맵으로 결과를 보여드립니다 — 설치도, 설정도 필요 없습니다.'}],
+ ['#page-home .herocta .btn-primary',{en:'▶ Open Simulator',ko:'▶ 시뮬레이터 열기'}],
+ ['#page-home .herocta .btn-ghost',{en:'Browse Cell Library',ko:'셀 라이브러리 보기'}],
+ ['#page-home .sec-label',{en:'How it works',ko:'작동 방식'}],
+ ['#page-home .sec-title',{en:'From input to insight in three steps',ko:'입력에서 인사이트까지, 세 단계'}],
+ ['#page-home .sec-sub',{en:'The interface stays simple while the solver does the heavy lifting on the server. You never touch the compute layer.',ko:'인터페이스는 단순하게, 무거운 계산은 서버의 솔버가 담당합니다. 컴퓨팅 계층은 신경 쓸 필요가 없습니다.'}],
+ ['#page-home .fcard:nth-child(1) h3',{en:'Pick & set conditions',ko:'셀 선택 & 조건 설정'}],
+ ['#page-home .fcard:nth-child(1) p',{en:'Choose a cell from the library, then set C-rate, ambient temperature, and capacity through the web controls.',ko:'라이브러리에서 셀을 고르고 C-rate, 주변 온도, 용량을 웹 컨트롤로 설정합니다.'}],
+ ['#page-home .fcard:nth-child(2) h3',{en:'Run on the server',ko:'서버에서 실행'}],
+ ['#page-home .fcard:nth-child(2) p',{en:'A containerized solver — your C, MATLAB, or Python code — receives the parameters, executes, and writes structured results back.',ko:'컨테이너화된 솔버(C, MATLAB, Python 코드)가 파라미터를 받아 실행하고 구조화된 결과를 기록합니다.'}],
+ ['#page-home .fcard:nth-child(3) h3',{en:'Read the results',ko:'결과 확인'}],
+ ['#page-home .fcard:nth-child(3) p',{en:'Voltage curves and thermal contour plots render in the browser with key metrics. Export the raw data anytime.',ko:'전압 곡선과 열 분포도가 핵심 지표와 함께 브라우저에 렌더링됩니다. 원시 데이터는 언제든 내보낼 수 있습니다.'}],
+ ['#contact h2',{html:1,en:'Ready to put your<br>solver online?',ko:'솔버를 온라인으로<br>옮길 준비되셨나요?'}],
+ ['#contact p',{en:"Send your current analysis code and a sample case. We'll scope Phase 1 and give you a firm timeline and quote.",ko:'현재 사용 중인 해석 코드와 샘플 케이스를 보내주세요. Phase 1 범위를 산정해 확정 일정과 견적을 드립니다.'}],
+ ['#contact .btn-primary',{en:'Try the demo →',ko:'데모 체험하기 →'}],
+ // ---- home v2
+ ['#page-home2 .eyebrow',{en:'Battery Digital Twin Platform',ko:'배터리 디지털 트윈 플랫폼'}],
+ ['#heroH1b',{html:1,en:'Every battery,<br><span class="grad">twinned in software.</span>',ko:'모든 배터리를,<br><span class="grad">소프트웨어로 트윈하다.</span>'}],
+ ['#page-home2 .lead',{en:"We cycle the physical cell, tear it down to measure what's inside, and rebuild it as a physics-based digital twin — so you can run, verify, and compare battery models before committing to hardware.",ko:'실물 셀을 충방전 시험하고, 분해해 내부를 측정한 뒤, 물리 기반 디지털 트윈으로 재구성합니다 — 하드웨어를 결정하기 전에 모델을 실행하고, 검증하고, 비교하세요.'}],
+ ['#page-home2 .herocta .btn-primary',{en:'▶ Open Simulator',ko:'▶ 시뮬레이터 열기'}],
+ ['#toProcess',{en:'Our Process ↓',ko:'서비스 프로세스 ↓'}],
+ ['.statbar .stat:nth-child(1) .l',{en:'Solver stacks — C · MATLAB · Python',ko:'솔버 스택 — C · MATLAB · Python'}],
+ ['.statbar .stat:nth-child(2) .l',{en:'Cells in the library, and growing',ko:'라이브러리 보유 셀, 계속 추가 중'}],
+ ['.statbar .stat:nth-child(3) .l',{en:'Teardown report per characterized cell',ko:'셀당 분해 분석 리포트 분량'}],
+ ['.statbar .stat:nth-child(4) .l',{en:'Target sectors — EV · ESS · UAM · Micro',ko:'적용 분야 — 전기차 · ESS · UAM · 마이크로'}],
+ ['#process2 .sec-label',{en:'Service structure',ko:'서비스 구조'}],
+ ['#process2 .sec-title',{en:'From physical cell to digital twin',ko:'실물 셀에서 디지털 트윈까지'}],
+ ['#process2 .sec-sub',{en:'Three stages turn a battery on the bench into a model you can run in the browser. Click each stage to see what happens inside.',ko:'세 단계를 거쳐 벤치 위의 배터리가 브라우저에서 실행되는 모델이 됩니다. 각 단계를 클릭해 내부 과정을 확인하세요.'}],
+ ['#pipe .pipe-step:nth-child(1) h3',{en:'Testing',ko:'실험'}],
+ ['#pipe .pipe-step:nth-child(1) p',{en:'Charge–discharge cycling and characterization of the received cell.',ko:'수령한 셀의 충방전 사이클링 및 특성 평가.'}],
+ ['#pipe .pipe-step:nth-child(2) h3',{en:'Teardown analysis',ko:'분해(해체) 분석'}],
+ ['#pipe .pipe-step:nth-child(2) p',{en:'Disassemble, measure every model input, digitize the cell.',ko:'분해 후 모든 모델 입력값을 측정하고 셀을 디지털화.'}],
+ ['#pipe .pipe-step:nth-child(3) h3',{en:'Model',ko:'모델'}],
+ ['#pipe .pipe-step:nth-child(3) p',{en:'Drive the physics model with measured data — the digital twin.',ko:'측정 데이터로 물리 모델 구동 — 디지털 트윈.'}],
+ ['#page-home2 section:nth-of-type(2) .sec-label',{en:'Deliverables',ko:'전달물'}],
+ ['#page-home2 section:nth-of-type(2) .sec-title',{en:'The first model package',ko:'첫 번째 모델 패키지'}],
+ ['.duedate',{en:'◷ First version targeted — end of August',ko:'◷ 최초 버전 목표 — 8월 말'}],
+ ['#page-home2 section:nth-of-type(2) .sec-sub',{en:"Every model ships as a complete, runnable set. Open each item to see what's included.",ko:'모든 모델은 바로 실행 가능한 완성 세트로 전달됩니다. 항목을 눌러 구성 내용을 확인하세요.'}],
+ ['.acc .acc-item:nth-child(1) .acc-head span',{en:'Model execution code / executable',ko:'모델 실행 코드 / 실행파일'}],
+ ['.acc .acc-item:nth-child(1) .inner',{en:'Solver source or a packaged executable — the same physics code we run server-side, containerized so it behaves identically on any machine.',ko:'솔버 소스 또는 패키징된 실행파일 — 서버에서 구동하는 것과 동일한 물리 코드로, 어떤 환경에서도 동일하게 동작하도록 컨테이너화되어 있습니다.'}],
+ ['.acc .acc-item:nth-child(2) .acc-head span',{en:'Input TXT + parameter guide',ko:'입력 TXT + 파라미터 설명'}],
+ ['.acc .acc-item:nth-child(2) .inner',{en:'A plain-text input deck listing every parameter with its meaning, unit, and valid range — edit values, rerun, and compare.',ko:'모든 파라미터의 의미, 단위, 유효 범위가 정리된 텍스트 입력 파일 — 값을 수정하고 재실행해 비교할 수 있습니다.'}],
+ ['.acc .acc-item:nth-child(3) .acc-head span',{en:'Sample output set',ko:'출력 결과 샘플'}],
+ ['.acc .acc-item:nth-child(3) .inner',{en:'Reference results for a known case, so you can confirm your run reproduces ours before trusting new cases.',ko:'검증된 케이스의 기준 결과 — 새로운 케이스를 신뢰하기 전에 동일한 결과가 재현되는지 확인할 수 있습니다.'}],
+ ['.acc .acc-item:nth-child(4) .acc-head span',{en:'Run & verification procedure',ko:'실행 및 검증 절차'}],
+ ['.acc .acc-item:nth-child(4) .inner',{en:'A step-by-step procedure: execute the model, read the outputs, and validate them against the sample set.',ko:'단계별 절차서 — 모델을 실행하고, 출력을 읽고, 샘플 세트와 대조해 검증합니다.'}],
+ ['#page-home2 section:nth-of-type(3) .sec-label',{en:'Where it applies',ko:'적용 분야'}],
+ ['#page-home2 section:nth-of-type(3) .sec-title',{en:'Pick the right battery, virtually',ko:'가상으로 찾는 최적의 배터리'}],
+ ['#page-home2 section:nth-of-type(3) .sec-sub',{en:'Before hardware is chosen, virtual simulation shows which cell fits each application — and why.',ko:'하드웨어를 선정하기 전에, 가상 시뮬레이션으로 어떤 셀이 각 응용에 맞는지 — 그리고 왜 맞는지 보여드립니다.'}],
+ ['.appgrid .appcard:nth-child(1) h3',{en:'Electric Vehicles',ko:'전기차'}],
+ ['.appgrid .appcard:nth-child(1) p',{en:'Range, fast-charge behavior and thermal limits across real drive cycles.',ko:'실제 주행 사이클 기반 주행거리, 급속충전 거동, 열 한계 분석.'}],
+ ['.appgrid .appcard:nth-child(2) h3',{en:'ESS',ko:'ESS'}],
+ ['.appgrid .appcard:nth-child(2) p',{en:'Grid-scale storage: calendar life, round-trip efficiency and safety margins.',ko:'그리드급 저장장치: 수명, 왕복 효율, 안전 마진.'}],
+ ['.appgrid .appcard:nth-child(3) h3',{en:'UAM',ko:'UAM'}],
+ ['.appgrid .appcard:nth-child(3) p',{en:'Air mobility: high discharge power under strict weight budgets.',ko:'항공 모빌리티: 엄격한 중량 제한에서의 고출력 방전.'}],
+ ['.appgrid .appcard:nth-child(4) h3',{en:'Micromobility',ko:'마이크로모빌리티'}],
+ ['.appgrid .appcard:nth-child(4) p',{en:'Scooters and light EVs: cost, cycle life and packaging trade-offs.',ko:'스쿠터·경량 EV: 비용, 사이클 수명, 패키징 트레이드오프.'}],
+ ['#contact2 h2',{html:1,en:'Ready to twin<br>your battery?',ko:'배터리를 트윈으로<br>만들 준비되셨나요?'}],
+ ['#contact2 p',{en:"Send us a cell. We'll test it, tear it down, and hand back a model you can run — with the full report behind it.",ko:'셀을 보내주세요. 시험하고, 분해 분석해서, 실행 가능한 모델과 전체 리포트를 돌려드립니다.'}],
+ ['#contact2 .btn-primary',{en:'Try the demo →',ko:'데모 체험하기 →'}],
+ // ---- simulator
+ ['#page-sim .sec-label',{en:'Live demo',ko:'라이브 데모'}],
+ ['#page-sim .sec-title',{en:'Simulator',ko:'시뮬레이터'}],
+ ['#page-sim .sec-sub',{en:'Front-end mock of the real flow. Curves are generated client-side to show how a server result would look — in production these come back from your solver.',ko:'실제 흐름의 프런트엔드 목업입니다. 곡선은 서버 결과를 미리 보여주기 위해 클라이언트에서 생성한 것으로, 실제 서비스에서는 솔버가 반환합니다.'}],
+ ['.sim-controls h4',{en:'Operating conditions',ko:'운전 조건'}],
+ ['.sim-controls .hint',{en:'// input parameters',ko:'// 입력 파라미터'}],
+ ['.sim-controls .field:nth-child(4) label',{en:'Discharge C-rate ',ko:'방전 C-rate '}],
+ ['.sim-controls .field:nth-child(5) label',{en:'Ambient temp ',ko:'주변 온도 '}],
+ ['.sim-controls .field:nth-child(6) label',{en:'Capacity ',ko:'용량 '}],
+ ['.sim-controls .field:nth-child(7) label',{en:'Chemistry',ko:'화학 조성'}],
+ ['.out-meta .metric:nth-child(1) .k',{en:'Energy delivered',ko:'방출 에너지'}],
+ ['.out-meta .metric:nth-child(2) .k',{en:'Runtime',ko:'구동 시간'}],
+ ['.out-meta .metric:nth-child(3) .k',{en:'Peak temp',ko:'최고 온도'}],
+ // ---- library
+ ['#lib-list .sec-label',{en:'Database',ko:'데이터베이스'}],
+ ['#lib-list .sec-title',{en:'Cell Library',ko:'셀 라이브러리'}],
+ ['.subtabs button[data-go="library"]',{en:'Cell Library',ko:'셀 라이브러리'}],
+ ['.subtabs button[data-go="compare"]',{en:'Compare Cells',ko:'셀 비교'}],
+ ['#back',{en:'← Back to Cell Library',ko:'← 셀 라이브러리로 돌아가기'}],
+ ['.simbanner h3',{en:'✦ Simulate this cell',ko:'✦ 이 셀 시뮬레이션하기'}],
+ ['.simbanner p',{en:"Load this cell's parameters into the simulator and run a discharge analysis.",ko:'이 셀의 파라미터를 시뮬레이터에 로드해 방전 해석을 실행합니다.'}],
+ ['#simbtn',{en:'▶ Run in Simulator',ko:'▶ 시뮬레이터에서 실행'}],
+ // ---- compare
+ ['#page-compare .sec-label',{en:'Side by side',ko:'나란히 비교'}],
+ ['#page-compare .sec-title',{en:'Compare Cells',ko:'셀 비교'}],
+ ['#page-compare .sec-sub',{en:'Pick up to 4 cells to compare specs. Best value in each row is highlighted.',ko:'최대 4개 셀을 선택해 사양을 비교하세요. 각 행의 최고 값이 강조됩니다.'}],
+];
+function smartSet(el,txt){
+  if(el.children.length&&el.firstChild&&el.firstChild.nodeType===3)el.firstChild.nodeValue=txt;
+  else if(el.children.length&&el.lastChild&&el.lastChild.nodeType===3)el.lastChild.nodeValue=txt;
+  else el.textContent=txt;
+}
+function setLang(l){
+  lang=l;document.documentElement.setAttribute('lang',l);
+  document.querySelectorAll('.langtog button').forEach(b=>b.classList.toggle('on',b.dataset.lang===l));
+  PAIRS.forEach(p=>{const el=document.querySelector(p[0]);if(!el)return;const v=p[1];if(v.html)el.innerHTML=v[l];else smartSet(el,v[l]);});
+  document.querySelectorAll('#page-library thead th,.specgroup h3 span,.specrow .k').forEach(el=>{
+    if(!el.dataset.en){const tn=(el.children.length&&el.firstChild&&el.firstChild.nodeType===3)?el.firstChild.nodeValue:el.textContent;el.dataset.en=tn.trim();}
+    const t=l==='ko'?(LEAF[el.dataset.en]||el.dataset.en):el.dataset.en;
+    smartSet(el,t+(el.querySelector('.arr')?' ':''));
+  });
+  $('q').placeholder=l==='ko'?'셀 검색…':'Search cells…';
+  if(/^\/\/ (idle|대기)/.test(runlog.textContent))runlog.textContent=l==='ko'?'// 대기 중 — 해석 실행을 누르세요':'// idle — press Run analysis';
+  if(!run.disabled)run.textContent=l==='ko'?'▶ 해석 실행':'▶ Run analysis';
+  renderTable();renderCompare();setPipe(pipeIdx);
+  setTimeout(fitHero,40);
+}
+document.querySelectorAll('.langtog button').forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
+setLang(lang);
 
 // ================= HERO TITLE AUTO-FIT (어떤 폭에서도 글자 안 잘리게) =================
 function fitOne(h1){
