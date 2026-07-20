@@ -1103,9 +1103,10 @@ function drawBattery3(p){
       const put=(im,a)=>{if(!im||!im.width||a<=0)return;
         if(a>=0.999)bgFill(im); // fully opaque image owns the canvas bg — no band edges
         const r=rect(im);c.globalAlpha=Math.min(1,a);c.drawImage(im,r.dx,r.dy,r.dw,r.dh);c.globalAlpha=1;};
-      // the light footage has a hard cut between its two source segments
-      // (frame 44 → 45): dissolve across it instead of letting the scrub jump
-      const CUT=SET===HF.light?{a:38,b:50}:null;
+      // light footage: a generated 25-frame bridge now animates the old hard cut;
+      // a short dissolve over its last frames melts a residual artifact into the
+      // original exploded segment
+      const CUT=SET===HF.light?{a:64,b:69}:null;
       if(CUT&&fi>CUT.a&&fi<CUT.b){
         const t=(fi-CUT.a)/(CUT.b-CUT.a);
         put(SET.frames[CUT.a],1);put(SET.frames[CUT.b],t*t*(3-2*t));
@@ -1301,9 +1302,9 @@ function l3Activate(){
   a3p=0;a3target=0;a3LastIdx=-2;a3Load();updateA3();
   if(!HF.tried){ // auto-load the Higgsfield frame sequences if they exist
     HF.tried=true;
-    [['frames/cell_0001.webp','dark'],['frames/clean/cell_0001.webp','light']].forEach(pair=>{
+    [['frames/cell_0001.webp','dark',120],['frames/clean/cell_0001.webp','light',145]].forEach(pair=>{
       const probe=new Image();
-      probe.onload=()=>loadHiggsfieldFrames(pair[0].replace('0001','####'),HF_COUNT,pair[1]);
+      probe.onload=()=>loadHiggsfieldFrames(pair[0].replace('0001','####'),pair[2],pair[1]);
       probe.src=pair[0];
     });
     [['frames/end_labeled.webp','dark'],['frames/clean/end_labeled.webp','light']].forEach(pair=>{
@@ -1314,7 +1315,6 @@ function l3Activate(){
   }
   l3Resize();updateL3(0);drawBattery3(0);l3Intro(true);l3OnScroll();
 }
-const HF_COUNT=120;
 // ---- bridge: the cell travels behind the stats strip between sections ----
 const bridgecv=document.getElementById('bridgecv');
 const brctx=bridgecv?bridgecv.getContext('2d'):null;
