@@ -1059,7 +1059,6 @@ function l3Intro(replay){
   setTimeout(()=>l3letters.forEach(s=>s.classList.add('on')),replay?120:40);
 }
 function hexA(h,a){try{const x=hexRGB(h);return `rgba(${x[0]},${x[1]},${x[2]},${a})`;}catch(e){return `rgba(120,130,140,${a})`;}}
-function cssRGBA(v,a){const s=css(v);if(s[0]==='#')return hexA(s,a);const m=s.match(/[\d.]+/g);return m&&m.length>=3?`rgba(${m[0]},${m[1]},${m[2]},${a})`:`rgba(120,130,140,${a})`;}
 const clampL=(p,a,b)=>Math.min(1,Math.max(0,(p-a)/(b-a)));
 // Higgsfield bridge: when the rendered frame sequence exists, call e.g.
 //   loadHiggsfieldFrames('frames/cell_####.webp',120)
@@ -1087,21 +1086,9 @@ function drawBattery3(p){
         const dw=im.width*s,dh=im.height*s;
         return{dx:(W-dw)/2,dy:mobile?H*0.68-dh/2:(H-dh)/2,dw,dh};
       };
-      const edges=im=>{ // footage bg has a subtle vertical gradient — sample its top & bottom edge colors once
-        if(im._bgT===undefined){try{const oc=document.createElement('canvas');oc.width=1;oc.height=2;const o=oc.getContext('2d');
-          o.drawImage(im,im.width/2-3,0,6,4,0,0,1,1);o.drawImage(im,im.width/2-3,im.height-4,6,4,0,1,1,1);
-          const d=o.getImageData(0,0,1,2).data;im._bgT=`rgb(${d[0]},${d[1]},${d[2]})`;im._bgB=`rgb(${d[4]},${d[5]},${d[6]})`;}catch(e){im._bgT=null;im._bgB=null;}}
-        return im._bgT?[im._bgT,im._bgB]:null;
-      };
-      const bgFill=im=>{ // extend the image's own bg gradient across the whole canvas
-        const eb=edges(im);if(!eb)return;
-        const r=rect(im),g=c.createLinearGradient(0,r.dy,0,r.dy+r.dh);
-        g.addColorStop(0,eb[0]);g.addColorStop(1,eb[1]);
-        c.fillStyle=g;c.fillRect(0,0,W,H);
-      };
-      bgFill(ref);
+      // frame backgrounds are normalized to the exact page bg color offline,
+      // so the canvas needs no fills — transparent areas just show the page bg
       const put=(im,a)=>{if(!im||!im.width||a<=0)return;
-        if(a>=0.999)bgFill(im); // fully opaque image owns the canvas bg — no band edges
         const r=rect(im);c.globalAlpha=Math.min(1,a);c.drawImage(im,r.dx,r.dy,r.dw,r.dh);c.globalAlpha=1;};
       // light footage: a generated 25-frame bridge now animates the old hard cut;
       // a short dissolve over its last frames melts a residual artifact into the
@@ -1116,9 +1103,6 @@ function drawBattery3(p){
       if(SET.labeled&&SET.labeled.width){ // labeled still shows at the exploded peak
         put(SET.labeled,Math.min(clampL(p,0.50,0.58),1-clampL(p,0.70,0.78)));
       }
-      // feather the pinned section's top & bottom edges into the page bg
-      const gt=c.createLinearGradient(0,0,0,H*0.14);gt.addColorStop(0,cssRGBA('--bg',1));gt.addColorStop(1,cssRGBA('--bg',0));c.fillStyle=gt;c.fillRect(0,0,W,H*0.14);
-      const gb=c.createLinearGradient(0,H*0.86,0,H);gb.addColorStop(0,cssRGBA('--bg',0));gb.addColorStop(1,cssRGBA('--bg',1));c.fillStyle=gb;c.fillRect(0,H*0.86,W,H*0.14);
       return;
     }
   }
@@ -1410,18 +1394,7 @@ function a3Draw(){
     const dw=img.width*s,dh=img.height*s;
     return{dx:(W-dw)/2,dy:mobile?H*0.66-dh/2:(H-dh)/2,dw,dh};
   };
-  const edges=im=>{ // image bg edge colors, sampled once (top & bottom center)
-    if(im._bgT===undefined){try{const oc=document.createElement('canvas');oc.width=1;oc.height=2;const o=oc.getContext('2d');
-      o.drawImage(im,im.width/2-3,0,6,4,0,0,1,1);o.drawImage(im,im.width/2-3,im.height-4,6,4,0,1,1,1);
-      const d=o.getImageData(0,0,1,2).data;im._bgT=`rgb(${d[0]},${d[1]},${d[2]})`;im._bgB=`rgb(${d[4]},${d[5]},${d[6]})`;}catch(e){im._bgT=null;im._bgB=null;}}
-    return im._bgT?[im._bgT,im._bgB]:null;
-  };
-  const bgFill=im=>{ // extend the image's own bg gradient across the whole canvas
-    const eb=edges(im);if(!eb)return;
-    const r=rectFor(im),g=c.createLinearGradient(0,r.dy,0,r.dy+r.dh);
-    g.addColorStop(0,eb[0]);g.addColorStop(1,eb[1]);
-    c.fillStyle=g;c.fillRect(0,0,W,H);
-  };
+  // app image backgrounds are normalized to the exact page bg color offline
   const place=(img,alpha,scale)=>{
     if(!img||!img.width||alpha<=0)return null;
     const r=rectFor(img),ex=(scale||1)-1;
@@ -1446,8 +1419,6 @@ function a3Draw(){
       if(im&&im.width)draws.push({im,a,zoom});
     }
   });
-  const domi=draws.reduce((m,d)=>!m||d.a>m.a?d:m,null);
-  if(domi)bgFill(domi.im); // dominant image's bg owns the canvas — no band edges
   draws.forEach(d=>{const r=place(d.im,d.a,d.zoom);if(r)baseRect=r;});
   if(!baseRect){const ref=imgs[0]&&imgs[0].width?imgs[0]:(SET.frames[0]&&SET.frames[0].width?SET.frames[0]:null);if(ref)baseRect=rectFor(ref);}
   // intro: blueprint-outline cell, fully faded out before the first vehicle appears
@@ -1465,9 +1436,6 @@ function a3Draw(){
     c.save();c.globalAlpha=cellA;if(cf===line)c.globalCompositeOperation=dark?'screen':'multiply';
     c.drawImage(cf,sx,sy,sw,sh,cx-cw/2,cy-ch/2,cw,ch);c.restore();
   }
-  // feather the pinned section's top & bottom edges into the page bg
-  const gt=c.createLinearGradient(0,0,0,H*0.14);gt.addColorStop(0,cssRGBA('--bg',1));gt.addColorStop(1,cssRGBA('--bg',0));c.fillStyle=gt;c.fillRect(0,0,W,H*0.14);
-  const gb=c.createLinearGradient(0,H*0.86,0,H);gb.addColorStop(0,cssRGBA('--bg',0));gb.addColorStop(1,cssRGBA('--bg',1));c.fillStyle=gb;c.fillRect(0,H*0.86,W,H*0.14);
 }
 function updateA3(){
   if(!apps3El)return;
