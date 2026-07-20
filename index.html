@@ -1295,6 +1295,7 @@ function bridgeUpdate(){
   brctx.clearRect(0,0,W,H);
   const dark=!document.body.classList.contains('sana');
   const cut=dark?A3.darkCut:A3.lightCut;
+  const line=dark?A3.darkLine:A3.lightLine;
   const SET=dark?HF.dark:HF.light;
   const src=(cut&&cut.width)?cut:(SET.ready?SET.frames[0]:null);
   if(!src||!src.width)return;
@@ -1302,12 +1303,17 @@ function bridgeUpdate(){
   const q=q0*q0*(3-2*q0);
   const s=Math.min(W/src.width,H/src.height),dh=src.height*s,dy=(H-dh)/2;
   // from: hero battery position (frame contain-fit) · to: apps intro anchor
-  const hx=W/2,hy=dy+dh*0.465,hh=dh*0.85;
-  const ax=W*0.52,ay=H*0.46,ah=dh*0.72;
+  const hx=W/2,hy=dy+dh*0.465,hh=dh*0.98;
+  const ax=W*0.52,ay=H*0.46,ah=dh*0.80;
   const x=hx+(ax-hx)*q,yc=hy+(ay-hy)*q,hgt=hh+(ah-hh)*q;
-  const sx=src.width*0.395,sw=src.width*0.205,sy2=src.height*0.04,sh=src.height*0.85;
-  const cw=hgt*(sw/sh);
-  brctx.drawImage(src,sx,sy2,sw,sh,x-cw/2,yc-hgt/2,cw,hgt);
+  const draw=(im,alpha)=>{
+    if(!im||!im.width||alpha<=0)return;
+    const sx=im.width*0.375,sw=im.width*0.25,sy2=0,sh=im.height*0.97;
+    const cw=hgt*(sw/sh);
+    brctx.globalAlpha=alpha;brctx.drawImage(im,sx,sy2,sw,sh,x-cw/2,yc-hgt/2,cw,hgt);brctx.globalAlpha=1;
+  };
+  if(line&&line.width){draw(src,1-q);draw(line,q);} // photoreal dissolves into blueprint
+  else draw(src,1);
 }
 window.addEventListener('scroll',bridgeUpdate,{passive:true});
 
@@ -1329,20 +1335,16 @@ function a3Load(){
     A3[set]=A3APPS.map(a=>{const im=new Image();im.onload=()=>a3Draw();im.src=dir+a.img+'.webp';return im;});
     // docked variants: same wireframe with the cell baked in at true 3D position
     A3[set+'D']=A3APPS.map(a=>{const im=new Image();im.onload=()=>a3Draw();im.src=dir+a.img+'_docked.webp';return im;});
-    // transparent cutout of the closed cell (flying sprite)
+    // transparent cutout of the closed cell (bridge sprite)
     const cut=new Image();cut.onload=()=>a3Draw();
     cut.src=(set==='dark'?'frames/':'frames/clean/')+'cell_cut.png';
     A3[set+'Cut']=cut;
+    // blueprint outline of the cell (implementation-chapter style)
+    const line=new Image();line.onload=()=>a3Draw();
+    line.src=(set==='dark'?'frames/':'frames/clean/')+'cell_line.webp';
+    A3[set+'Line']=line;
   });
 }
-// per-app battery dock: position as fraction of the app image, cell size as
-// fraction of the drawn image height, final tilt in radians
-const A3DOCKS=[
- {x:0.628,y:0.655,s:0.15,r:Math.PI/2},   // EV — skateboard pack
- {x:0.700,y:0.520,s:0.17,r:0},            // ESS — rack modules stand upright
- {x:0.610,y:0.630,s:0.14,r:Math.PI/2},    // UAM — belly modules
- {x:0.570,y:0.720,s:0.11,r:Math.PI/2},    // scooter — deck pack
-];
 const A3WINS=[[0.16,0.37],[0.37,0.58],[0.58,0.79],[0.79,1.0001]];
 function a3Draw(){
   if(!a3ctx||!a3w)return;
@@ -1364,8 +1366,8 @@ function a3Draw(){
     c.globalAlpha=1;
     return r;
   };
-  // app wireframes with crossfades; the docked variant (cell baked in, true 3D)
-  // fades in right as the flying sprite arrives
+  // implementation visuals: the docked renders (cell baked in, true 3D) are
+  // the app images themselves — pure crossfades between them, no travel
   const dimgs=dark?A3.darkD:A3.lightD;
   let baseRect=null;
   A3WINS.forEach((w,i)=>{
@@ -1374,44 +1376,23 @@ function a3Draw(){
     const a=Math.min(fadeIn,fadeOut);
     if(a>0){
       const zoom=1.0+0.03*(1-clampL(p,w[0],w[1]));
-      const r=place(imgs[i],a,zoom);if(r)baseRect=r;
-      const dockA=Math.min(a,clampL(p,w[0]+0.045,w[0]+0.075)*(i<3?1-clampL(p,w[1]-0.05,w[1]-0.015):1));
-      if(dockA>0&&dimgs[i]&&dimgs[i].width)place(dimgs[i],dockA,zoom);
+      const im=(dimgs[i]&&dimgs[i].width)?dimgs[i]:imgs[i];
+      const r=place(im,a,zoom);if(r)baseRect=r;
     }
   });
   if(!baseRect){const ref=imgs[0]&&imgs[0].width?imgs[0]:(SET.frames[0]&&SET.frames[0].width?SET.frames[0]:null);if(ref)baseRect=rectFor(ref);}
-  // ---- persistent cell: flies between docks; hidden while the baked docked
-  // image owns it, and while the bridge sprite owns it between sections ----
-  let spriteA=bridgeActive?0:1;
-  A3WINS.forEach((w,i)=>{
-    const hide=clampL(p,w[0]+0.03,w[0]+0.07)*(i<3?1-clampL(p,w[1]-0.05,w[1]-0.015):1);
-    spriteA=Math.min(spriteA,1-hide);
-  });
+  // intro: blueprint-outline cell, fully faded out before the first vehicle appears
+  const line=dark?A3.darkLine:A3.lightLine;
   const cut=dark?A3.darkCut:A3.lightCut;
-  const cf=(cut&&cut.width)?cut:(SET.ready?SET.frames[0]:null);
-  if(spriteA>0&&cf&&cf.width&&baseRect){
-    const dockAt=i=>({x:baseRect.dx+A3DOCKS[i].x*baseRect.dw,y:baseRect.dy+A3DOCKS[i].y*baseRect.dh,s:A3DOCKS[i].s*baseRect.dh,r:A3DOCKS[i].r});
-    const anchors=[{p:0,x:W*0.52,y:H*0.46,s:baseRect.dh*0.72,r:0}];
-    A3WINS.forEach((w,i)=>{
-      const d=dockAt(i);
-      anchors.push({p:Math.min(w[0]+0.05,0.999),x:d.x,y:d.y,s:d.s,r:d.r});
-      anchors.push({p:Math.min(w[1]-0.01,0.9995),x:d.x,y:d.y,s:d.s,r:d.r});
-    });
-    let a=anchors[0],b=anchors[anchors.length-1];
-    for(let i=0;i<anchors.length-1;i++){if(p>=anchors[i].p&&p<=anchors[i+1].p){a=anchors[i];b=anchors[i+1];break;}}
-    if(p>anchors[anchors.length-1].p)a=b=anchors[anchors.length-1];
-    const t=b.p>a.p?(p-a.p)/(b.p-a.p):1,e=t*t*(3-2*t);
-    const moving=Math.abs(a.x-b.x)+Math.abs(a.y-b.y)>1;
-    const cx=a.x+(b.x-a.x)*e;
-    const cy=a.y+(b.y-a.y)*e-(moving?Math.sin(Math.PI*e)*H*0.07:0); // flight arc
-    const cs=a.s+(b.s-a.s)*e;
-    const cr=a.r+(b.r-a.r)*e+(moving?Math.sin(Math.PI*e)*0.22:0);   // in-flight wobble
-    // crop just the cell out of the cutout (skips floor shadow)
-    const sx=cf.width*0.395,sw=cf.width*0.205,sy=cf.height*0.04,sh=cf.height*0.85;
-    const ch=cs,cw=ch*(sw/sh);
-    c.save();c.globalAlpha=spriteA;c.translate(cx,cy);c.rotate(cr);
-    c.drawImage(cf,sx,sy,sw,sh,-cw/2,-ch/2,cw,ch);
-    c.restore();
+  const cf=(line&&line.width)?line:((cut&&cut.width)?cut:(SET.ready?SET.frames[0]:null));
+  const cellA=bridgeActive?0:1-clampL(p,0.09,0.135);
+  if(cellA>0&&cf&&cf.width&&baseRect){
+    const drift=clampL(p,0,0.135);
+    const cx=W*0.52,cy=H*0.46+drift*H*0.04;
+    const ch=baseRect.dh*0.80*(1-0.15*drift);
+    const sx=cf.width*0.375,sw=cf.width*0.25,sy=0,sh=cf.height*0.97;
+    const cw=ch*(sw/sh);
+    c.save();c.globalAlpha=cellA;c.drawImage(cf,sx,sy,sw,sh,cx-cw/2,cy-ch/2,cw,ch);c.restore();
   }
 }
 function updateA3(){
