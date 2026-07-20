@@ -345,6 +345,13 @@
   #l3c2{left:82%;top:46%}
   #l3c3{left:80%;top:66%}
   @media(max-width:1100px){#l3c1,#l3c2,#l3c3{left:auto;right:20px;max-width:190px}}
+  /* mobile: text block on top, battery below — no overlap */
+  @media(max-width:760px){
+    .l3content{top:calc(env(safe-area-inset-top,0px) + 92px);transform:none}
+    .l3title{font-size:clamp(36px,11vw,54px)}
+    .l3sub{margin-top:14px;font-size:15px;max-width:88%}
+    #l3c1,#l3c2,#l3c3{display:none}
+  }
   .l3stats{padding-top:80px;padding-bottom:10px;position:relative;z-index:5}
   #bridgecv{position:fixed;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;display:none}
   .statbar3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
@@ -359,7 +366,13 @@
   .a3desc{font-size:clamp(14px,1.6vw,18px);color:var(--mute);margin-top:16px;max-width:400px}
   html[lang="ko"] .a3title{word-break:keep-all}
   .a3scrim{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 72%,transparent) 30%,transparent 54%)}
-  @media(max-width:760px){.a3scrim{background:linear-gradient(90deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 60%,transparent) 45%,transparent 78%)}}
+  /* mobile: stacked layout — scrim comes from the top so the text stays readable */
+  @media(max-width:760px){
+    .a3scrim{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 55%,transparent) 38%,transparent 60%)}
+    .a3content{top:calc(env(safe-area-inset-top,0px) + 92px);transform:none}
+    .a3title{font-size:clamp(30px,9vw,44px);max-width:100%}
+    .a3desc{max-width:100%;font-size:14px}
+  }
 
   /* ============ CONTACT/FOOTER ============ */
   .contact{text-align:center;padding-top:100px;padding-bottom:100px}
@@ -1046,6 +1059,7 @@ function l3Intro(replay){
   setTimeout(()=>l3letters.forEach(s=>s.classList.add('on')),replay?120:40);
 }
 function hexA(h,a){try{const x=hexRGB(h);return `rgba(${x[0]},${x[1]},${x[2]},${a})`;}catch(e){return `rgba(120,130,140,${a})`;}}
+function cssRGBA(v,a){const s=css(v);if(s[0]==='#')return hexA(s,a);const m=s.match(/[\d.]+/g);return m&&m.length>=3?`rgba(${m[0]},${m[1]},${m[2]},${a})`:`rgba(120,130,140,${a})`;}
 const clampL=(p,a,b)=>Math.min(1,Math.max(0,(p-a)/(b-a)));
 // Higgsfield bridge: when the rendered frame sequence exists, call e.g.
 //   loadHiggsfieldFrames('frames/cell_####.webp',120)
@@ -1062,17 +1076,48 @@ function drawBattery3(p){
   const SET=document.body.classList.contains('sana')?HF.light:HF.dark;
   if(SET.ready&&SET.frames.length){
     if(bridgeActive)return; // the bridge sprite owns the battery between sections
-    const f=SET.frames[Math.min(SET.frames.length-1,Math.round(pe*(SET.frames.length-1)))];
-    if(f&&f.width){
-      // contain-fit: the whole frame (incl. baked labels) is always visible;
-      // leftover space blends into the page bg, which matches the footage bg.
-      const s=Math.min(W/f.width,H/f.height),dw=f.width*s,dh=f.height*s;
-      const dx=(W-dw)/2,dy=(H-dh)/2;
-      c.drawImage(f,dx,dy,dw,dh);
-      if(SET.labeled&&SET.labeled.width){ // labeled still shows at the exploded peak
-        const a=Math.min(clampL(p,0.50,0.58),1-clampL(p,0.70,0.78));
-        if(a>0){c.globalAlpha=a;c.drawImage(SET.labeled,dx,dy,dw,dh);c.globalAlpha=1;}
+    const n=SET.frames.length,fi=pe*(n-1),ref=SET.frames[0];
+    if(ref&&ref.width){
+      // paint the whole canvas in the footage's own bg color (sampled once from
+      // the first frame's corner) so the frame never shows as a band with edges
+      const mobile=W<=760;
+      const rect=im=>{
+        let s=Math.min(W/im.width,H/im.height);
+        if(mobile)s=Math.min(W/im.width*1.2,H*0.52/im.height); // larger cell, kept below the stacked text
+        const dw=im.width*s,dh=im.height*s;
+        return{dx:(W-dw)/2,dy:mobile?H*0.68-dh/2:(H-dh)/2,dw,dh};
+      };
+      const edges=im=>{ // footage bg has a subtle vertical gradient — sample its top & bottom edge colors once
+        if(im._bgT===undefined){try{const oc=document.createElement('canvas');oc.width=1;oc.height=2;const o=oc.getContext('2d');
+          o.drawImage(im,im.width/2-3,0,6,4,0,0,1,1);o.drawImage(im,im.width/2-3,im.height-4,6,4,0,1,1,1);
+          const d=o.getImageData(0,0,1,2).data;im._bgT=`rgb(${d[0]},${d[1]},${d[2]})`;im._bgB=`rgb(${d[4]},${d[5]},${d[6]})`;}catch(e){im._bgT=null;im._bgB=null;}}
+        return im._bgT?[im._bgT,im._bgB]:null;
+      };
+      const bgFill=im=>{ // extend the image's own bg gradient across the whole canvas
+        const eb=edges(im);if(!eb)return;
+        const r=rect(im),g=c.createLinearGradient(0,r.dy,0,r.dy+r.dh);
+        g.addColorStop(0,eb[0]);g.addColorStop(1,eb[1]);
+        c.fillStyle=g;c.fillRect(0,0,W,H);
+      };
+      bgFill(ref);
+      const put=(im,a)=>{if(!im||!im.width||a<=0)return;
+        if(a>=0.999)bgFill(im); // fully opaque image owns the canvas bg — no band edges
+        const r=rect(im);c.globalAlpha=Math.min(1,a);c.drawImage(im,r.dx,r.dy,r.dw,r.dh);c.globalAlpha=1;};
+      // the light footage has a hard cut between its two source segments
+      // (frame 44 → 45): dissolve across it instead of letting the scrub jump
+      const CUT=SET===HF.light?{a:38,b:50}:null;
+      if(CUT&&fi>CUT.a&&fi<CUT.b){
+        const t=(fi-CUT.a)/(CUT.b-CUT.a);
+        put(SET.frames[CUT.a],1);put(SET.frames[CUT.b],t*t*(3-2*t));
+      }else{
+        put(SET.frames[Math.min(n-1,Math.round(fi))],1);
       }
+      if(SET.labeled&&SET.labeled.width){ // labeled still shows at the exploded peak
+        put(SET.labeled,Math.min(clampL(p,0.50,0.58),1-clampL(p,0.70,0.78)));
+      }
+      // feather the pinned section's top & bottom edges into the page bg
+      const gt=c.createLinearGradient(0,0,0,H*0.14);gt.addColorStop(0,cssRGBA('--bg',1));gt.addColorStop(1,cssRGBA('--bg',0));c.fillStyle=gt;c.fillRect(0,0,W,H*0.14);
+      const gb=c.createLinearGradient(0,H*0.86,0,H);gb.addColorStop(0,cssRGBA('--bg',0));gb.addColorStop(1,cssRGBA('--bg',1));c.fillStyle=gb;c.fillRect(0,H*0.86,W,H*0.14);
       return;
     }
   }
@@ -1301,18 +1346,23 @@ function bridgeUpdate(){
   if(!src||!src.width)return;
   const q0=clampL((y-start)/Math.max(1,end-start),0,1);
   const q=q0*q0*(3-2*q0);
-  const s=Math.min(W/src.width,H/src.height),dh=src.height*s,dy=(H-dh)/2;
+  const mobile=W<=760;
+  let s=Math.min(W/src.width,H/src.height);
+  if(mobile)s=Math.min(W/src.width*1.35,H*0.52/src.height);
+  const dh=src.height*s,dy=mobile?H*0.68-dh/2:(H-dh)/2;
   // from: hero battery position (frame contain-fit) · to: apps intro anchor
   const hx=W/2,hy=dy+dh*0.465,hh=dh*0.98;
-  const ax=W*0.52,ay=H*0.46,ah=dh*0.80;
+  const ax=mobile?W*0.5:W*0.52,ay=mobile?H*0.62:H*0.46,ah=dh*0.80;
   const x=hx+(ax-hx)*q,yc=hy+(ay-hy)*q,hgt=hh+(ah-hh)*q;
-  const draw=(im,alpha)=>{
+  const draw=(im,alpha,comp)=>{
     if(!im||!im.width||alpha<=0)return;
     const sx=im.width*0.375,sw=im.width*0.25,sy2=0,sh=im.height*0.97;
     const cw=hgt*(sw/sh);
-    brctx.globalAlpha=alpha;brctx.drawImage(im,sx,sy2,sw,sh,x-cw/2,yc-hgt/2,cw,hgt);brctx.globalAlpha=1;
+    brctx.save();brctx.globalAlpha=alpha;if(comp)brctx.globalCompositeOperation=comp;
+    brctx.drawImage(im,sx,sy2,sw,sh,x-cw/2,yc-hgt/2,cw,hgt);brctx.restore();
   };
-  if(line&&line.width){draw(src,1-q);draw(line,q);} // photoreal dissolves into blueprint
+  // blueprint sprite has a baked bg — multiply (light) / screen (dark) melts it away
+  if(line&&line.width){draw(src,1-q);draw(line,q,dark?'screen':'multiply');}
   else draw(src,1);
 }
 window.addEventListener('scroll',bridgeUpdate,{passive:true});
@@ -1353,9 +1403,24 @@ function a3Draw(){
   const dark=!document.body.classList.contains('sana');
   const imgs=dark?A3.dark:A3.light;
   const SET=dark?HF.dark:HF.light;
-  const rectFor=img=>{ // contain-fit, centered — bg gaps blend with page bg
-    const s=Math.min(W/img.width,H/img.height),dw=img.width*s,dh=img.height*s;
-    return{dx:(W-dw)/2,dy:(H-dh)/2,dw,dh};
+  const mobile=W<=760;
+  const rectFor=img=>{ // contain-fit; on mobile the visual sits below the stacked text
+    let s=Math.min(W/img.width,H/img.height);
+    if(mobile)s=Math.min(W/img.width*1.25,H*0.55/img.height);
+    const dw=img.width*s,dh=img.height*s;
+    return{dx:(W-dw)/2,dy:mobile?H*0.66-dh/2:(H-dh)/2,dw,dh};
+  };
+  const edges=im=>{ // image bg edge colors, sampled once (top & bottom center)
+    if(im._bgT===undefined){try{const oc=document.createElement('canvas');oc.width=1;oc.height=2;const o=oc.getContext('2d');
+      o.drawImage(im,im.width/2-3,0,6,4,0,0,1,1);o.drawImage(im,im.width/2-3,im.height-4,6,4,0,1,1,1);
+      const d=o.getImageData(0,0,1,2).data;im._bgT=`rgb(${d[0]},${d[1]},${d[2]})`;im._bgB=`rgb(${d[4]},${d[5]},${d[6]})`;}catch(e){im._bgT=null;im._bgB=null;}}
+    return im._bgT?[im._bgT,im._bgB]:null;
+  };
+  const bgFill=im=>{ // extend the image's own bg gradient across the whole canvas
+    const eb=edges(im);if(!eb)return;
+    const r=rectFor(im),g=c.createLinearGradient(0,r.dy,0,r.dy+r.dh);
+    g.addColorStop(0,eb[0]);g.addColorStop(1,eb[1]);
+    c.fillStyle=g;c.fillRect(0,0,W,H);
   };
   const place=(img,alpha,scale)=>{
     if(!img||!img.width||alpha<=0)return null;
@@ -1370,6 +1435,7 @@ function a3Draw(){
   // the app images themselves — pure crossfades between them, no travel
   const dimgs=dark?A3.darkD:A3.lightD;
   let baseRect=null;
+  const draws=[];
   A3WINS.forEach((w,i)=>{
     const fadeIn=clampL(p,w[0]-0.02,w[0]+0.045);
     const fadeOut=i<3?1-clampL(p,w[1]-0.02,w[1]+0.045):1;
@@ -1377,9 +1443,12 @@ function a3Draw(){
     if(a>0){
       const zoom=1.0+0.03*(1-clampL(p,w[0],w[1]));
       const im=(dimgs[i]&&dimgs[i].width)?dimgs[i]:imgs[i];
-      const r=place(im,a,zoom);if(r)baseRect=r;
+      if(im&&im.width)draws.push({im,a,zoom});
     }
   });
+  const domi=draws.reduce((m,d)=>!m||d.a>m.a?d:m,null);
+  if(domi)bgFill(domi.im); // dominant image's bg owns the canvas — no band edges
+  draws.forEach(d=>{const r=place(d.im,d.a,d.zoom);if(r)baseRect=r;});
   if(!baseRect){const ref=imgs[0]&&imgs[0].width?imgs[0]:(SET.frames[0]&&SET.frames[0].width?SET.frames[0]:null);if(ref)baseRect=rectFor(ref);}
   // intro: blueprint-outline cell, fully faded out before the first vehicle appears
   const line=dark?A3.darkLine:A3.lightLine;
@@ -1388,12 +1457,17 @@ function a3Draw(){
   const cellA=bridgeActive?0:1-clampL(p,0.09,0.135);
   if(cellA>0&&cf&&cf.width&&baseRect){
     const drift=clampL(p,0,0.135);
-    const cx=W*0.52,cy=H*0.46+drift*H*0.04;
+    const cx=mobile?W*0.5:W*0.52,cy=(mobile?H*0.62:H*0.46)+drift*H*0.04;
     const ch=baseRect.dh*0.80*(1-0.15*drift);
     const sx=cf.width*0.375,sw=cf.width*0.25,sy=0,sh=cf.height*0.97;
     const cw=ch*(sw/sh);
-    c.save();c.globalAlpha=cellA;c.drawImage(cf,sx,sy,sw,sh,cx-cw/2,cy-ch/2,cw,ch);c.restore();
+    // blueprint sprite has a baked bg — multiply (light) / screen (dark) melts it away
+    c.save();c.globalAlpha=cellA;if(cf===line)c.globalCompositeOperation=dark?'screen':'multiply';
+    c.drawImage(cf,sx,sy,sw,sh,cx-cw/2,cy-ch/2,cw,ch);c.restore();
   }
+  // feather the pinned section's top & bottom edges into the page bg
+  const gt=c.createLinearGradient(0,0,0,H*0.14);gt.addColorStop(0,cssRGBA('--bg',1));gt.addColorStop(1,cssRGBA('--bg',0));c.fillStyle=gt;c.fillRect(0,0,W,H*0.14);
+  const gb=c.createLinearGradient(0,H*0.86,0,H);gb.addColorStop(0,cssRGBA('--bg',0));gb.addColorStop(1,cssRGBA('--bg',1));c.fillStyle=gb;c.fillRect(0,H*0.86,W,H*0.14);
 }
 function updateA3(){
   if(!apps3El)return;
