@@ -140,6 +140,71 @@
   .runlog{font-family:var(--data);font-size:11px;color:var(--accent2);margin-top:16px;min-height:16px}
   body.sana .runlog{color:var(--mute)}
 
+  /* ============ SIM STUDIO ============ */
+  .studio{display:grid;grid-template-columns:225px 1fr;gap:22px;align-items:start}
+  .sarea{min-width:0}
+  .srail{position:sticky;top:96px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:4px}
+  .srail .rl{font-family:var(--data);font-size:10px;color:var(--mute);letter-spacing:.14em;text-transform:uppercase;padding:6px 10px 8px}
+  .ritem{display:block;width:100%;text-align:left;background:transparent;border:1px solid transparent;border-radius:var(--radius-sm);padding:10px 12px;cursor:pointer;font-family:var(--body);color:var(--text);transition:all .15s}
+  .ritem b{display:block;font-family:var(--display);font-size:14px;font-weight:600}
+  .ritem small{display:block;color:var(--mute);font-size:11px;margin-top:2px;font-family:var(--data)}
+  .ritem:hover{border-color:var(--border)}
+  .ritem.on{background:color-mix(in srgb,var(--accent) 10%,transparent);border-color:var(--accent)}
+  .ritem.on b{color:var(--accent)}
+  .ritem.dis{opacity:.45;cursor:default}
+  .ritem.dis:hover{border-color:transparent}
+  .rdiv{height:1px;background:var(--border);margin:8px 6px}
+  .ritem .badge{font-size:9px;padding:2px 7px;margin-left:6px;vertical-align:1px}
+  @media(max-width:900px){
+    .studio{grid-template-columns:1fr}
+    .srail{position:static;flex-direction:row;overflow-x:auto;padding:8px}
+    .srail .rl,.rdiv{display:none}
+    .ritem{width:auto;white-space:nowrap;flex:0 0 auto}
+    .ritem small{display:none}
+  }
+  .sview{display:none}.sview.show{display:block}
+  .scen{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+  .scen .slbl{font-family:var(--data);font-size:11px;color:var(--mute);letter-spacing:.1em;text-transform:uppercase;margin-right:4px}
+  /* timeline (animation-tool style scrubber) */
+  .timeline{display:flex;align-items:center;gap:14px;margin-top:16px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 16px}
+  .tl-btn{width:34px;height:34px;flex:0 0 34px;border-radius:50%;background:var(--accent);color:var(--accent-ink);border:none;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:transform .15s}
+  .tl-btn:hover{transform:scale(1.08)}
+  .tl-btn:disabled{opacity:.35;cursor:default;transform:none}
+  .timeline input[type=range]{flex:1}
+  .tl-time{font-family:var(--data);font-size:12px;color:var(--mute);min-width:110px;text-align:right;white-space:nowrap}
+  .tl-key{font-family:var(--data);font-size:10px;color:var(--mute);border:1px solid var(--border);border-radius:4px;padding:2px 6px}
+  @media(max-width:600px){.tl-key{display:none}}
+  /* pack viewbar */
+  .viewbar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+  .viewbar .vlbl{font-family:var(--data);font-size:10px;color:var(--mute);letter-spacing:.12em}
+  .minitabs{display:flex;gap:4px}
+  .minitabs button{padding:6px 12px;font-size:12px;border-radius:var(--radius-sm);border:1px solid var(--border);background:transparent;color:var(--mute);cursor:pointer;font-family:var(--data)}
+  .minitabs button.active{color:var(--accent);border-color:var(--accent);background:color-mix(in srgb,var(--accent) 7%,transparent)}
+  .inspector{font-family:var(--data);font-size:12px;color:var(--accent2);margin-top:14px;min-height:18px}
+  body.sana .inspector{color:var(--text)}
+  .plegend{display:flex;align-items:center;gap:8px;font-family:var(--data);font-size:10px;color:var(--mute);margin-left:auto}
+  .plegend .bar{width:90px;height:8px;border-radius:4px;background:linear-gradient(90deg,var(--accent2),var(--accent),var(--heat))}
+  /* materials */
+  .matgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:1000px){.matgrid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:620px){.matgrid{grid-template-columns:1fr}}
+  .matcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;cursor:pointer;transition:transform .2s,border-color .2s;box-shadow:var(--shadow)}
+  .matcard:hover{transform:translateY(-3px);border-color:var(--accent)}
+  .matcard h3{font-family:var(--display);font-size:18px;font-weight:600}
+  .matcard .formula{font-family:var(--data);font-size:11px;color:var(--mute);margin-bottom:10px}
+  .matcard canvas{width:100%;height:90px;display:block;background:var(--plot-bg);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:12px}
+  .matcard .mrow{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid color-mix(in srgb,var(--border) 55%,transparent)}
+  .matcard .mrow:last-of-type{border-bottom:none}
+  .matcard .mrow .k{color:var(--mute)}
+  .matcard .mrow .v{font-family:var(--data)}
+  .mtags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+  .mtag{font-family:var(--data);font-size:10px;color:var(--accent2);border:1px solid var(--border);border-radius:999px;padding:2px 9px}
+  .mat-detail-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:22px}
+  @media(max-width:900px){.mat-detail-grid{grid-template-columns:1fr}}
+  .matplot{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+  .matplot canvas{width:100%;display:block;background:var(--plot-bg);border:1px solid var(--border);border-radius:var(--radius-sm)}
+  .matnote{color:var(--mute);font-size:14px;line-height:1.7;margin-top:14px}
+
   /* ============ LIBRARY ============ */
   .toolrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:14px;flex-wrap:wrap}
   .subtabs{display:flex;gap:8px}
@@ -252,6 +317,50 @@
   .acc-body .inner{padding:0 22px 20px;line-height:1.7}
   .duedate{display:inline-flex;align-items:center;gap:8px;font-family:var(--data);font-size:12px;color:var(--accent2);border:1px solid var(--border);padding:6px 14px;border-radius:999px;margin-bottom:18px}
 
+  /* ============ V3 — SCROLL LANDING ============ */
+  .landing3,.l3stats{display:none}
+  body.v3 .landing3{display:block}
+  body.v3 .l3stats{display:block}
+  .landing3{position:relative;height:260vh}
+  .lpin{position:sticky;top:0;height:100vh;overflow:hidden}
+  #bat3{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .l3gridov{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:64px 64px;opacity:.16;-webkit-mask-image:radial-gradient(ellipse at center,black 30%,transparent 78%);mask-image:radial-gradient(ellipse at center,black 30%,transparent 78%)}
+  .l3content{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);z-index:3;pointer-events:none;transition:opacity .3s}
+  .l3eyebrow{font-family:var(--data);font-size:13px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;margin-bottom:22px}
+  .l3title{font-family:var(--display);font-weight:700;font-size:clamp(44px,9vw,140px);line-height:.95;letter-spacing:-.02em;max-width:9ch;color:var(--text)}
+  .l3title .w{display:inline-block;white-space:nowrap}
+  .l3title .w span{display:inline-block;opacity:0;transform:translateY(30px);transition:opacity .4s,transform .4s}
+  .l3title .w span.on{opacity:1;transform:none}
+  .l3sub{font-size:clamp(15px,1.8vw,20px);color:var(--mute);margin-top:22px;max-width:430px;opacity:0;transition:opacity .4s}
+  .l3state{position:absolute;left:32px;bottom:26px;font-family:var(--data);font-size:11px;letter-spacing:.14em;color:var(--mute);z-index:3}
+  .l3state b{color:var(--accent)}
+  .l3hint{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);font-family:var(--data);font-size:11px;color:var(--mute);letter-spacing:.18em;z-index:3;transition:opacity .4s;animation:l3bob 2s ease-in-out infinite}
+  @keyframes l3bob{50%{transform:translate(-50%,6px)}}
+  @media(prefers-reduced-motion:reduce){.l3hint{animation:none}}
+  .l3callout{position:absolute;z-index:3;max-width:250px;opacity:0;transform:translateX(-14px);transition:opacity .45s,transform .45s;border-left:2px solid var(--accent);padding-left:14px;pointer-events:none}
+  .l3callout.on{opacity:1;transform:none}
+  .l3callout .k{display:block;font-family:var(--data);font-size:12px;color:var(--accent);letter-spacing:.1em;margin-bottom:6px}
+  .l3callout .d{display:block;font-size:13px;color:var(--mute);line-height:1.55}
+  #l3c1{left:80%;top:22%}
+  #l3c2{left:82%;top:46%}
+  #l3c3{left:80%;top:66%}
+  @media(max-width:1100px){#l3c1,#l3c2,#l3c3{left:auto;right:20px;max-width:190px}}
+  .l3stats{padding-top:80px;padding-bottom:10px;position:relative;z-index:5}
+  #bridgecv{position:fixed;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;display:none}
+  .statbar3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:880px){.statbar3{grid-template-columns:1fr}}
+  /* applications chapter */
+  .apps3{display:none;position:relative;height:520vh}
+  body.v3 .apps3{display:block}
+  #appcv{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .a3content{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);z-index:3;pointer-events:none}
+  .a3num{font-family:var(--data);font-size:12px;color:var(--accent);letter-spacing:.16em;text-transform:uppercase;margin-bottom:14px}
+  .a3title{font-family:var(--display);font-weight:700;font-size:clamp(34px,5.5vw,84px);letter-spacing:-.02em;line-height:1.05;max-width:480px;color:var(--text)}
+  .a3desc{font-size:clamp(14px,1.6vw,18px);color:var(--mute);margin-top:16px;max-width:400px}
+  html[lang="ko"] .a3title{word-break:keep-all}
+  .a3scrim{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 72%,transparent) 30%,transparent 54%)}
+  @media(max-width:760px){.a3scrim{background:linear-gradient(90deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 60%,transparent) 45%,transparent 78%)}}
+
   /* ============ CONTACT/FOOTER ============ */
   .contact{text-align:center;padding-top:100px;padding-bottom:100px}
   .contact h2{font-family:var(--display);font-size:clamp(30px,5vw,52px);font-weight:700;letter-spacing:-.02em;margin-bottom:20px;overflow-wrap:break-word;word-break:break-word}
@@ -271,6 +380,8 @@
   <button data-style="sana" data-v2="0">Clean</button>
   <button data-style="lab" data-v2="1">Lab 2</button>
   <button data-style="sana" data-v2="1">Clean 2</button>
+  <button data-style="lab" data-v2="2">Lab 3</button>
+  <button data-style="sana" data-v2="2">Clean 3</button>
 </div>
 
 <nav>
@@ -319,6 +430,52 @@
 
 <!-- ============ HOME V2 — DIGITAL TWIN ============ -->
 <div class="page" id="page-home2">
+  <!-- V3 scroll landing — shown only for Lab 3 / Clean 3; rest of the page is untouched -->
+  <div class="landing3" id="landing3">
+    <div class="lpin">
+      <canvas id="bat3"></canvas>
+      <div class="l3gridov"></div>
+      <div class="l3content" id="l3content">
+        <div class="wrap">
+          <div class="l3eyebrow" id="l3eyebrow">Next-gen cylindrical cell</div>
+          <h1 class="l3title" id="l3title" aria-label="NEXT-GEN CELL"></h1>
+          <p class="l3sub" id="l3sub">Exploring the architecture of clean energy density.</p>
+        </div>
+      </div>
+      <div class="l3callout" id="l3c1"><span class="k">01 GRAPHITE ANODE</span><span class="d">High-conductivity negative electrode layer for stable electron flow.</span></div>
+      <div class="l3callout" id="l3c2"><span class="k">02 POROUS SEPARATOR</span><span class="d">Ultra-thin polyolefin film preventing short circuits.</span></div>
+      <div class="l3callout" id="l3c3"><span class="k">03 LITHIUM CATHODE</span><span class="d">High-density positive electrode material driving the power.</span></div>
+      <div class="l3state" id="l3state"></div>
+      <div class="l3hint" id="l3hint">SCROLL ▾</div>
+    </div>
+  </div>
+  <div class="l3stats wrap" id="l3stats">
+    <div class="statbar3">
+      <div class="stat"><div class="n"><span data-c3="850">0</span><small> Wh/L</small></div><div class="l">Energy density</div></div>
+      <div class="stat"><div class="n"><span data-c3="2000">0</span><small>+</small></div><div class="l">Lifecycle loops</div></div>
+      <div class="stat"><div class="n"><span data-c3="15">0</span><small> min</small></div><div class="l">Ultra-fast charge</div></div>
+    </div>
+  </div>
+  <!-- V3 bridge: the cell passes behind the stats strip between the two pinned sections -->
+  <canvas id="bridgecv"></canvas>
+  <!-- V3 applications chapter: battery → EV / ESS / UAM / scooter wireframes -->
+  <div class="apps3" id="apps3">
+    <div class="lpin">
+      <canvas id="appcv"></canvas>
+      <div class="l3gridov"></div>
+      <div class="a3scrim"></div>
+      <div class="a3content">
+        <div class="wrap">
+          <div id="a3inner" style="transition:opacity .3s,transform .3s">
+            <div class="a3num" id="a3num"></div>
+            <h2 class="a3title" id="a3title"></h2>
+            <p class="a3desc" id="a3desc"></p>
+          </div>
+        </div>
+      </div>
+      <div class="l3state" id="a3state"></div>
+    </div>
+  </div>
   <header class="hero wrap">
     <div class="cell-viz" id="cellViz2"></div>
     <div class="eyebrow">Battery Digital Twin Platform</div>
@@ -381,35 +538,119 @@
   <footer>VOLTSCAPE — digital twin concept · 2026</footer>
 </div>
 
-<!-- ============ SIMULATOR ============ -->
+<!-- ============ SIMULATOR / STUDIO ============ -->
 <div class="page" id="page-sim">
   <div class="wrap pagepad">
-    <div class="sec-label">Live demo</div>
+    <div class="sec-label">Simulation studio</div>
     <h2 class="sec-title">Simulator</h2>
-    <p class="sec-sub">Front-end mock of the real flow. Curves are generated client-side to show how a server result would look — in production these come back from your solver.</p>
-    <div class="sim-shell">
-      <div class="sim-controls">
-        <h4>Operating conditions</h4>
-        <div class="hint">// input parameters</div>
-        <div class="loaded-cell" id="loadedCell"></div>
-        <div class="field"><label>Discharge C-rate <span class="val" id="crateVal">1.0 C</span></label><input type="range" id="crate" min="0.2" max="5" step="0.1" value="1"></div>
-        <div class="field"><label>Ambient temp <span class="val" id="tempVal">25 °C</span></label><input type="range" id="temp" min="-10" max="55" step="1" value="25"></div>
-        <div class="field"><label>Capacity <span class="val" id="capVal">50 Ah</span></label><input type="range" id="cap" min="2" max="160" step="1" value="50"></div>
-        <div class="field"><label style="margin-bottom:12px">Chemistry</label>
-          <div class="seg" id="chem"><button class="active" data-c="NMC">NMC</button><button data-c="LFP">LFP</button><button data-c="LTO">LTO</button></div>
+    <p class="sec-sub">One studio, three tools — configure a cell, wire it into a pack, and ground both in electrode data. Results are client-side mocks of the production solver flow.</p>
+    <div class="studio">
+      <aside class="srail">
+        <div class="rl" id="railLbl">Simulation Studio</div>
+        <button class="ritem on" data-sv="cell"><b>Cell Studio</b><small>single cell · P2D demo</small></button>
+        <button class="ritem" data-sv="pack"><b>Pack Builder</b><small>multi-cell network</small></button>
+        <button class="ritem" data-sv="mat"><b>Materials</b><small>OCV · property data</small></button>
+        <div class="rdiv"></div>
+        <button class="ritem dis" id="r3d"><b>Cell 3D <span class="badge coming">DEV</span></b><small>interactive 3D view</small></button>
+        <button class="ritem dis" id="rdeg"><b>Degradation <span class="badge coming">DEV</span></b><small>aging &amp; cycle life</small></button>
+      </aside>
+      <div class="sarea">
+
+        <!-- ---- CELL STUDIO ---- -->
+        <div class="sview show" id="sv-cell">
+          <div class="scen" id="scen"></div>
+          <div class="sim-shell">
+            <div class="sim-controls">
+              <h4>Operating conditions</h4>
+              <div class="hint">// input parameters</div>
+              <div class="loaded-cell" id="loadedCell"></div>
+              <div class="field"><label>Discharge C-rate <span class="val" id="crateVal">1.0 C</span></label><input type="range" id="crate" min="0.2" max="5" step="0.1" value="1"></div>
+              <div class="field"><label>Ambient temp <span class="val" id="tempVal">25 °C</span></label><input type="range" id="temp" min="-10" max="55" step="1" value="25"></div>
+              <div class="field"><label>Capacity <span class="val" id="capVal">50 Ah</span></label><input type="range" id="cap" min="2" max="160" step="1" value="50"></div>
+              <div class="field"><label style="margin-bottom:12px">Chemistry</label>
+                <div class="seg" id="chem"><button class="active" data-c="NMC">NMC</button><button data-c="LFP">LFP</button><button data-c="LTO">LTO</button></div>
+              </div>
+              <button class="run-btn" id="run">▶ Run analysis</button>
+              <div class="stack-note">Production target: <b>FastAPI</b> + job queue<br>Solver: <b>Python / MATLAB / C</b> container<br>Plots: <b>WebGL</b> + server PNG fallback</div>
+            </div>
+            <div class="sim-output">
+              <div class="out-tabs"><button class="active" data-tab="voltage">voltage_curve</button><button data-tab="contour">thermal_contour</button></div>
+              <div class="canvas-wrap"><canvas id="plot" width="720" height="380"></canvas></div>
+              <div class="timeline">
+                <button class="tl-btn" id="tlPlay" disabled>▶</button>
+                <input type="range" id="tlScrub" min="0" max="1000" value="1000" disabled>
+                <span class="tl-time" id="tlTime">t = — / — min</span>
+                <span class="tl-key">SPACE</span>
+              </div>
+              <div class="out-meta">
+                <div class="metric"><div class="k">Energy delivered</div><div class="v lime" id="mEnergy">—</div></div>
+                <div class="metric"><div class="k">Runtime</div><div class="v" id="mTime">—</div></div>
+                <div class="metric"><div class="k">Peak temp</div><div class="v heat" id="mPeak">—</div></div>
+              </div>
+              <div class="runlog" id="runlog">// idle — press Run analysis</div>
+            </div>
+          </div>
         </div>
-        <button class="run-btn" id="run">▶ Run analysis</button>
-        <div class="stack-note">Production target: <b>FastAPI</b> + job queue<br>Solver: <b>Python / MATLAB / C</b> container<br>Plots: <b>WebGL</b> + server PNG fallback</div>
-      </div>
-      <div class="sim-output">
-        <div class="out-tabs"><button class="active" data-tab="voltage">voltage_curve</button><button data-tab="contour">thermal_contour</button></div>
-        <div class="canvas-wrap"><canvas id="plot" width="720" height="380"></canvas></div>
-        <div class="out-meta">
-          <div class="metric"><div class="k">Energy delivered</div><div class="v lime" id="mEnergy">—</div></div>
-          <div class="metric"><div class="k">Runtime</div><div class="v" id="mTime">—</div></div>
-          <div class="metric"><div class="k">Peak temp</div><div class="v heat" id="mPeak">—</div></div>
+
+        <!-- ---- PACK BUILDER ---- -->
+        <div class="sview" id="sv-pack">
+          <div class="scen" id="packpre"></div>
+          <div class="sim-shell">
+            <div class="sim-controls">
+              <h4>Pack configuration</h4>
+              <div class="hint">// series × parallel network</div>
+              <div class="field"><label>Series count <span class="val" id="psVal">13 S</span></label><input type="range" id="ps" min="1" max="96" step="1" value="13"></div>
+              <div class="field"><label>Parallel count <span class="val" id="ppVal">4 P</span></label><input type="range" id="pp" min="1" max="8" step="1" value="4"></div>
+              <div class="field"><label>Discharge C-rate <span class="val" id="pcVal">1.0 C</span></label><input type="range" id="pc" min="0.2" max="5" step="0.1" value="1"></div>
+              <div class="field"><label>Ambient temp <span class="val" id="ptVal">25 °C</span></label><input type="range" id="pt" min="-10" max="55" step="1" value="25"></div>
+              <div class="field"><label>Cell mismatch <span class="val" id="pmVal">3.0 %</span></label><input type="range" id="pm" min="0" max="10" step="0.5" value="3"></div>
+              <div class="field"><label style="margin-bottom:12px">Chemistry</label>
+                <div class="seg" id="pchem"><button class="active" data-c="NMC">NMC</button><button data-c="LFP">LFP</button><button data-c="LTO">LTO</button></div>
+              </div>
+              <button class="run-btn" id="prun">▶ Solve pack</button>
+              <div class="stack-note" id="pkNote"></div>
+            </div>
+            <div class="sim-output">
+              <div class="viewbar">
+                <span class="vlbl">COLOR</span>
+                <div class="minitabs" id="pmodeTabs"><button class="active" data-m="T">temp</button><button data-m="V">voltage</button><button data-m="S">soc</button></div>
+                <span class="vlbl">VIEW</span>
+                <div class="minitabs" id="pviewTabs"><button class="active" data-v="grid">pack</button><button data-v="circuit">circuit</button></div>
+                <span class="plegend"><span id="plegLo">—</span><span class="bar" id="plegBar"></span><span id="plegHi">—</span></span>
+              </div>
+              <div class="canvas-wrap"><canvas id="packcv" width="720" height="380"></canvas></div>
+              <div class="timeline">
+                <button class="tl-btn" id="ptlPlay" disabled>▶</button>
+                <input type="range" id="ptlScrub" min="0" max="1000" value="0" disabled>
+                <span class="tl-time" id="ptlTime">t = — / — min</span>
+                <span class="tl-key">SPACE</span>
+              </div>
+              <div class="out-meta">
+                <div class="metric"><div class="k">Pack voltage</div><div class="v lime" id="pkV">—</div></div>
+                <div class="metric"><div class="k">Energy</div><div class="v" id="pkE">—</div></div>
+                <div class="metric"><div class="k">ΔV imbalance</div><div class="v" id="pkDV">—</div></div>
+                <div class="metric"><div class="k">ΔT spread</div><div class="v heat" id="pkDT">—</div></div>
+              </div>
+              <div class="inspector" id="pinspect">// click a cell to inspect it</div>
+            </div>
+          </div>
         </div>
-        <div class="runlog" id="runlog">// idle — press Run analysis</div>
+
+        <!-- ---- MATERIALS ---- -->
+        <div class="sview" id="sv-mat">
+          <div class="toolrow">
+            <div class="subtabs" id="mtabs"><button class="active" data-mt="c">Cathodes</button><button data-mt="a">Anodes</button><button data-mt="cmp">Compare</button></div>
+            <div class="rowcount" id="matnote" style="margin-top:0"></div>
+          </div>
+          <div class="matgrid" id="matgrid"></div>
+          <div id="matcmp" style="display:none">
+            <div class="cmp-pickbar" id="matpick"></div>
+            <div class="matplot" style="margin-bottom:18px"><canvas id="matcv" width="720" height="340"></canvas><div id="matlegend" style="margin-top:10px"></div></div>
+            <div class="cmp-table" id="mattbl"></div>
+          </div>
+          <div id="matdetail" style="display:none"></div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -582,19 +823,24 @@ function go(name){
   if(name==='library')showList();
   if(name==='compare')renderCompare();
   if(name==='contact'){setTimeout(()=>document.getElementById(v2?'contact2':'contact').scrollIntoView({behavior:'smooth'}),60);return;}
+  if(!pages[name]&&document.body.classList.contains('v3'))setTimeout(l3Activate,30);
   window.scrollTo(0,0);
 }
 document.querySelectorAll('[data-go]').forEach(el=>el.addEventListener('click',()=>go(el.dataset.go)));
 
 // ================= STYLE SWITCHER =================
 document.querySelectorAll('.switcher button').forEach(b=>b.onclick=()=>{
-  v2=b.dataset.v2==='1';
-  document.body.className=b.dataset.style+(v2?' v2':'');
+  v2=b.dataset.v2!=='0';
+  const v3=b.dataset.v2==='2';
+  document.body.className=b.dataset.style+(v2?' v2':'')+(v3?' v3':'');
   document.querySelectorAll('.switcher button').forEach(x=>x.classList.toggle('on',x===b));
   if(lastResult)draw();
+  drawPack();
+  if(document.getElementById('sv-mat').classList.contains('show'))renderMaterials();
   if(document.getElementById('lib-detail').style.display==='block'&&currentCell!=null)document.getElementById('d-pic').innerHTML=cellSVG();
   // if a home page is on screen, swap it for the variant that matches the tab
   if(document.getElementById('page-home').classList.contains('show')||document.getElementById('page-home2').classList.contains('show'))go('home');
+  if(v3)setTimeout(l3Activate,60);
 });
 
 // ================= LIBRARY =================
@@ -637,7 +883,7 @@ function openDetail(i){
 }
 $('back').onclick=showList;
 $('d-addcmp').onclick=()=>{toggleCompare(currentCell);go('compare');};
-$('simbtn').onclick=()=>{loadCellIntoSim(currentCell);go('sim');setTimeout(()=>document.getElementById('run').click(),300);};
+$('simbtn').onclick=()=>{loadCellIntoSim(currentCell);go('sim');goStudio('cell');setTimeout(()=>document.getElementById('run').click(),300);};
 
 // ================= SIMULATOR =================
 const crate=$('crate'),temp=$('temp'),cap=$('cap');
@@ -675,14 +921,29 @@ function draw(){
   ctx.strokeStyle=grid;ctx.lineWidth=1;ctx.fillStyle=mute;ctx.font="11px 'IBM Plex Mono'";
   for(let i=0;i<=5;i++){const y=padT+py*i/5;ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(W-padR,y);ctx.stroke();}
   if(tab==='voltage'){
-    const v0=r.v0;ctx.strokeStyle=line;ctx.lineWidth=2.5;ctx.beginPath();
-    for(let i=0;i<=200;i++){const soc=i/200;const v=v0+0.35*Math.exp(-soc*4)-0.45*soc-(soc>0.85?(soc-0.85)*6:0)-r.c*0.04;const x=padL+px*soc;const ymin=v0-1.2,ymax=v0+0.5;const y=padT+py*(1-(v-ymin)/(ymax-ymin));i?ctx.lineTo(x,y):ctx.moveTo(x,y);}
-    ctx.stroke();ctx.fillStyle=mute;ctx.fillText('Voltage (V)',6,padT+8);ctx.fillText('Depth of discharge →',padL,H-10);
+    const v0=r.v0,p=cellTL?cellTL.p:1;
+    const ymin=v0-1.2,ymax=v0+0.5;
+    const X=s=>padL+px*s,Y=v=>padT+py*(1-(v-ymin)/(ymax-ymin));
+    const vAt=s=>v0+0.35*Math.exp(-s*4)-0.45*s-(s>0.85?(s-0.85)*6:0)-r.c*0.04;
+    // full trajectory, dimmed (animation-tool "ghost" of the whole take)
+    ctx.globalAlpha=.25;ctx.strokeStyle=mute;ctx.lineWidth=1.5;ctx.beginPath();
+    for(let i=0;i<=200;i++){const s=i/200;i?ctx.lineTo(X(s),Y(vAt(s))):ctx.moveTo(X(s),Y(vAt(s)));}
+    ctx.stroke();ctx.globalAlpha=1;
+    // solved portion up to the playhead
+    ctx.strokeStyle=line;ctx.lineWidth=2.5;ctx.beginPath();
+    const n=Math.max(1,Math.round(200*p));
+    for(let i=0;i<=n;i++){const s=i/200;i?ctx.lineTo(X(s),Y(vAt(s))):ctx.moveTo(X(s),Y(vAt(s)));}
+    ctx.stroke();
+    const pe=Math.min(1,p);
+    if(p<1){ctx.strokeStyle=css('--accent2');ctx.setLineDash([4,4]);ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(X(pe),padT);ctx.lineTo(X(pe),padT+py);ctx.stroke();ctx.setLineDash([]);}
+    ctx.fillStyle=line;ctx.beginPath();ctx.arc(X(pe),Y(vAt(pe)),4.5,0,7);ctx.fill();
+    ctx.fillStyle=mute;ctx.fillText('Voltage (V)',6,padT+8);ctx.fillText('Depth of discharge →',padL,H-10);
   }else{
     const cols=48,rows=24,cw=px/cols,ch=py/rows,peak=+r.peak;
+    const pf=0.15+0.85*(cellTL?cellTL.p:1); // heat builds up over the timeline
     // gradient endpoints from theme
     const c1=hexRGB(css('--accent2')||'#4ad6ff'),c2=hexRGB(css('--accent')||'#c6ff4a'),c3=hexRGB(css('--heat')||'#ff6b4a');
-    for(let i=0;i<cols;i++)for(let j=0;j<rows;j++){const cx=i/cols,cy=j/rows;const d=Math.hypot(cx-0.5,cy-0.7);const val=Math.max(0,1-d*1.5)*(0.6+r.c*0.08);const tC=r.t+val*(peak-r.t);const norm=Math.min(1,Math.max(0,(tC-r.t)/(peak-r.t+0.001)));let col;if(norm<0.5){col=mix(c1,c2,norm/0.5);}else{col=mix(c2,c3,(norm-0.5)/0.5);}ctx.fillStyle=`rgb(${col[0]|0},${col[1]|0},${col[2]|0})`;ctx.fillRect(padL+i*cw,padT+j*ch,cw+1,ch+1);}
+    for(let i=0;i<cols;i++)for(let j=0;j<rows;j++){const cx=i/cols,cy=j/rows;const d=Math.hypot(cx-0.5,cy-0.7);const val=Math.max(0,1-d*1.5)*(0.6+r.c*0.08)*pf;const tC=r.t+val*(peak-r.t);const norm=Math.min(1,Math.max(0,(tC-r.t)/(peak-r.t+0.001)));let col;if(norm<0.5){col=mix(c1,c2,norm/0.5);}else{col=mix(c2,c3,(norm-0.5)/0.5);}ctx.fillStyle=`rgb(${col[0]|0},${col[1]|0},${col[2]|0})`;ctx.fillRect(padL+i*cw,padT+j*ch,cw+1,ch+1);}
     ctx.fillStyle=document.body.classList.contains('lab')?'#e6ecf7':'#fff';ctx.font="11px 'IBM Plex Mono'";ctx.fillText('cell surface temperature map',padL+6,padT+16);
   }
 }
@@ -693,7 +954,7 @@ run.onclick=()=>{
   run.disabled=true;run.textContent=lang==='ko'?'⟳ 해석 중…':'⟳ Running…';
   const steps=['→ POST /api/solve','→ queued job #'+(Math.random()*9000+1000|0),'→ solver: '+chem+' model','→ writing results…'];
   let i=0;runlog.textContent='';
-  const iv=setInterval(()=>{runlog.textContent=steps[i]||runlog.textContent;if(++i>=steps.length){clearInterval(iv);lastResult=compute();draw();$('mEnergy').textContent=lastResult.energy+' kWh';$('mTime').textContent=lastResult.runtime+' min';$('mPeak').textContent=lastResult.peak+' °C';runlog.textContent='✓ done — result rendered ('+lastResult.energy+' kWh)';run.disabled=false;run.textContent=lang==='ko'?'▶ 해석 실행':'▶ Run analysis';}},340);
+  const iv=setInterval(()=>{runlog.textContent=steps[i]||runlog.textContent;if(++i>=steps.length){clearInterval(iv);lastResult=compute();$('mEnergy').textContent=lastResult.energy+' kWh';$('mTime').textContent=lastResult.runtime+' min';$('mPeak').textContent=lastResult.peak+' °C';runlog.textContent='✓ done — result rendered ('+lastResult.energy+' kWh)';run.disabled=false;run.textContent=lang==='ko'?'▶ 해석 실행':'▶ Run analysis';cellTL.enable(+lastResult.runtime);cellTL.set(0,true);cellTL.play();}},340);
 };
 lastResult=compute();draw();$('mEnergy').textContent=lastResult.energy+' kWh';$('mTime').textContent=lastResult.runtime+' min';$('mPeak').textContent=lastResult.peak+' °C';
 
@@ -764,6 +1025,824 @@ const io2=new IntersectionObserver(es=>es.forEach(e=>{
 }),{threshold:.3});
 const sb=document.querySelector('.statbar');if(sb)io2.observe(sb);
 document.getElementById('toProcess').onclick=()=>document.getElementById('process2').scrollIntoView({behavior:'smooth'});
+
+// ================= V3 — SCROLL LANDING =================
+// Scroll-scrubbed battery disassembly, GSAP/Lenis-style behavior implemented
+// dependency-free: scroll sets a target, an inertial rAF loop eases toward it.
+const landing3El=document.getElementById('landing3'),bat3=document.getElementById('bat3');
+const lpinEl=landing3El?landing3El.querySelector('.lpin'):null;
+const l3ctx=bat3?bat3.getContext('2d'):null;
+let l3p=0,l3target=0,l3raf=null,l3w=0,l3h=0,l3counted=false;
+const l3Reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const l3titleEl=document.getElementById('l3title'),l3letters=[];
+if(l3titleEl){let li=0;'NEXT-GEN CELL'.split(' ').forEach((word,wi)=>{
+  if(wi)l3titleEl.appendChild(document.createTextNode(' '));
+  const w=document.createElement('span');w.className='w';
+  word.split('').forEach(ch=>{const s=document.createElement('span');s.textContent=ch;s.style.transitionDelay=(li++*30)+'ms';w.appendChild(s);l3letters.push(s);});
+  l3titleEl.appendChild(w);
+});}
+function l3Intro(replay){
+  if(replay)l3letters.forEach(s=>s.classList.remove('on'));
+  setTimeout(()=>l3letters.forEach(s=>s.classList.add('on')),replay?120:40);
+}
+function hexA(h,a){try{const x=hexRGB(h);return `rgba(${x[0]},${x[1]},${x[2]},${a})`;}catch(e){return `rgba(120,130,140,${a})`;}}
+const clampL=(p,a,b)=>Math.min(1,Math.max(0,(p-a)/(b-a)));
+// Higgsfield bridge: when the rendered frame sequence exists, call e.g.
+//   loadHiggsfieldFrames('frames/cell_####.webp',120)
+// and the scrub swaps from the procedural render to the real frames.
+const HF={dark:{frames:[],ready:false},light:{frames:[],ready:false},tried:false};
+window.loadHiggsfieldFrames=(pattern,count,set)=>{const S=HF[set||'dark'];S.frames=[];S.ready=false;let done=0;
+  for(let i=1;i<=count;i++){const img=new Image();img.src=pattern.replace(/#+/,m=>String(i).padStart(m.length,'0'));img.onload=()=>{if(++done===count){S.ready=true;drawBattery3(l3p);}};S.frames.push(img);}};
+function drawBattery3(p){
+  if(!l3ctx||!l3w)return;
+  const c=l3ctx,W=l3w,H=l3h;
+  c.clearRect(0,0,W,H);
+  // timeline: 0→0.55 disassemble · 0.55→0.72 hold (labels shown) · 0.72→1 reassemble
+  const pe=p<0.55?p/0.55:p<0.72?1:Math.max(0,1-(p-0.72)/0.26);
+  const SET=document.body.classList.contains('sana')?HF.light:HF.dark;
+  if(SET.ready&&SET.frames.length){
+    if(bridgeActive)return; // the bridge sprite owns the battery between sections
+    const f=SET.frames[Math.min(SET.frames.length-1,Math.round(pe*(SET.frames.length-1)))];
+    if(f&&f.width){
+      // contain-fit: the whole frame (incl. baked labels) is always visible;
+      // leftover space blends into the page bg, which matches the footage bg.
+      const s=Math.min(W/f.width,H/f.height),dw=f.width*s,dh=f.height*s;
+      const dx=(W-dw)/2,dy=(H-dh)/2;
+      c.drawImage(f,dx,dy,dw,dh);
+      if(SET.labeled&&SET.labeled.width){ // labeled still shows at the exploded peak
+        const a=Math.min(clampL(p,0.50,0.58),1-clampL(p,0.70,0.78));
+        if(a>0){c.globalAlpha=a;c.drawImage(SET.labeled,dx,dy,dw,dh);c.globalAlpha=1;}
+      }
+      return;
+    }
+  }
+  const ez=(a,b)=>{const t=clampL(pe,a,b);return t*t*(3-2*t);};
+  const dark=!document.body.classList.contains('sana');
+  const mute=css('--mute'),acc=css('--accent'),acc2=css('--accent2');
+  const cx=W>760?W*0.60:W*0.52;
+  const bh=H*0.60,top=(H-bh)/2+H*0.02,bot=top+bh;
+  const r=Math.min(bh*0.21,W*0.13),ryE=r*0.30;
+  const split=ez(.2,.6),xray=ez(.22,.45),reveal=ez(.3,.55),bp=ez(.7,.9);
+  const sep=split*r*3.1,capLift=ez(.25,.6)*bh*0.10;
+  // ground shadow
+  c.fillStyle=dark?'rgba(0,0,0,.5)':'rgba(15,17,21,.10)';
+  c.beginPath();c.ellipse(cx,bot+ryE*2.0,r*2.4,ryE*1.1,0,0,7);c.fill();
+  const metal=(x0,x1)=>{const g=c.createLinearGradient(x0,0,x1,0);g.addColorStop(0,'#4b525b');g.addColorStop(.25,'#d6dbe1');g.addColorStop(.5,'#9aa2ac');g.addColorStop(.78,'#666e78');g.addColorStop(1,'#3c434c');return g;};
+  // ---- inner assembly: mandrel + jelly-roll sheets ----
+  const sheetGeo=[
+    {off:-r*0.15,dx:ez(.5,.75)*r*1.9, w:r*0.62,kind:'anode'},
+    {off:r*0.05, dx:ez(.55,.82)*r*3.1,w:r*0.55,kind:'sep'},
+    {off:r*0.2,  dx:ez(.6,.88)*r*4.3, w:r*0.55,kind:'cathode'},
+  ];
+  if(reveal>0){
+    const mw=r*0.5,msy=top+bh*0.05,msh=bh*0.9;
+    c.save();c.globalAlpha=reveal;
+    c.fillStyle=metal(cx-mw/2,cx+mw/2);
+    c.fillRect(cx-mw/2,msy,mw,msh);
+    c.beginPath();c.ellipse(cx,msy,mw/2,ryE*0.4,0,0,7);c.fill();
+    c.beginPath();c.ellipse(cx,msy+msh,mw/2,ryE*0.4,0,0,7);c.fill();
+    c.restore();
+    sheetGeo.forEach(s=>{
+      const x=cx+s.off+s.dx,sy=top+bh*0.09,sh=bh*0.82,bulge=s.w*0.5;
+      c.save();c.globalAlpha=reveal;
+      c.beginPath();
+      c.moveTo(x,sy);
+      c.quadraticCurveTo(x-bulge,sy+sh/2,x,sy+sh);
+      c.lineTo(x+s.w,sy+sh);
+      c.quadraticCurveTo(x+s.w-bulge,sy+sh/2,x+s.w,sy);
+      c.closePath();
+      if(s.kind==='cathode'){const g=c.createLinearGradient(x,0,x+s.w,0);g.addColorStop(0,'#6d747e');g.addColorStop(.4,'#d0d6dc');g.addColorStop(1,'#7c848e');c.fillStyle=g;}
+      else if(s.kind==='sep')c.fillStyle=dark?'#c3ccd5':'#eef1f4';
+      else c.fillStyle=dark?'#23272e':'#3a3f47';
+      c.fill();
+      c.strokeStyle=dark?'#525a64':'#9aa2ac';c.lineWidth=1;c.stroke();
+      c.clip();
+      if(s.kind==='sep'){
+        c.fillStyle=dark?'rgba(26,34,52,.5)':'rgba(120,130,142,.45)';
+        for(let yy=sy+8;yy<sy+sh;yy+=11)for(let xx=4;xx<s.w;xx+=8){
+          const b=bulge*Math.sin(Math.PI*(yy-sy)/sh);
+          c.beginPath();c.arc(x+xx-b*0.9,yy,1.3,0,7);c.fill();
+        }
+      }
+      if(s.kind==='anode'){
+        c.fillStyle='rgba(255,255,255,.07)';
+        for(let k=0;k<200;k++){const yy=sy+((k*97)%sh),b=bulge*Math.sin(Math.PI*(yy-sy)/sh);c.fillRect(x+((k*53)%s.w)-b*0.9,yy,2,2);}
+      }
+      c.restore();
+    });
+  }
+  // ---- outer casing: two half-shells sliding apart, fading to x-ray ----
+  const caseA=Math.max(0.10,1-0.85*xray);
+  [-1,1].forEach(dir=>{
+    c.save();c.globalAlpha=caseA;
+    c.translate(dir*sep,0);
+    c.beginPath();
+    if(dir<0)c.rect(cx-r-80,top-ryE*3-capLift-60,r+80,bh+ryE*6+120);
+    else c.rect(cx,top-ryE*3-capLift-60,r+80,bh+ryE*6+120);
+    c.clip();
+    c.fillStyle=metal(cx-r,cx+r);
+    c.fillRect(cx-r,top,r*2,bh);
+    c.beginPath();c.ellipse(cx,bot,r,ryE,0,0,Math.PI);c.fill();
+    c.fillStyle=dark?'#31383f':'#7d858f';
+    c.beginPath();c.ellipse(cx,top,r,ryE,0,0,7);c.fill();
+    c.fillStyle=dark?'#20252b':'#98a0aa';
+    c.beginPath();c.ellipse(cx,top,r*0.86,ryE*0.86,0,0,7);c.fill();
+    c.restore();
+  });
+  // blueprint ghost of the original casing position
+  if(xray>0){
+    c.save();c.globalAlpha=xray*0.85;c.strokeStyle=hexA(acc2,0.9);c.lineWidth=1;c.setLineDash([5,6]);
+    c.beginPath();c.moveTo(cx-r,top);c.lineTo(cx-r,bot);c.moveTo(cx+r,top);c.lineTo(cx+r,bot);c.stroke();
+    c.beginPath();c.ellipse(cx,top,r,ryE,0,0,7);c.stroke();
+    c.beginPath();c.ellipse(cx,bot,r,ryE,0,0,7);c.stroke();
+    c.setLineDash([]);c.restore();
+  }
+  // ---- terminal cap ----
+  const capW=r*0.62,capH=bh*0.055,capY=top-capH-ryE*0.6-capLift;
+  c.save();c.globalAlpha=Math.max(0.3,1-xray*0.55);
+  c.fillStyle=metal(cx-capW/2,cx+capW/2);
+  c.fillRect(cx-capW/2,capY,capW,capH);
+  c.beginPath();c.ellipse(cx,capY+capH,capW/2,ryE*0.45,0,0,7);c.fill();
+  c.fillStyle=dark?'#cdd3da':'#b8bfc7';
+  c.beginPath();c.ellipse(cx,capY,capW/2,ryE*0.45,0,0,7);c.fill();
+  c.restore();
+  if(bp>0){
+    c.save();c.globalAlpha=bp*0.9;c.strokeStyle=hexA(acc2,0.8);c.setLineDash([3,4]);c.lineWidth=1;
+    c.beginPath();c.ellipse(cx,capY,capW*0.95,ryE*0.8,0,0,7);c.stroke();
+    c.beginPath();c.moveTo(cx-capW*1.3,capY);c.lineTo(cx+capW*1.3,capY);c.moveTo(cx,capY-ryE*1.6);c.lineTo(cx,capY+ryE*1.6);c.stroke();
+    c.setLineDash([]);c.restore();
+  }
+  // ---- x-ray scan sweep ----
+  if(pe>0.2&&pe<0.52){
+    const t=(pe-0.2)/0.32,sy=top+bh*t;
+    const g=c.createLinearGradient(0,sy-46,0,sy+46);
+    g.addColorStop(0,hexA(acc2,0));g.addColorStop(.5,hexA(acc2,0.22));g.addColorStop(1,hexA(acc2,0));
+    c.fillStyle=g;c.fillRect(cx-r*3.4,sy-46,r*6.8,92);
+    c.strokeStyle=hexA(acc2,0.65);c.lineWidth=1;
+    c.beginPath();c.moveTo(cx-r*3.4,sy);c.lineTo(cx+r*3.4,sy);c.stroke();
+  }
+  // ---- blueprint dimension lines ----
+  if(bp>0){
+    c.save();c.globalAlpha=bp;c.strokeStyle=mute;c.fillStyle=mute;c.lineWidth=1;c.font="10px 'IBM Plex Mono'";
+    const dimX=cx-r-sep-36;
+    c.setLineDash([4,5]);c.beginPath();c.moveTo(dimX,top);c.lineTo(dimX,bot);c.stroke();c.setLineDash([]);
+    c.beginPath();c.moveTo(dimX-5,top);c.lineTo(dimX+5,top);c.moveTo(dimX-5,bot);c.lineTo(dimX+5,bot);c.stroke();
+    c.save();c.translate(dimX-8,(top+bot)/2);c.rotate(-Math.PI/2);c.textAlign='center';c.fillText('H 70.0 mm',0,0);c.restore();
+    c.textAlign='left';c.fillText('Ø 21.0 mm',cx-r,bot+ryE*2.6+14);
+    c.restore();
+  }
+  // ---- leader lines from layers toward the HTML callouts ----
+  if(W>1100){
+    [
+      {on:p>=0.27&&p<0.93,gx:cx+sheetGeo[0].off+sheetGeo[0].dx+sheetGeo[0].w/2,y:H*0.26},
+      {on:p>=0.48&&p<0.93,gx:cx+sheetGeo[1].off+sheetGeo[1].dx+sheetGeo[1].w/2,y:H*0.50},
+      {on:p>=0.63&&p<0.95,gx:cx+sheetGeo[2].off+sheetGeo[2].dx+sheetGeo[2].w/2,y:H*0.70},
+    ].forEach(L=>{
+      if(!L.on)return;
+      c.save();c.globalAlpha=0.8;c.strokeStyle=hexA(acc,0.8);c.fillStyle=hexA(acc,0.9);c.lineWidth=1;
+      c.beginPath();c.arc(L.gx,L.y,3,0,7);c.fill();
+      c.beginPath();c.moveTo(L.gx+6,L.y);c.lineTo(W*0.79,L.y);c.stroke();
+      c.restore();
+    });
+  }
+}
+function updateL3(p){
+  if(!landing3El)return;
+  // title & subtitle persist through the whole sequence
+  document.getElementById('l3content').style.opacity=1;
+  document.getElementById('l3sub').style.opacity=1;
+  document.getElementById('l3hint').style.opacity=p>0.04?0:1;
+  // material names are baked into the footage's final still; HTML callouts
+  // only serve the procedural fallback
+  const foot=(document.body.classList.contains('sana')?HF.light:HF.dark).ready;
+  document.getElementById('l3c1').classList.toggle('on',!foot&&p>=0.16&&p<0.62);
+  document.getElementById('l3c2').classList.toggle('on',!foot&&p>=0.28&&p<0.62);
+  document.getElementById('l3c3').classList.toggle('on',!foot&&p>=0.40&&p<0.64);
+  const st=p<0.13?0:p<0.30?1:p<0.44?2:p<0.72?3:4;
+  const L=lang==='ko'?['금속 케이싱','X-레이 디졸브','젤리롤 분리','코어 상세 노출','재조립']:['METALLIC CASING','X-RAY DISSOLVE','JELLY-ROLL SEPARATION','FULL DETAILED CORE','REASSEMBLY'];
+  document.getElementById('l3state').innerHTML=`<b>0${st+1}</b> — ${L[st]} · ${(p*100).toFixed(0)}%`;
+}
+function l3Resize(){
+  if(!bat3||!document.body.classList.contains('v3'))return;
+  const dpr=Math.min(2,window.devicePixelRatio||1);
+  l3w=lpinEl.clientWidth;l3h=lpinEl.clientHeight;
+  bat3.width=l3w*dpr;bat3.height=l3h*dpr;
+  l3ctx.setTransform(dpr,0,0,dpr,0,0);
+  drawBattery3(l3p);
+  if(appcv&&a3ctx){
+    a3w=appcv.parentElement.clientWidth;a3h=appcv.parentElement.clientHeight;
+    appcv.width=a3w*dpr;appcv.height=a3h*dpr;
+    a3ctx.setTransform(dpr,0,0,dpr,0,0);
+    a3Draw();
+  }
+}
+function l3Tick(){
+  l3p+=(l3target-l3p)*0.14;
+  if(Math.abs(l3target-l3p)<0.0008)l3p=l3target;
+  drawBattery3(l3p);updateL3(l3p);
+  l3raf=l3p===l3target?null:requestAnimationFrame(l3Tick);
+}
+function l3OnScroll(){
+  if(!landing3El||!document.body.classList.contains('v3')||!document.getElementById('page-home2').classList.contains('show'))return;
+  const rc=landing3El.getBoundingClientRect();
+  const total=Math.max(1,landing3El.offsetHeight-window.innerHeight);
+  l3target=Math.min(1,Math.max(0,-rc.top/total));
+  if(l3Reduced){l3p=l3target;drawBattery3(l3p);updateL3(l3p);return;}
+  if(!l3raf)l3raf=requestAnimationFrame(l3Tick);
+}
+function l3Activate(){
+  if(!landing3El)return;
+  l3counted=false;l3p=0;l3target=0;
+  a3p=0;a3target=0;a3LastIdx=-2;a3Load();updateA3();
+  if(!HF.tried){ // auto-load the Higgsfield frame sequences if they exist
+    HF.tried=true;
+    [['frames/cell_0001.webp','dark'],['frames/clean/cell_0001.webp','light']].forEach(pair=>{
+      const probe=new Image();
+      probe.onload=()=>loadHiggsfieldFrames(pair[0].replace('0001','####'),HF_COUNT,pair[1]);
+      probe.src=pair[0];
+    });
+    [['frames/end_labeled.webp','dark'],['frames/clean/end_labeled.webp','light']].forEach(pair=>{
+      const im=new Image();
+      im.onload=()=>{HF[pair[1]].labeled=im;};
+      im.src=pair[0];
+    });
+  }
+  l3Resize();updateL3(0);drawBattery3(0);l3Intro(true);l3OnScroll();
+}
+const HF_COUNT=120;
+// ---- bridge: the cell travels behind the stats strip between sections ----
+const bridgecv=document.getElementById('bridgecv');
+const brctx=bridgecv?bridgecv.getContext('2d'):null;
+let bridgeActive=false;
+function bridgeUpdate(){
+  if(!brctx||!landing3El)return;
+  const ap=document.getElementById('apps3');
+  const v3on=document.body.classList.contains('v3')&&document.getElementById('page-home2').classList.contains('show');
+  const y=window.scrollY||window.pageYOffset;
+  const start=landing3El.offsetTop+landing3El.offsetHeight-window.innerHeight;
+  const end=ap.offsetTop;
+  const active=v3on&&y>start+2&&y<end-2;
+  if(active!==bridgeActive){
+    bridgeActive=active;
+    bridgecv.style.display=active?'block':'none';
+    drawBattery3(l3p);a3Draw();
+  }
+  if(!active)return;
+  const dpr=Math.min(2,window.devicePixelRatio||1);
+  const W=window.innerWidth,H=window.innerHeight;
+  if(bridgecv.width!==Math.round(W*dpr)){bridgecv.width=W*dpr;bridgecv.height=H*dpr;}
+  brctx.setTransform(dpr,0,0,dpr,0,0);
+  brctx.clearRect(0,0,W,H);
+  const dark=!document.body.classList.contains('sana');
+  const cut=dark?A3.darkCut:A3.lightCut;
+  const SET=dark?HF.dark:HF.light;
+  const src=(cut&&cut.width)?cut:(SET.ready?SET.frames[0]:null);
+  if(!src||!src.width)return;
+  const q0=clampL((y-start)/Math.max(1,end-start),0,1);
+  const q=q0*q0*(3-2*q0);
+  const s=Math.min(W/src.width,H/src.height),dh=src.height*s,dy=(H-dh)/2;
+  // from: hero battery position (frame contain-fit) · to: apps intro anchor
+  const hx=W/2,hy=dy+dh*0.465,hh=dh*0.85;
+  const ax=W*0.52,ay=H*0.46,ah=dh*0.72;
+  const x=hx+(ax-hx)*q,yc=hy+(ay-hy)*q,hgt=hh+(ah-hh)*q;
+  const sx=src.width*0.395,sw=src.width*0.205,sy2=src.height*0.04,sh=src.height*0.85;
+  const cw=hgt*(sw/sh);
+  brctx.drawImage(src,sx,sy2,sw,sh,x-cw/2,yc-hgt/2,cw,hgt);
+}
+window.addEventListener('scroll',bridgeUpdate,{passive:true});
+
+// ---- applications chapter: battery → EV / ESS / UAM / scooter ----
+const apps3El=document.getElementById('apps3'),appcv=document.getElementById('appcv');
+const a3ctx=appcv?appcv.getContext('2d'):null;
+let a3p=0,a3target=0,a3raf=null,a3w=0,a3h=0,a3LastIdx=-2;
+const A3={dark:[],light:[],tried:false};
+const A3APPS=[
+ {img:'ev',t:{en:'Electric Vehicle',ko:'전기차'},d:{en:'Range and fast-charge behavior across real drive cycles — one skateboard pack, hundreds of cells.',ko:'실제 주행 사이클 기반 주행거리와 급속충전 거동 — 스케이트보드 팩 하나에 수백 개의 셀.'}},
+ {img:'ess',t:{en:'ESS · Grid Storage',ko:'ESS · 에너지 저장장치'},d:{en:'Grid-scale rack modules where calendar life and round-trip efficiency decide.',ko:'수명과 왕복 효율이 승부를 가르는 그리드급 랙 모듈.'}},
+ {img:'uam',t:{en:'UAM · Air Mobility',ko:'UAM · 항공 모빌리티'},d:{en:'High discharge power under the strictest weight budgets.',ko:'가장 엄격한 중량 제한에서의 고출력 방전.'}},
+ {img:'scooter',t:{en:'Scooter · Micromobility',ko:'스쿠터 · 마이크로모빌리티'},d:{en:'A pack inside the deck — cost, cycle life and packaging in balance.',ko:'데크 속 배터리 팩 — 비용, 수명, 패키징의 균형.'}},
+];
+function a3Load(){
+  if(A3.tried)return;A3.tried=true;
+  ['dark','light'].forEach(set=>{
+    const dir=set==='dark'?'frames/apps/':'frames/apps/clean/';
+    A3[set]=A3APPS.map(a=>{const im=new Image();im.onload=()=>a3Draw();im.src=dir+a.img+'.webp';return im;});
+    // docked variants: same wireframe with the cell baked in at true 3D position
+    A3[set+'D']=A3APPS.map(a=>{const im=new Image();im.onload=()=>a3Draw();im.src=dir+a.img+'_docked.webp';return im;});
+    // transparent cutout of the closed cell (flying sprite)
+    const cut=new Image();cut.onload=()=>a3Draw();
+    cut.src=(set==='dark'?'frames/':'frames/clean/')+'cell_cut.png';
+    A3[set+'Cut']=cut;
+  });
+}
+// per-app battery dock: position as fraction of the app image, cell size as
+// fraction of the drawn image height, final tilt in radians
+const A3DOCKS=[
+ {x:0.628,y:0.655,s:0.15,r:Math.PI/2},   // EV — skateboard pack
+ {x:0.700,y:0.520,s:0.17,r:0},            // ESS — rack modules stand upright
+ {x:0.610,y:0.630,s:0.14,r:Math.PI/2},    // UAM — belly modules
+ {x:0.570,y:0.720,s:0.11,r:Math.PI/2},    // scooter — deck pack
+];
+const A3WINS=[[0.16,0.37],[0.37,0.58],[0.58,0.79],[0.79,1.0001]];
+function a3Draw(){
+  if(!a3ctx||!a3w)return;
+  const c=a3ctx,W=a3w,H=a3h,p=a3p;
+  c.clearRect(0,0,W,H);
+  const dark=!document.body.classList.contains('sana');
+  const imgs=dark?A3.dark:A3.light;
+  const SET=dark?HF.dark:HF.light;
+  const rectFor=img=>{ // contain-fit, centered — bg gaps blend with page bg
+    const s=Math.min(W/img.width,H/img.height),dw=img.width*s,dh=img.height*s;
+    return{dx:(W-dw)/2,dy:(H-dh)/2,dw,dh};
+  };
+  const place=(img,alpha,scale)=>{
+    if(!img||!img.width||alpha<=0)return null;
+    const r=rectFor(img),ex=(scale||1)-1;
+    const dw=r.dw*(1+ex),dh=r.dh*(1+ex);
+    c.globalAlpha=Math.min(1,alpha);
+    c.drawImage(img,r.dx-(dw-r.dw)/2,r.dy-(dh-r.dh)/2,dw,dh);
+    c.globalAlpha=1;
+    return r;
+  };
+  // app wireframes with crossfades; the docked variant (cell baked in, true 3D)
+  // fades in right as the flying sprite arrives
+  const dimgs=dark?A3.darkD:A3.lightD;
+  let baseRect=null;
+  A3WINS.forEach((w,i)=>{
+    const fadeIn=clampL(p,w[0]-0.02,w[0]+0.045);
+    const fadeOut=i<3?1-clampL(p,w[1]-0.02,w[1]+0.045):1;
+    const a=Math.min(fadeIn,fadeOut);
+    if(a>0){
+      const zoom=1.0+0.03*(1-clampL(p,w[0],w[1]));
+      const r=place(imgs[i],a,zoom);if(r)baseRect=r;
+      const dockA=Math.min(a,clampL(p,w[0]+0.045,w[0]+0.075)*(i<3?1-clampL(p,w[1]-0.05,w[1]-0.015):1));
+      if(dockA>0&&dimgs[i]&&dimgs[i].width)place(dimgs[i],dockA,zoom);
+    }
+  });
+  if(!baseRect){const ref=imgs[0]&&imgs[0].width?imgs[0]:(SET.frames[0]&&SET.frames[0].width?SET.frames[0]:null);if(ref)baseRect=rectFor(ref);}
+  // ---- persistent cell: flies between docks; hidden while the baked docked
+  // image owns it, and while the bridge sprite owns it between sections ----
+  let spriteA=bridgeActive?0:1;
+  A3WINS.forEach((w,i)=>{
+    const hide=clampL(p,w[0]+0.03,w[0]+0.07)*(i<3?1-clampL(p,w[1]-0.05,w[1]-0.015):1);
+    spriteA=Math.min(spriteA,1-hide);
+  });
+  const cut=dark?A3.darkCut:A3.lightCut;
+  const cf=(cut&&cut.width)?cut:(SET.ready?SET.frames[0]:null);
+  if(spriteA>0&&cf&&cf.width&&baseRect){
+    const dockAt=i=>({x:baseRect.dx+A3DOCKS[i].x*baseRect.dw,y:baseRect.dy+A3DOCKS[i].y*baseRect.dh,s:A3DOCKS[i].s*baseRect.dh,r:A3DOCKS[i].r});
+    const anchors=[{p:0,x:W*0.52,y:H*0.46,s:baseRect.dh*0.72,r:0}];
+    A3WINS.forEach((w,i)=>{
+      const d=dockAt(i);
+      anchors.push({p:Math.min(w[0]+0.05,0.999),x:d.x,y:d.y,s:d.s,r:d.r});
+      anchors.push({p:Math.min(w[1]-0.01,0.9995),x:d.x,y:d.y,s:d.s,r:d.r});
+    });
+    let a=anchors[0],b=anchors[anchors.length-1];
+    for(let i=0;i<anchors.length-1;i++){if(p>=anchors[i].p&&p<=anchors[i+1].p){a=anchors[i];b=anchors[i+1];break;}}
+    if(p>anchors[anchors.length-1].p)a=b=anchors[anchors.length-1];
+    const t=b.p>a.p?(p-a.p)/(b.p-a.p):1,e=t*t*(3-2*t);
+    const moving=Math.abs(a.x-b.x)+Math.abs(a.y-b.y)>1;
+    const cx=a.x+(b.x-a.x)*e;
+    const cy=a.y+(b.y-a.y)*e-(moving?Math.sin(Math.PI*e)*H*0.07:0); // flight arc
+    const cs=a.s+(b.s-a.s)*e;
+    const cr=a.r+(b.r-a.r)*e+(moving?Math.sin(Math.PI*e)*0.22:0);   // in-flight wobble
+    // crop just the cell out of the cutout (skips floor shadow)
+    const sx=cf.width*0.395,sw=cf.width*0.205,sy=cf.height*0.04,sh=cf.height*0.85;
+    const ch=cs,cw=ch*(sw/sh);
+    c.save();c.globalAlpha=spriteA;c.translate(cx,cy);c.rotate(cr);
+    c.drawImage(cf,sx,sy,sw,sh,-cw/2,-ch/2,cw,ch);
+    c.restore();
+  }
+}
+function updateA3(){
+  if(!apps3El)return;
+  const p=a3p;
+  const idx=p<0.16?-1:p<0.37?0:p<0.58?1:p<0.79?2:3;
+  const num=document.getElementById('a3num'),ti=document.getElementById('a3title'),de=document.getElementById('a3desc');
+  if(idx!==a3LastIdx){
+    a3LastIdx=idx;
+    const inner=document.getElementById('a3inner');
+    inner.style.opacity=0;inner.style.transform='translateY(12px)';
+    setTimeout(()=>{
+      if(idx<0){
+        num.textContent=lang==='ko'?'적용 분야':'APPLICATIONS';
+        ti.textContent=lang==='ko'?'하나의 셀, 모든 모빌리티':'One cell, every mobility.';
+        de.textContent=lang==='ko'?'스크롤하여 셀이 실제 제품에 실장되는 모습을 확인하세요.':'Scroll to see the cell embedded in real products.';
+      }else{
+        const a=A3APPS[idx];
+        num.textContent='0'+(idx+1)+' / 04';
+        ti.textContent=a.t[lang];de.textContent=a.d[lang];
+      }
+      inner.style.opacity=1;inner.style.transform='none';
+    },180);
+  }
+  document.getElementById('a3state').innerHTML='<b>'+(lang==='ko'?'적용 분야':'APPLICATIONS')+'</b> · '+(p*100).toFixed(0)+'%';
+}
+function a3Tick(){
+  a3p+=(a3target-a3p)*0.14;
+  if(Math.abs(a3target-a3p)<0.0008)a3p=a3target;
+  a3Draw();updateA3();
+  a3raf=a3p===a3target?null:requestAnimationFrame(a3Tick);
+}
+function a3OnScroll(){
+  if(!apps3El||!document.body.classList.contains('v3')||!document.getElementById('page-home2').classList.contains('show'))return;
+  const rc=apps3El.getBoundingClientRect();
+  const total=Math.max(1,apps3El.offsetHeight-window.innerHeight);
+  a3target=Math.min(1,Math.max(0,-rc.top/total));
+  if(l3Reduced){a3p=a3target;a3Draw();updateA3();return;}
+  if(!a3raf)a3raf=requestAnimationFrame(a3Tick);
+}
+
+if(landing3El){
+  window.addEventListener('scroll',l3OnScroll,{passive:true});
+  window.addEventListener('scroll',a3OnScroll,{passive:true});
+  window.addEventListener('resize',()=>{if(document.body.classList.contains('v3'))l3Resize();});
+  const io3=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting&&!l3counted&&document.body.classList.contains('v3')){l3counted=true;
+      document.querySelectorAll('[data-c3]').forEach(el=>{
+        const t=+el.dataset.c3;let v=0;const step=Math.max(1,t/50);
+        const iv=setInterval(()=>{v+=step;if(v>=t){v=t;clearInterval(iv);}el.textContent=Math.round(v).toLocaleString('en-US');},28);
+      });
+    }
+  }),{threshold:.35});
+  io3.observe(document.getElementById('l3stats'));
+  updateL3(0);
+}
+
+// ================= SIM STUDIO =================
+const SVIEWS={cell:'sv-cell',pack:'sv-pack',mat:'sv-mat'};
+let sviewCur='cell';
+function goStudio(v){
+  sviewCur=v;
+  document.querySelectorAll('.sview').forEach(x=>x.classList.remove('show'));
+  document.getElementById(SVIEWS[v]).classList.add('show');
+  document.querySelectorAll('.ritem[data-sv]').forEach(b=>b.classList.toggle('on',b.dataset.sv===v));
+  if(v==='pack')drawPack();
+  if(v==='mat')renderMaterials();
+}
+document.querySelectorAll('.ritem[data-sv]').forEach(b=>b.onclick=()=>goStudio(b.dataset.sv));
+
+// ---- timeline engine (shared, animation-tool style) ----
+function mkTimeline(playId,scrubId,timeId,onFrame){
+  const btn=$(playId),sc=$(scrubId),tm=$(timeId);
+  const T={p:1,playing:false,dur:6000,total:0,raf:0};
+  T.label=()=>{tm.textContent=`t = ${(T.p*T.total).toFixed(1)} / ${T.total.toFixed(0)} min`;};
+  T.set=(p,skip)=>{T.p=Math.min(1,Math.max(0,p));sc.value=T.p*1000|0;T.label();if(!skip)onFrame(T.p);};
+  T.enable=total=>{btn.disabled=false;sc.disabled=false;T.total=total;};
+  T.pause=()=>{T.playing=false;btn.textContent='▶';cancelAnimationFrame(T.raf);};
+  T.play=()=>{
+    if(btn.disabled)return;
+    T.playing=true;btn.textContent='❚❚';
+    const t0=performance.now(),p0=T.p>=1?0:T.p;
+    const step=n=>{if(!T.playing)return;const p=p0+(n-t0)/T.dur;if(p>=1){T.set(1);T.pause();return;}T.set(p);T.raf=requestAnimationFrame(step);};
+    T.raf=requestAnimationFrame(step);
+  };
+  T.toggle=()=>{T.playing?T.pause():T.play();};
+  btn.onclick=T.toggle;
+  sc.oninput=()=>{T.pause();T.set(+sc.value/1000);};
+  return T;
+}
+var cellTL=mkTimeline('tlPlay','tlScrub','tlTime',()=>{if(lastResult)draw();});
+
+// ---- quick scenarios ----
+const SCEN=[
+ {c:1,t:25,en:'1C @ 25°C · Baseline',ko:'1C @ 25°C · 기준'},
+ {c:3,t:25,en:'3C @ 25°C · Fast',ko:'3C @ 25°C · 고속'},
+ {c:1,t:-10,en:'1C @ -10°C · Cold',ko:'1C @ -10°C · 저온'},
+ {c:1,t:45,en:'1C @ 45°C · Hot',ko:'1C @ 45°C · 고온'},
+ {c:5,t:25,en:'5C @ 25°C · Stress',ko:'5C @ 25°C · 스트레스'},
+];
+function renderScen(){
+  const el=$('scen');if(!el)return;
+  el.innerHTML='<span class="slbl">'+(lang==='ko'?'빠른 시나리오':'Quick scenarios')+'</span>'+SCEN.map((s,i)=>`<span class="chip" data-sc="${i}">${s[lang]}</span>`).join('');
+  el.querySelectorAll('.chip').forEach(ch=>ch.onclick=()=>{
+    const s=SCEN[+ch.dataset.sc];
+    crate.value=s.c;crateVal.textContent=s.c.toFixed(1)+' C';
+    temp.value=s.t;tempVal.textContent=s.t+' °C';
+    run.click();
+  });
+}
+
+// ---- PACK BUILDER ----
+const ps=$('ps'),pp=$('pp'),pc=$('pc'),pt=$('pt'),pm=$('pm');
+const psVal=$('psVal'),ppVal=$('ppVal'),pcVal=$('pcVal'),ptVal=$('ptVal'),pmVal=$('pmVal');
+let pchemSel='NMC',pmode='T',pviewMode='grid',packCells=[],packRects=[],packSel=-1,packSolved=false;
+const PACKPRE=[
+ {s:13,p:4,chem:'NMC',c:1,en:'13S4P · E-bike 48 V',ko:'13S4P · 전기자전거 48 V'},
+ {s:16,p:2,chem:'LFP',c:0.5,en:'16S2P · ESS rack',ko:'16S2P · ESS 랙'},
+ {s:96,p:2,chem:'NMC',c:2,en:'96S2P · EV 400 V',ko:'96S2P · 전기차 400 V'},
+ {s:24,p:6,chem:'NMC',c:4,en:'24S6P · UAM lift',ko:'24S6P · UAM 고출력'},
+];
+function renderPackPre(){
+  const el=$('packpre');if(!el)return;
+  el.innerHTML='<span class="slbl">'+(lang==='ko'?'팩 프리셋':'Pack presets')+'</span>'+PACKPRE.map((s,i)=>`<span class="chip" data-pp="${i}">${s[lang]}</span>`).join('');
+  el.querySelectorAll('.chip').forEach(ch=>ch.onclick=()=>{
+    const s=PACKPRE[+ch.dataset.pp];
+    ps.value=s.s;pp.value=s.p;pc.value=s.c;
+    psVal.textContent=s.s+' S';ppVal.textContent=s.p+' P';pcVal.textContent=s.c.toFixed(1)+' C';
+    pchemSel=s.chem;document.querySelectorAll('#pchem button').forEach(x=>x.classList.toggle('active',x.dataset.c===s.chem));
+    seedPack();prun.click();
+  });
+}
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
+function seedPack(){
+  const S=+ps.value,P=+pp.value,mis=+pm.value;
+  const rnd=mulberry(S*73+P*911+mis*37+7);
+  packCells=[];
+  for(let s=0;s<S;s++)for(let p=0;p<P;p++)packCells.push({s,p,devQ:(rnd()*2-1)*mis/100,devR:(rnd()*2-1)*mis/100});
+  packSel=-1;packSolved=false;
+}
+function packState(prog){
+  const S=+ps.value,P=+pp.value,c=+pc.value,ta=+pt.value,v0=NOMINAL[pchemSel];
+  return packCells.map(cl=>{
+    const soc=Math.max(0,1-prog*(1+cl.devR*0.6)/(1+cl.devQ));
+    const dod=1-soc;
+    const ocv=v0+0.32*Math.exp(-dod*4)-0.45*dod-(dod>0.85?(dod-0.85)*6:0);
+    const v=Math.max(v0-1.2,ocv-c*0.05*(1+cl.devR*3));
+    const cx=(cl.s+0.5)/S-0.5,cy=(cl.p+0.5)/P-0.5;
+    const centre=Math.max(0,1-Math.hypot(cx,cy)*1.2);
+    const T=ta+(0.25+0.75*prog)*c*c*2.6*(1+cl.devR*2)*(0.75+0.45*centre);
+    return{v,T,soc};
+  });
+}
+function rr(c,x,y,w,h,r){c.beginPath();if(c.roundRect)c.roundRect(x,y,w,h,r);else{c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}}
+const pcv=$('packcv'),pctx=pcv.getContext('2d');
+function drawPack(){
+  if(!pcv)return;
+  const prog=packTL?packTL.p:0;
+  const S=+ps.value,P=+pp.value;
+  const st=packSolved?packState(prog):null;
+  const W=pcv.width,H=pcv.height;pctx.clearRect(0,0,W,H);
+  const pad=30;
+  let vals=null,lo=0,hi=1;
+  if(st){
+    vals=st.map(x=>pmode==='T'?x.T:pmode==='V'?x.v:x.soc);
+    lo=Math.min(...vals);hi=Math.max(...vals);if(hi-lo<1e-6)hi=lo+1e-6;
+  }
+  const c1=hexRGB(css('--accent2')||'#4ad6ff'),c2=hexRGB(css('--accent')||'#c6ff4a'),c3=hexRGB(css('--heat')||'#ff6b4a');
+  const colFor=n=>{n=Math.min(1,Math.max(0,n));const col=n<0.5?mix(c1,c2,n/0.5):mix(c2,c3,(n-0.5)/0.5);return `rgb(${col[0]|0},${col[1]|0},${col[2]|0})`;};
+  packRects=[];
+  if(pviewMode==='grid'){
+    const gw=(W-pad*2)/S,gh=(H-pad*2)/P;
+    const cw=Math.max(2,gw-Math.min(6,gw*0.16)),chh=Math.max(2,gh-Math.min(6,gh*0.16));
+    const rad=Math.min(5,cw/4,chh/4);
+    packCells.forEach((cl,i)=>{
+      const x=pad+cl.s*gw+(gw-cw)/2,y=pad+cl.p*gh+(gh-chh)/2;
+      let fill=css('--plot-grid');
+      if(st){const n=(vals[i]-lo)/(hi-lo);fill=colFor(pmode==='T'?n:1-n);}
+      pctx.fillStyle=fill;rr(pctx,x,y,cw,chh,rad);pctx.fill();
+      if(cw>7&&chh>7){
+        pctx.fillStyle='rgba(255,255,255,.09)';pctx.fillRect(x+1,y+1,cw-2,chh*0.3);
+        pctx.fillStyle='rgba(0,0,0,.15)';pctx.fillRect(x+1,y+chh*0.78,cw-2,chh*0.22-1);
+      }
+      if(i===packSel){pctx.strokeStyle=css('--accent');pctx.lineWidth=2;rr(pctx,x-1.5,y-1.5,cw+3,chh+3,rad+1);pctx.stroke();}
+      packRects.push({x,y,w:cw,h:chh,i});
+    });
+  }else{
+    const gw=(W-pad*2)/S,gh=(H-pad*2)/P;
+    const wire=css('--mute'),bg=css('--plot-bg');
+    pctx.strokeStyle=wire;pctx.lineWidth=1.2;pctx.globalAlpha=.5;
+    for(let p=0;p<P;p++){const yc=pad+gh*(p+0.5);pctx.beginPath();pctx.moveTo(pad-10,yc);pctx.lineTo(W-pad+10,yc);pctx.stroke();}
+    pctx.globalAlpha=1;pctx.lineWidth=2.5;
+    pctx.beginPath();pctx.moveTo(pad-10,pad+gh*0.5);pctx.lineTo(pad-10,H-pad-gh*0.5);pctx.stroke();
+    pctx.beginPath();pctx.moveTo(W-pad+10,pad+gh*0.5);pctx.lineTo(W-pad+10,H-pad-gh*0.5);pctx.stroke();
+    pctx.fillStyle=wire;pctx.font="12px 'IBM Plex Mono'";
+    pctx.fillText('+',pad-26,pad+gh*0.5+4);pctx.fillText('−',W-pad+18,pad+gh*0.5+4);
+    const bh=Math.max(8,Math.min(gh*0.55,22));
+    packCells.forEach((cl,i)=>{
+      const xc=pad+gw*(cl.s+0.5),yc=pad+gh*(cl.p+0.5);
+      pctx.fillStyle=bg;pctx.fillRect(xc-6,yc-bh/2-2,12,bh+4);
+      let col=wire;
+      if(st){const n=(vals[i]-lo)/(hi-lo);col=colFor(pmode==='T'?n:1-n);}
+      pctx.strokeStyle=col;
+      pctx.lineWidth=3;pctx.beginPath();pctx.moveTo(xc-2,yc-bh/2);pctx.lineTo(xc-2,yc+bh/2);pctx.stroke();
+      pctx.lineWidth=1.5;pctx.beginPath();pctx.moveTo(xc+3,yc-bh*0.28);pctx.lineTo(xc+3,yc+bh*0.28);pctx.stroke();
+      if(i===packSel){pctx.strokeStyle=css('--accent');pctx.lineWidth=1.5;rr(pctx,xc-9,yc-bh/2-5,18,bh+10,4);pctx.stroke();}
+      packRects.push({x:xc-9,y:yc-bh/2-5,w:18,h:bh+10,i});
+    });
+  }
+  if(!st){pctx.fillStyle=css('--mute');pctx.font="11px 'IBM Plex Mono'";pctx.fillText(lang==='ko'?'// ▶ 팩 해석을 눌러 계산하세요 — 슬라이더로 구조를 먼저 잡아보세요':'// press ▶ Solve pack — shape the layout with the sliders first',pad,18);}
+  // legend
+  if(st){
+    const fmt=v=>pmode==='T'?v.toFixed(1)+'°C':pmode==='V'?v.toFixed(2)+'V':(v*100).toFixed(0)+'%';
+    $('plegLo').textContent=fmt(lo);$('plegHi').textContent=fmt(hi);
+    $('plegBar').style.background=pmode==='T'?'linear-gradient(90deg,var(--accent2),var(--accent),var(--heat))':'linear-gradient(90deg,var(--heat),var(--accent),var(--accent2))';
+  }else{$('plegLo').textContent='—';$('plegHi').textContent='—';}
+  updatePackHUD(st);
+  if(packSel>=0&&packSolved)updateInspector();
+}
+function updatePackHUD(st){
+  const S=+ps.value,P=+pp.value,v0=NOMINAL[pchemSel];
+  $('pkNote').innerHTML=`config: <b>${S}S${P}P</b> · ${S*P} cells<br>nominal: <b>${(v0*S).toFixed(1)} V</b> · ${(S*P*5*v0/1000).toFixed(2)} kWh<br>cell: 5 Ah class · ${pchemSel}`;
+  if(!st){$('pkV').textContent='—';$('pkE').textContent='—';$('pkDV').textContent='—';$('pkDT').textContent='—';return;}
+  let packV=0;for(let s=0;s<S;s++){let sum=0;for(let p=0;p<P;p++)sum+=st[s*P+p].v;packV+=sum/P;}
+  const vs=st.map(x=>x.v),Ts=st.map(x=>x.T);
+  $('pkV').textContent=packV.toFixed(1)+' V';
+  $('pkE').textContent=(S*P*5*v0/1000).toFixed(2)+' kWh';
+  $('pkDV').textContent=((Math.max(...vs)-Math.min(...vs))*1000).toFixed(0)+' mV';
+  $('pkDT').textContent=(Math.max(...Ts)-Math.min(...Ts)).toFixed(1)+' °C';
+}
+function updateInspector(){
+  const el=$('pinspect');
+  if(packSel<0||!packSolved){el.textContent=lang==='ko'?'// 셀을 클릭하면 상세 정보가 표시됩니다':'// click a cell to inspect it';return;}
+  const cl=packCells[packSel],st=packState(packTL.p)[packSel];
+  el.textContent=`▣ cell [S${cl.s+1}·P${cl.p+1}] — ${st.v.toFixed(3)} V · ${st.T.toFixed(1)} °C · SOC ${(st.soc*100).toFixed(0)}% · ΔQ ${(cl.devQ*100).toFixed(1)}% · ΔR ${(cl.devR*100).toFixed(1)}%`;
+}
+var packTL=mkTimeline('ptlPlay','ptlScrub','ptlTime',()=>drawPack());
+pcv.onclick=e=>{
+  const r=pcv.getBoundingClientRect();
+  const x=(e.clientX-r.left)*pcv.width/r.width,y=(e.clientY-r.top)*pcv.height/r.height;
+  const hit=packRects.find(c=>x>=c.x&&x<=c.x+c.w&&y>=c.y&&y<=c.y+c.h);
+  packSel=hit?hit.i:-1;drawPack();updateInspector();
+};
+function reconfPack(reseed){if(reseed)seedPack();packSolved=false;packTL.pause();drawPack();updateInspector();}
+ps.oninput=()=>{psVal.textContent=ps.value+' S';reconfPack(true);};
+pp.oninput=()=>{ppVal.textContent=pp.value+' P';reconfPack(true);};
+pm.oninput=()=>{pmVal.textContent=(+pm.value).toFixed(1)+' %';reconfPack(true);};
+pc.oninput=()=>{pcVal.textContent=(+pc.value).toFixed(1)+' C';reconfPack(false);};
+pt.oninput=()=>{ptVal.textContent=pt.value+' °C';reconfPack(false);};
+document.querySelectorAll('#pchem button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#pchem button').forEach(x=>x.classList.remove('active'));b.classList.add('active');pchemSel=b.dataset.c;packSolved=false;drawPack();});
+document.querySelectorAll('#pmodeTabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#pmodeTabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');pmode=b.dataset.m;drawPack();});
+document.querySelectorAll('#pviewTabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#pviewTabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');pviewMode=b.dataset.v;drawPack();});
+const prun=$('prun');
+prun.onclick=()=>{
+  prun.disabled=true;prun.textContent=lang==='ko'?'⟳ 해석 중…':'⟳ Solving…';
+  const steps=['→ POST /api/pack/solve','→ building '+ps.value+'S'+pp.value+'P network','→ per-cell lumped P2D model','→ writing results…'];
+  let i=0;const el=$('pinspect');el.textContent='';
+  const iv=setInterval(()=>{el.textContent=steps[i]||el.textContent;if(++i>=steps.length){clearInterval(iv);
+    packSolved=true;packTL.enable(60/+pc.value*0.9);packTL.set(0,true);packTL.play();
+    prun.disabled=false;prun.textContent=lang==='ko'?'▶ 팩 해석':'▶ Solve pack';
+    el.textContent=lang==='ko'?'✓ 팩 해석 완료 — 셀을 클릭해 확인하세요':'✓ pack solved — click any cell to inspect';
+  }},300);
+};
+
+// ---- MATERIALS ----
+const MATS=[
+ {id:'NMC811',type:'c',name:'NMC 811',formula:'LiNi₀.₈Mn₀.₁Co₀.₁O₂',capTh:275,cap:200,vavg:3.80,win:[2.7,4.35],D:'~10⁻¹⁰ cm²/s',simChem:'NMC',
+  tags:{en:['high energy','EV standard','Ni-rich'],ko:['고에너지','EV 표준','하이니켈']},
+  desc:{en:'Nickel-rich layered oxide — the workhorse of long-range EVs. High capacity and voltage come at the cost of tighter thermal margins and a strong dependence on precise BMS control.',
+        ko:'하이니켈 층상 산화물 — 장거리 전기차의 주력 소재입니다. 높은 용량과 전압을 얻는 대신 열 마진이 좁아지고 정밀한 BMS 제어가 필수입니다.'},
+  ocv:t=>4.30-0.85*t-0.18*Math.pow(t,4)+0.05*Math.exp(-t*12)-0.15*Math.exp((t-1)*18)},
+ {id:'NCA',type:'c',name:'NCA',formula:'LiNi₀.₈Co₀.₁₅Al₀.₀₅O₂',capTh:279,cap:195,vavg:3.75,win:[2.7,4.25],D:'~10⁻¹⁰ cm²/s',simChem:'NMC',
+  tags:{en:['high energy','cylindrical','proven'],ko:['고에너지','원통형','검증됨']},
+  desc:{en:'Nickel-cobalt-aluminium oxide, proven in high-energy cylindrical cells. Similar energy to NMC with slightly different aging behavior and cost structure.',
+        ko:'니켈·코발트·알루미늄 산화물로, 고에너지 원통형 셀에서 검증된 소재입니다. NMC와 유사한 에너지를 내면서 열화 거동과 비용 구조가 조금 다릅니다.'},
+  ocv:t=>4.20-0.72*t-0.15*t*t*t-0.12*Math.exp((t-1)*16)},
+ {id:'LCO',type:'c',name:'LCO',formula:'LiCoO₂',capTh:274,cap:155,vavg:3.90,win:[3.0,4.35],D:'~10⁻⁹ cm²/s',simChem:'NMC',
+  tags:{en:['consumer','volumetric','cobalt'],ko:['컨슈머','부피 효율','코발트']},
+  desc:{en:'The original commercial cathode — still dominant in phones and laptops where volumetric energy matters more than cost. Cobalt price and thermal stability limit large-format use.',
+        ko:'최초의 상용 양극재 — 부피 에너지가 중요한 스마트폰·노트북에서 여전히 주력입니다. 코발트 가격과 열 안정성 때문에 대형 셀에는 잘 쓰이지 않습니다.'},
+  ocv:t=>3.30+0.95*Math.exp(-3.2*t)+0.05*Math.tanh((0.45-t)*8)-0.25*Math.exp((t-1)*14)},
+ {id:'LFP',type:'c',name:'LFP',formula:'LiFePO₄',capTh:170,cap:158,vavg:3.40,win:[2.5,3.65],D:'~10⁻¹³ cm²/s',simChem:'LFP',
+  tags:{en:['safe','long life','flat OCV'],ko:['안전','장수명','평탄 OCV']},
+  desc:{en:'Olivine iron phosphate — a famously flat 3.4 V plateau, excellent safety and cycle life. Lower energy density, and the flat curve makes SOC estimation harder for the BMS.',
+        ko:'올리빈 구조의 인산철 — 3.4 V의 평탄한 전압 구간, 뛰어난 안전성과 수명이 특징입니다. 에너지 밀도는 낮고, 평탄한 곡선 탓에 BMS의 SOC 추정이 어렵습니다.'},
+  ocv:t=>3.425+0.30*Math.exp(-t*45)-0.40*Math.exp((t-1)*45)},
+ {id:'LMO',type:'c',name:'LMO',formula:'LiMn₂O₄',capTh:148,cap:118,vavg:4.00,win:[3.0,4.2],D:'~10⁻⁹ cm²/s',simChem:'NMC',
+  tags:{en:['low cost','high power','blend'],ko:['저비용','고출력','블렌드']},
+  desc:{en:'Manganese spinel — cheap, high-voltage and high-power, but manganese dissolution limits cycle life. Often blended with NMC.',
+        ko:'망간 스피넬 — 저렴하고 고전압·고출력이지만 망간 용출로 수명이 제한됩니다. NMC와 블렌딩해 자주 사용됩니다.'},
+  ocv:t=>4.15-0.30*t+0.06*Math.tanh((0.5-t)*9)-0.12*t*t-0.15*Math.exp((t-1)*20)},
+ {id:'GR',type:'a',name:'Graphite',formula:'LiC₆',capTh:372,cap:344,vavg:0.13,win:[0.005,0.8],D:'~10⁻⁹ cm²/s',simChem:'NMC',
+  tags:{en:['standard','low voltage','plating risk'],ko:['표준','저전압','석출 주의']},
+  desc:{en:'The dominant anode for three decades — a low, staircase-shaped voltage profile near 0.1 V maximizes cell voltage. Lithium plating at low temperature and high charge rate is the key risk.',
+        ko:'30년간 지배적인 음극재 — 0.1 V 부근의 계단형 저전압 곡선이 셀 전압을 극대화합니다. 저온·고속 충전 시 리튬 석출이 핵심 리스크입니다.'},
+  ocv:t=>0.105+0.60*Math.exp(-t*18)+0.055*Math.tanh((0.20-t)*30)+0.045*Math.tanh((0.55-t)*30)},
+ {id:'SIGR',type:'a',name:'Si-Graphite',formula:'SiOₓ/C blend',capTh:1500,cap:450,vavg:0.30,win:[0.01,0.9],D:'~10⁻¹² cm²/s',simChem:'NMC',
+  tags:{en:['high capacity','swelling','blend'],ko:['고용량','팽창','블렌드']},
+  desc:{en:'Silicon-graphite composite — silicon multiplies capacity but swells ~300%, so only a few percent is blended in. The sloped profile helps SOC estimation.',
+        ko:'실리콘-흑연 복합재 — 실리콘이 용량을 크게 늘리지만 약 300% 팽창하므로 소량만 블렌딩합니다. 기울어진 전압 곡선은 SOC 추정에 유리합니다.'},
+  ocv:t=>0.35+0.55*Math.exp(-t*8)-0.28*t},
+ {id:'LTO',type:'a',name:'LTO',formula:'Li₄Ti₅O₁₂',capTh:175,cap:165,vavg:1.55,win:[1.2,2.0],D:'~10⁻¹¹ cm²/s',simChem:'LTO',
+  tags:{en:['zero strain','fast charge','safe'],ko:['무변형','급속충전','안전']},
+  desc:{en:'Zero-strain titanate at 1.55 V — sacrifices cell voltage for extreme cycle life, fast charge and low-temperature performance. No SEI, no plating.',
+        ko:'1.55 V의 무변형(zero-strain) 티탄산염 — 셀 전압을 희생하는 대신 극한의 수명, 급속충전, 저온 성능을 얻습니다. SEI도, 리튬 석출도 없습니다.'},
+  ocv:t=>1.57+0.35*Math.exp(-t*50)-0.30*Math.exp((t-1)*50)},
+];
+let mtab='c',matSel=['NMC811','LFP','GR'],curMat=null;
+function matPalette(){return [css('--accent')||'#c6ff4a',css('--accent2')||'#4ad6ff',css('--heat')||'#ff6b4a','#b58cff','#ffb44a','#59d999','#ff7ab8','#8899ff'];}
+function drawOCV(cvEl,list,detail){
+  if(!cvEl)return;
+  const c=cvEl.getContext('2d'),W=cvEl.width,H=cvEl.height;
+  c.clearRect(0,0,W,H);
+  const padL=detail?46:8,padB=detail?30:6,padT=detail?16:6,padR=detail?14:6;
+  const px=W-padL-padR,py=H-padT-padB;
+  let lo=1e9,hi=-1e9;
+  list.forEach(m=>{for(let i=0;i<=100;i++){const v=m.ocv(i/100);lo=Math.min(lo,v);hi=Math.max(hi,v);}});
+  const gap=(hi-lo)*0.08||0.1;lo-=gap;hi+=gap;
+  const grid=css('--plot-grid'),mute=css('--mute');
+  if(detail){
+    c.strokeStyle=grid;c.lineWidth=1;c.font="10px 'IBM Plex Mono'";c.fillStyle=mute;
+    for(let i=0;i<=4;i++){const y=padT+py*i/4;c.beginPath();c.moveTo(padL,y);c.lineTo(W-padR,y);c.stroke();c.fillText((hi-(hi-lo)*i/4).toFixed(2),6,y+3);}
+    for(let i=0;i<=5;i++){const x=padL+px*i/5;c.fillText((i/5).toFixed(1),x-6,H-8);}
+    c.fillText('U_eq (V) vs Li/Li⁺',padL,padT-4);c.fillText('θ →',W-padR-26,H-8);
+  }
+  const pal=matPalette();
+  list.forEach((m,k)=>{
+    c.strokeStyle=pal[k%pal.length];c.lineWidth=detail?2.2:1.8;c.beginPath();
+    for(let i=0;i<=140;i++){const t=i/140,v=m.ocv(t);const x=padL+px*t,y=padT+py*(1-(v-lo)/(hi-lo));i?c.lineTo(x,y):c.moveTo(x,y);}
+    c.stroke();
+  });
+}
+function renderMaterials(){
+  const grid=$('matgrid'),cmp=$('matcmp'),det=$('matdetail');
+  if(!grid)return;
+  document.querySelectorAll('#mtabs button').forEach(b=>b.classList.toggle('active',b.dataset.mt===mtab));
+  $('matnote').textContent=lang==='ko'?'곡선·물성은 데모용 근사값입니다':'curves & values are illustrative demo data';
+  if(curMat){grid.style.display='none';cmp.style.display='none';det.style.display='block';renderMatDetail();return;}
+  det.style.display='none';
+  if(mtab==='cmp'){grid.style.display='none';cmp.style.display='block';renderMatCompare();return;}
+  cmp.style.display='none';grid.style.display='grid';
+  const list=MATS.filter(m=>m.type===mtab);
+  grid.innerHTML=list.map(m=>`<div class="matcard" data-mid="${m.id}">
+    <h3>${m.name}</h3><div class="formula">${m.formula}</div>
+    <canvas id="mc-${m.id}" width="300" height="90"></canvas>
+    <div class="mrow"><span class="k">${lang==='ko'?'실용 용량':'Practical capacity'}</span><span class="v">${m.cap} mAh/g</span></div>
+    <div class="mrow"><span class="k">${lang==='ko'?'평균 전압':'Avg voltage'}</span><span class="v">${m.vavg.toFixed(2)} V</span></div>
+    <div class="mrow"><span class="k">${lang==='ko'?'전압 범위':'Voltage window'}</span><span class="v">${m.win[0]}–${m.win[1]} V</span></div>
+    <div class="mtags">${m.tags[lang].map(t=>`<span class="mtag">${t}</span>`).join('')}</div>
+  </div>`).join('');
+  list.forEach(m=>drawOCV(document.getElementById('mc-'+m.id),[m],false));
+  grid.querySelectorAll('.matcard').forEach(cd=>cd.onclick=()=>{curMat=cd.dataset.mid;renderMaterials();window.scrollTo({top:0,behavior:'smooth'});});
+}
+function renderMatDetail(){
+  const m=MATS.find(x=>x.id===curMat),det=$('matdetail');
+  const rows=[
+    [lang==='ko'?'구분':'Type',m.type==='c'?(lang==='ko'?'양극재':'Cathode'):(lang==='ko'?'음극재':'Anode')],
+    [lang==='ko'?'이론 용량':'Theoretical capacity',m.capTh+' mAh/g'],
+    [lang==='ko'?'실용 용량':'Practical capacity',m.cap+' mAh/g'],
+    [lang==='ko'?'평균 전압 (vs Li/Li⁺)':'Avg voltage (vs Li/Li⁺)',m.vavg.toFixed(2)+' V'],
+    [lang==='ko'?'전압 범위':'Voltage window',m.win[0]+'–'+m.win[1]+' V'],
+    [lang==='ko'?'고체 확산계수':'Solid diffusivity',m.D],
+    [lang==='ko'?'비에너지 (활물질)':'Specific energy (active)',Math.round(m.cap*m.vavg)+' Wh/kg'],
+    [lang==='ko'?'시뮬레이터 매핑':'Simulator mapping',m.simChem+' model'],
+  ];
+  det.innerHTML=`<div class="backbtn" id="matBack">${lang==='ko'?'← 소재 목록으로':'← Back to materials'}</div>
+  <div class="mat-detail-grid">
+    <div class="matplot">
+      <h3 style="font-family:var(--display);font-size:22px;margin-bottom:2px">${m.name}</h3>
+      <div style="font-family:var(--data);font-size:12px;color:var(--mute);margin-bottom:14px">${m.formula}</div>
+      <canvas id="matbig" width="640" height="300"></canvas>
+      <p class="matnote">${m.desc[lang]}</p>
+      <div class="mtags">${m.tags[lang].map(t=>`<span class="mtag">${t}</span>`).join('')}</div>
+    </div>
+    <div>
+      <div class="speccol">
+        <div class="specgroup"><h3><span>${lang==='ko'?'물성 (데모 값)':'Properties (illustrative)'}</span></h3>
+          ${rows.map(r=>`<div class="specrow"><span class="k">${r[0]}</span><span class="v">${r[1]}</span></div>`).join('')}
+        </div>
+      </div>
+      <div class="simbanner" style="margin-top:20px;padding:26px">
+        <h3 style="font-size:18px">✦ ${lang==='ko'?'셀 스튜디오에서 사용':'Use in Cell Studio'}</h3>
+        <p style="font-size:13px">${lang==='ko'?`${m.simChem} 모델로 매핑되어 시뮬레이터에 로드됩니다.`:`Maps to the ${m.simChem} model and loads into the simulator.`}</p>
+        <button class="btn-primary" id="matUse">▶ ${lang==='ko'?'셀 스튜디오로 보내기':'Send to Cell Studio'}</button>
+      </div>
+    </div>
+  </div>`;
+  drawOCV($('matbig'),[m],true);
+  $('matBack').onclick=()=>{curMat=null;renderMaterials();};
+  $('matUse').onclick=()=>{
+    chem=m.simChem;
+    document.querySelectorAll('#chem button').forEach(x=>x.classList.toggle('active',x.dataset.c===chem));
+    const lc=$('loadedCell');lc.classList.add('show');
+    lc.innerHTML=`▣ material: <b>${m.name}</b> — ${lang==='ko'?'매핑 모델':'mapped model'}: ${m.simChem}`;
+    goStudio('cell');window.scrollTo(0,0);
+  };
+}
+function renderMatCompare(){
+  const pick=$('matpick');
+  pick.innerHTML='<span class="lbl">'+(lang==='ko'?'소재 선택:':'SELECT MATERIALS:')+'</span>'+MATS.map(m=>`<span class="chip ${matSel.includes(m.id)?'on':''}" data-mm="${m.id}">${m.name}</span>`).join('');
+  pick.querySelectorAll('.chip').forEach(ch=>ch.onclick=()=>{
+    const id=ch.dataset.mm;
+    matSel=matSel.includes(id)?matSel.filter(x=>x!==id):[...matSel,id].slice(-5);
+    renderMatCompare();
+  });
+  const list=MATS.filter(m=>matSel.includes(m.id));
+  drawOCV($('matcv'),list,true);
+  const pal=matPalette();
+  $('matlegend').innerHTML=list.map((m,k)=>`<span style="font-family:var(--data);font-size:11px;color:${pal[k%pal.length]};margin-right:14px">— ${m.name}</span>`).join('');
+  const rows=[
+    {k:{en:'Type',ko:'구분'},f:m=>m.type==='c'?(lang==='ko'?'양극재':'Cathode'):(lang==='ko'?'음극재':'Anode')},
+    {k:{en:'Practical capacity',ko:'실용 용량'},f:m=>m.cap+' mAh/g'},
+    {k:{en:'Avg voltage',ko:'평균 전압'},f:m=>m.vavg.toFixed(2)+' V'},
+    {k:{en:'Voltage window',ko:'전압 범위'},f:m=>m.win[0]+'–'+m.win[1]+' V'},
+    {k:{en:'Specific energy (active)',ko:'비에너지 (활물질)'},f:m=>Math.round(m.cap*m.vavg)+' Wh/kg'},
+  ];
+  $('mattbl').innerHTML=list.length?'<table><thead><tr><th>'+(lang==='ko'?'물성':'Property')+'</th>'+list.map(m=>`<th>${m.name}<small>${m.formula}</small></th>`).join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr><td>'+r.k[lang]+'</td>'+list.map(m=>'<td>'+r.f(m)+'</td>').join('')+'</tr>').join('')+'</tbody></table>':'<div class="cmp-empty">'+(lang==='ko'?'위에서 소재를 선택하세요.':'Pick materials above to compare.')+'</div>';
+}
+document.querySelectorAll('#mtabs button').forEach(b=>b.onclick=()=>{mtab=b.dataset.mt;curMat=null;renderMaterials();});
+
+// ---- studio keyboard: SPACE toggles the visible timeline ----
+document.addEventListener('keydown',e=>{
+  if(e.code!=='Space')return;
+  if(!document.getElementById('page-sim').classList.contains('show'))return;
+  const t=e.target.tagName;if(t==='INPUT'||t==='TEXTAREA'||t==='BUTTON'||t==='SELECT')return;
+  e.preventDefault();
+  (sviewCur==='pack'?packTL:cellTL).toggle();
+});
+
+// ---- studio init ----
+renderScen();renderPackPre();seedPack();drawPack();
 
 // ================= I18N =================
 const LEAF={ // spec/table leaf labels, EN → KO
@@ -846,10 +1925,48 @@ const PAIRS=[
  ['#contact2 h2',{html:1,en:'Ready to twin<br>your battery?',ko:'배터리를 트윈으로<br>만들 준비되셨나요?'}],
  ['#contact2 p',{en:"Send us a cell. We'll test it, tear it down, and hand back a model you can run — with the full report behind it.",ko:'셀을 보내주세요. 시험하고, 분해 분석해서, 실행 가능한 모델과 전체 리포트를 돌려드립니다.'}],
  ['#contact2 .btn-primary',{en:'Try the demo →',ko:'데모 체험하기 →'}],
- // ---- simulator
- ['#page-sim .sec-label',{en:'Live demo',ko:'라이브 데모'}],
+ // ---- v3 scroll landing
+ ['#l3eyebrow',{en:'Next-gen cylindrical cell',ko:'차세대 원통형 셀'}],
+ ['#l3sub',{en:'Exploring the architecture of clean energy density.',ko:'청정 에너지 밀도의 아키텍처를 탐구합니다.'}],
+ ['#l3c1 .k',{en:'01 GRAPHITE ANODE',ko:'01 흑연 음극'}],
+ ['#l3c1 .d',{en:'High-conductivity negative electrode layer for stable electron flow.',ko:'안정적인 전자 흐름을 위한 고전도 음극 층입니다.'}],
+ ['#l3c2 .k',{en:'02 POROUS SEPARATOR',ko:'02 다공성 분리막'}],
+ ['#l3c2 .d',{en:'Ultra-thin polyolefin film preventing short circuits.',ko:'단락을 방지하는 초박형 폴리올레핀 필름입니다.'}],
+ ['#l3c3 .k',{en:'03 LITHIUM CATHODE',ko:'03 리튬 양극'}],
+ ['#l3c3 .d',{en:'High-density positive electrode material driving the power.',ko:'출력을 이끄는 고밀도 양극 소재입니다.'}],
+ ['.statbar3 .stat:nth-child(1) .l',{en:'Energy density',ko:'에너지 밀도'}],
+ ['.statbar3 .stat:nth-child(2) .l',{en:'Lifecycle loops',ko:'사이클 수명'}],
+ ['.statbar3 .stat:nth-child(3) .l',{en:'Ultra-fast charge',ko:'초급속 충전'}],
+ // ---- simulator / studio
+ ['#page-sim .sec-label',{en:'Simulation studio',ko:'시뮬레이션 스튜디오'}],
  ['#page-sim .sec-title',{en:'Simulator',ko:'시뮬레이터'}],
- ['#page-sim .sec-sub',{en:'Front-end mock of the real flow. Curves are generated client-side to show how a server result would look — in production these come back from your solver.',ko:'실제 흐름의 프런트엔드 목업입니다. 곡선은 서버 결과를 미리 보여주기 위해 클라이언트에서 생성한 것으로, 실제 서비스에서는 솔버가 반환합니다.'}],
+ ['#page-sim .sec-sub',{en:'One studio, three tools — configure a cell, wire it into a pack, and ground both in electrode data. Results are client-side mocks of the production solver flow.',ko:'하나의 스튜디오, 세 가지 도구 — 셀을 구성하고, 팩으로 연결하고, 전극 데이터로 뒷받침하세요. 이 페이지의 결과는 실제 솔버 흐름을 보여주는 클라이언트 목업입니다.'}],
+ ['#railLbl',{en:'Simulation Studio',ko:'시뮬레이션 스튜디오'}],
+ ['.ritem[data-sv="cell"] b',{en:'Cell Studio',ko:'셀 스튜디오'}],
+ ['.ritem[data-sv="cell"] small',{en:'single cell · P2D demo',ko:'단일 셀 · P2D 데모'}],
+ ['.ritem[data-sv="pack"] b',{en:'Pack Builder',ko:'팩 빌더'}],
+ ['.ritem[data-sv="pack"] small',{en:'multi-cell network',ko:'멀티 셀 팩 네트워크'}],
+ ['.ritem[data-sv="mat"] b',{en:'Materials',ko:'전극 소재'}],
+ ['.ritem[data-sv="mat"] small',{en:'OCV · property data',ko:'OCV · 물성 데이터'}],
+ ['#r3d b',{en:'Cell 3D ',ko:'셀 3D '}],
+ ['#r3d small',{en:'interactive 3D view',ko:'인터랙티브 3D 뷰'}],
+ ['#rdeg b',{en:'Degradation ',ko:'열화 해석 '}],
+ ['#rdeg small',{en:'aging & cycle life',ko:'노화 · 사이클 수명'}],
+ ['#sv-pack .sim-controls h4',{en:'Pack configuration',ko:'팩 구성'}],
+ ['#sv-pack .sim-controls .hint',{en:'// series × parallel network',ko:'// 직렬 × 병렬 네트워크'}],
+ ['#sv-pack .field:nth-child(3) label',{en:'Series count ',ko:'직렬 수 '}],
+ ['#sv-pack .field:nth-child(4) label',{en:'Parallel count ',ko:'병렬 수 '}],
+ ['#sv-pack .field:nth-child(5) label',{en:'Discharge C-rate ',ko:'방전 C-rate '}],
+ ['#sv-pack .field:nth-child(6) label',{en:'Ambient temp ',ko:'주변 온도 '}],
+ ['#sv-pack .field:nth-child(7) label',{en:'Cell mismatch ',ko:'셀 편차 '}],
+ ['#sv-pack .field:nth-child(8) label',{en:'Chemistry',ko:'화학 조성'}],
+ ['#sv-pack .out-meta .metric:nth-child(1) .k',{en:'Pack voltage',ko:'팩 전압'}],
+ ['#sv-pack .out-meta .metric:nth-child(2) .k',{en:'Energy',ko:'총 에너지'}],
+ ['#sv-pack .out-meta .metric:nth-child(3) .k',{en:'ΔV imbalance',ko:'ΔV 편차'}],
+ ['#sv-pack .out-meta .metric:nth-child(4) .k',{en:'ΔT spread',ko:'ΔT 편차'}],
+ ['#mtabs button[data-mt="c"]',{en:'Cathodes',ko:'양극재'}],
+ ['#mtabs button[data-mt="a"]',{en:'Anodes',ko:'음극재'}],
+ ['#mtabs button[data-mt="cmp"]',{en:'Compare',ko:'비교'}],
  ['.sim-controls h4',{en:'Operating conditions',ko:'운전 조건'}],
  ['.sim-controls .hint',{en:'// input parameters',ko:'// 입력 파라미터'}],
  ['.sim-controls .field:nth-child(4) label',{en:'Discharge C-rate ',ko:'방전 C-rate '}],
@@ -890,6 +2007,11 @@ function setLang(l){
   $('q').placeholder=l==='ko'?'셀 검색…':'Search cells…';
   if(/^\/\/ (idle|대기)/.test(runlog.textContent))runlog.textContent=l==='ko'?'// 대기 중 — 해석 실행을 누르세요':'// idle — press Run analysis';
   if(!run.disabled)run.textContent=l==='ko'?'▶ 해석 실행':'▶ Run analysis';
+  if(!prun.disabled)prun.textContent=l==='ko'?'▶ 팩 해석':'▶ Solve pack';
+  if(/^\/\//.test($('pinspect').textContent))$('pinspect').textContent=l==='ko'?'// 셀을 클릭하면 상세 정보가 표시됩니다':'// click a cell to inspect it';
+  renderScen();renderPackPre();drawPack();
+  if(document.getElementById('sv-mat').classList.contains('show'))renderMaterials();
+  if(document.body.classList.contains('v3')){updateL3(l3p);a3LastIdx=-2;updateA3();}
   renderTable();renderCompare();setPipe(pipeIdx);
   setTimeout(fitHero,40);
 }
