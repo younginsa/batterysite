@@ -373,15 +373,13 @@
   @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
 </style>
 </head>
-<body class="lab">
+<body class="lab v2 v3">
 
 <div class="switcher">
-  <button data-style="lab" data-v2="0" class="on">Lab</button>
-  <button data-style="sana" data-v2="0">Clean</button>
-  <button data-style="lab" data-v2="1">Lab 2</button>
-  <button data-style="sana" data-v2="1">Clean 2</button>
-  <button data-style="lab" data-v2="2">Lab 3</button>
-  <button data-style="sana" data-v2="2">Clean 3</button>
+  <button data-style="lab" data-ff="cyl" class="on">Cylinder (dark)</button>
+  <button data-style="sana" data-ff="cyl">Cylinder (light)</button>
+  <button data-style="lab" data-ff="pouch">Pouch (dark)</button>
+  <button data-style="sana" data-ff="pouch">Pouch (light)</button>
 </div>
 
 <nav>
@@ -396,40 +394,8 @@
   </div>
 </nav>
 
-<!-- ============ HOME ============ -->
-<div class="page show" id="page-home">
-  <header class="hero wrap">
-    <div class="cell-viz" id="cellViz"></div>
-    <div class="eyebrow">Virtual Battery Analysis Platform</div>
-    <h1 id="heroH1">Run electrochemical<br>models <span class="grad">in the browser.</span></h1>
-    <p class="lead">Pick a cell, set your operating conditions, run a physics-based solver on our servers, and read the results back as voltage curves and thermal contour maps — no install, no setup.</p>
-    <div class="herocta">
-      <button class="btn-primary" data-go="sim">▶ Open Simulator</button>
-      <button class="btn-ghost" data-go="library">Browse Cell Library</button>
-    </div>
-  </header>
-
-  <section class="block wrap reveal">
-    <div class="sec-label">How it works</div>
-    <h2 class="sec-title">From input to insight in three steps</h2>
-    <p class="sec-sub">The interface stays simple while the solver does the heavy lifting on the server. You never touch the compute layer.</p>
-    <div class="fgrid">
-      <div class="fcard"><div class="num">01</div><h3>Pick &amp; set conditions</h3><p>Choose a cell from the library, then set C-rate, ambient temperature, and capacity through the web controls.</p></div>
-      <div class="fcard"><div class="num">02</div><h3>Run on the server</h3><p>A containerized solver — your C, MATLAB, or Python code — receives the parameters, executes, and writes structured results back.</p></div>
-      <div class="fcard"><div class="num">03</div><h3>Read the results</h3><p>Voltage curves and thermal contour plots render in the browser with key metrics. Export the raw data anytime.</p></div>
-    </div>
-  </section>
-
-  <section class="contact wrap reveal" id="contact">
-    <h2>Ready to put your<br>solver online?</h2>
-    <p>Send your current analysis code and a sample case. We'll scope Phase 1 and give you a firm timeline and quote.</p>
-    <button class="btn-primary" data-go="sim">Try the demo →</button>
-  </section>
-  <footer>VOLTSCAPE — sample concept page · prototype for discussion · 2026</footer>
-</div>
-
 <!-- ============ HOME V2 — DIGITAL TWIN ============ -->
-<div class="page" id="page-home2">
+<div class="page show" id="page-home2">
   <!-- V3 scroll landing — shown only for Lab 3 / Clean 3; rest of the page is untouched -->
   <div class="landing3" id="landing3">
     <div class="lpin">
@@ -814,15 +780,16 @@ function cellSVG(){
 }
 
 // ================= ROUTER =================
-let v2=false; // false = original home, true = digital-twin home
+let v2=true; // v1 home removed — page-home2 is the only home
+let FF='cyl'; // form factor: 'cyl' | 'pouch'
 const pages={sim:'page-sim',library:'page-library',compare:'page-compare'};
 function go(name){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('show'));
-  document.getElementById(pages[name]||(v2?'page-home2':'page-home')).classList.add('show');
+  document.getElementById(pages[name]||'page-home2').classList.add('show');
   document.querySelectorAll('.navlinks a').forEach(a=>a.classList.toggle('active',a.dataset.go===name));
   if(name==='library')showList();
   if(name==='compare')renderCompare();
-  if(name==='contact'){setTimeout(()=>document.getElementById(v2?'contact2':'contact').scrollIntoView({behavior:'smooth'}),60);return;}
+  if(name==='contact'){setTimeout(()=>document.getElementById('contact2').scrollIntoView({behavior:'smooth'}),60);return;}
   if(!pages[name]&&document.body.classList.contains('v3'))setTimeout(l3Activate,30);
   window.scrollTo(0,0);
 }
@@ -830,17 +797,15 @@ document.querySelectorAll('[data-go]').forEach(el=>el.addEventListener('click',(
 
 // ================= STYLE SWITCHER =================
 document.querySelectorAll('.switcher button').forEach(b=>b.onclick=()=>{
-  v2=b.dataset.v2!=='0';
-  const v3=b.dataset.v2==='2';
-  document.body.className=b.dataset.style+(v2?' v2':'')+(v3?' v3':'');
+  FF=b.dataset.ff||'cyl';
+  document.body.className=b.dataset.style+' v2 v3'+(FF==='pouch'?' pouch':'');
   document.querySelectorAll('.switcher button').forEach(x=>x.classList.toggle('on',x===b));
   if(lastResult)draw();
   drawPack();
   if(document.getElementById('sv-mat').classList.contains('show'))renderMaterials();
   if(document.getElementById('lib-detail').style.display==='block'&&currentCell!=null)document.getElementById('d-pic').innerHTML=cellSVG();
-  // if a home page is on screen, swap it for the variant that matches the tab
-  if(document.getElementById('page-home').classList.contains('show')||document.getElementById('page-home2').classList.contains('show'))go('home');
-  if(v3)setTimeout(l3Activate,60);
+  if(document.getElementById('page-home2').classList.contains('show'))go('home');
+  setTimeout(l3Activate,60);
 });
 
 // ================= LIBRARY =================
@@ -1050,16 +1015,21 @@ const clampL=(p,a,b)=>Math.min(1,Math.max(0,(p-a)/(b-a)));
 // Higgsfield bridge: when the rendered frame sequence exists, call e.g.
 //   loadHiggsfieldFrames('frames/cell_####.webp',120)
 // and the scrub swaps from the procedural render to the real frames.
-const HF={dark:{frames:[],ready:false},light:{frames:[],ready:false},tried:false};
-window.loadHiggsfieldFrames=(pattern,count,set)=>{const S=HF[set||'dark'];S.frames=[];S.ready=false;let done=0;
-  for(let i=1;i<=count;i++){const img=new Image();img.src=pattern.replace(/#+/,m=>String(i).padStart(m.length,'0'));img.onload=()=>{if(++done===count){S.ready=true;drawBattery3(l3p);}};S.frames.push(img);}};
+const HF={cyl:{dark:{frames:[],ready:false},light:{frames:[],ready:false},tried:false},
+          pouch:{dark:{frames:[],ready:false},light:{frames:[],ready:false},tried:false}};
+function ffDir(ff,theme){const base=ff==='pouch'?'frames/pouch/':'frames/';return theme==='light'?base+'clean/':base;}
+function HFSET(){return HF[FF][document.body.classList.contains('sana')?'light':'dark'];}
+// crop of the closed-cell sprite inside its 16:9 source, per form factor
+function cellCrop(w,h){return FF==='pouch'?{sx:w*0.42,sw:w*0.36,sy:h*0.02,sh:h*0.93}:{sx:w*0.375,sw:w*0.25,sy:0,sh:h*0.97};}
+function loadHFFrames(ff,theme){const S=HF[ff][theme];if(S.frames.length)return;S.ready=false;let done=0;const dir=ffDir(ff,theme);
+  for(let i=1;i<=HF_COUNT;i++){const img=new Image();img.src=dir+'cell_'+String(i).padStart(4,'0')+'.webp';img.onload=()=>{if(++done===HF_COUNT){S.ready=true;drawBattery3(l3p);}};S.frames.push(img);}}
 function drawBattery3(p){
   if(!l3ctx||!l3w)return;
   const c=l3ctx,W=l3w,H=l3h;
   c.clearRect(0,0,W,H);
   // timeline: 0→0.55 disassemble · 0.55→0.72 hold (labels shown) · 0.72→1 reassemble
   const pe=p<0.55?p/0.55:p<0.72?1:Math.max(0,1-(p-0.72)/0.26);
-  const SET=document.body.classList.contains('sana')?HF.light:HF.dark;
+  const SET=HFSET();
   if(SET.ready&&SET.frames.length){
     if(bridgeActive)return; // the bridge sprite owns the battery between sections
     const f=SET.frames[Math.min(SET.frames.length-1,Math.round(pe*(SET.frames.length-1)))];
@@ -1208,13 +1178,15 @@ function drawBattery3(p){
 }
 function updateL3(p){
   if(!landing3El)return;
+  const eb=document.getElementById('l3eyebrow');
+  if(eb)eb.textContent=lang==='ko'?(FF==='pouch'?'차세대 파우치 셀':'차세대 원통형 셀'):(FF==='pouch'?'Next-gen pouch cell':'Next-gen cylindrical cell');
   // title & subtitle persist through the whole sequence
   document.getElementById('l3content').style.opacity=1;
   document.getElementById('l3sub').style.opacity=1;
   document.getElementById('l3hint').style.opacity=p>0.04?0:1;
   // material names are baked into the footage's final still; HTML callouts
   // only serve the procedural fallback
-  const foot=(document.body.classList.contains('sana')?HF.light:HF.dark).ready;
+  const foot=HFSET().ready;
   document.getElementById('l3c1').classList.toggle('on',!foot&&p>=0.16&&p<0.62);
   document.getElementById('l3c2').classList.toggle('on',!foot&&p>=0.28&&p<0.62);
   document.getElementById('l3c3').classList.toggle('on',!foot&&p>=0.40&&p<0.64);
@@ -1254,17 +1226,17 @@ function l3Activate(){
   if(!landing3El)return;
   l3counted=false;l3p=0;l3target=0;
   a3p=0;a3target=0;a3LastIdx=-2;a3Load();updateA3();
-  if(!HF.tried){ // auto-load the Higgsfield frame sequences if they exist
-    HF.tried=true;
-    [['frames/cell_0001.webp','dark'],['frames/clean/cell_0001.webp','light']].forEach(pair=>{
+  const bucket=HF[FF];
+  if(!bucket.tried){ // auto-load this form factor's frame sequences if present
+    bucket.tried=true;
+    ['dark','light'].forEach(theme=>{
+      const dir=ffDir(FF,theme),ff=FF;
       const probe=new Image();
-      probe.onload=()=>loadHiggsfieldFrames(pair[0].replace('0001','####'),HF_COUNT,pair[1]);
-      probe.src=pair[0];
-    });
-    [['frames/end_labeled.webp','dark'],['frames/clean/end_labeled.webp','light']].forEach(pair=>{
+      probe.onload=()=>loadHFFrames(ff,theme);
+      probe.src=dir+'cell_0001.webp';
       const im=new Image();
-      im.onload=()=>{HF[pair[1]].labeled=im;};
-      im.src=pair[0];
+      im.onload=()=>{HF[ff][theme].labeled=im;};
+      im.src=dir+'end_labeled.webp';
     });
   }
   l3Resize();updateL3(0);drawBattery3(0);l3Intro(true);l3OnScroll();
@@ -1293,24 +1265,25 @@ function bridgeUpdate(){
   if(bridgecv.width!==Math.round(W*dpr)){bridgecv.width=W*dpr;bridgecv.height=H*dpr;}
   brctx.setTransform(dpr,0,0,dpr,0,0);
   brctx.clearRect(0,0,W,H);
-  const dark=!document.body.classList.contains('sana');
-  const cut=dark?A3.darkCut:A3.lightCut;
-  const line=dark?A3.darkLine:A3.lightLine;
-  const SET=dark?HF.dark:HF.light;
+  const theme=document.body.classList.contains('sana')?'light':'dark';
+  const cut=A3.cut[FF][theme],line=A3.line[FF][theme];
+  const SET=HFSET();
   const src=(cut&&cut.width)?cut:(SET.ready?SET.frames[0]:null);
   if(!src||!src.width)return;
   const q0=clampL((y-start)/Math.max(1,end-start),0,1);
   const q=q0*q0*(3-2*q0);
-  const s=Math.min(W/src.width,H/src.height),dh=src.height*s,dy=(H-dh)/2;
-  // from: hero battery position (frame contain-fit) · to: apps intro anchor
-  const hx=W/2,hy=dy+dh*0.465,hh=dh*0.98;
+  const s=Math.min(W/src.width,H/src.height),dw=src.width*s,dh=src.height*s;
+  const left=(W-dw)/2,dy=(H-dh)/2;
+  // from: hero battery position within the contain-fit frame · to: apps intro anchor
+  const ctrX=FF==='pouch'?0.60:0.50,ctrY=FF==='pouch'?0.50:0.465;
+  const hx=left+ctrX*dw,hy=dy+ctrY*dh,hh=FF==='pouch'?dh*0.88:dh*0.98;
   const ax=W*0.52,ay=H*0.46,ah=dh*0.80;
   const x=hx+(ax-hx)*q,yc=hy+(ay-hy)*q,hgt=hh+(ah-hh)*q;
   const draw=(im,alpha)=>{
     if(!im||!im.width||alpha<=0)return;
-    const sx=im.width*0.375,sw=im.width*0.25,sy2=0,sh=im.height*0.97;
-    const cw=hgt*(sw/sh);
-    brctx.globalAlpha=alpha;brctx.drawImage(im,sx,sy2,sw,sh,x-cw/2,yc-hgt/2,cw,hgt);brctx.globalAlpha=1;
+    const cr=cellCrop(im.width,im.height);
+    const cw=hgt*(cr.sw/cr.sh);
+    brctx.globalAlpha=alpha;brctx.drawImage(im,cr.sx,cr.sy,cr.sw,cr.sh,x-cw/2,yc-hgt/2,cw,hgt);brctx.globalAlpha=1;
   };
   if(line&&line.width){draw(src,1-q);draw(line,q);} // photoreal dissolves into blueprint
   else draw(src,1);
@@ -1330,19 +1303,19 @@ const A3APPS=[
 ];
 function a3Load(){
   if(A3.tried)return;A3.tried=true;
-  ['dark','light'].forEach(set=>{
-    const dir=set==='dark'?'frames/apps/':'frames/apps/clean/';
-    A3[set]=A3APPS.map(a=>{const im=new Image();im.onload=()=>a3Draw();im.src=dir+a.img+'.webp';return im;});
-    // docked variants: same wireframe with the cell baked in at true 3D position
-    A3[set+'D']=A3APPS.map(a=>{const im=new Image();im.onload=()=>a3Draw();im.src=dir+a.img+'_docked.webp';return im;});
-    // transparent cutout of the closed cell (bridge sprite)
-    const cut=new Image();cut.onload=()=>a3Draw();
-    cut.src=(set==='dark'?'frames/':'frames/clean/')+'cell_cut.png';
-    A3[set+'Cut']=cut;
-    // blueprint outline of the cell (implementation-chapter style)
-    const line=new Image();line.onload=()=>a3Draw();
-    line.src=(set==='dark'?'frames/':'frames/clean/')+'cell_line.webp';
-    A3[set+'Line']=line;
+  A3.D={cyl:{},pouch:{}};A3.cut={cyl:{},pouch:{}};A3.line={cyl:{},pouch:{}};
+  ['dark','light'].forEach(theme=>{
+    const dir=theme==='dark'?'frames/apps/':'frames/apps/clean/';
+    A3[theme]=A3APPS.map(a=>{const im=new Image();im.onload=()=>a3Draw();im.src=dir+a.img+'.webp';return im;});
+    // docked variants per form factor (cell baked in at true 3D position)
+    A3.D.cyl[theme]=A3APPS.map(a=>{const im=new Image();im.onload=()=>a3Draw();im.src=dir+a.img+'_docked.webp';return im;});
+    A3.D.pouch[theme]=A3APPS.map(a=>{const im=new Image();im.onload=()=>a3Draw();im.src=dir+a.img+'_docked_pouch.webp';return im;});
+    // sprites per form factor
+    ['cyl','pouch'].forEach(ff=>{
+      const sdir=ffDir(ff,theme);
+      const cut=new Image();cut.onload=()=>a3Draw();cut.src=sdir+'cell_cut.png';A3.cut[ff][theme]=cut;
+      const line=new Image();line.onload=()=>a3Draw();line.src=sdir+'cell_line.webp';A3.line[ff][theme]=line;
+    });
   });
 }
 const A3WINS=[[0.16,0.37],[0.37,0.58],[0.58,0.79],[0.79,1.0001]];
@@ -1352,7 +1325,7 @@ function a3Draw(){
   c.clearRect(0,0,W,H);
   const dark=!document.body.classList.contains('sana');
   const imgs=dark?A3.dark:A3.light;
-  const SET=dark?HF.dark:HF.light;
+  const SET=HFSET();
   const rectFor=img=>{ // contain-fit, centered — bg gaps blend with page bg
     const s=Math.min(W/img.width,H/img.height),dw=img.width*s,dh=img.height*s;
     return{dx:(W-dw)/2,dy:(H-dh)/2,dw,dh};
@@ -1368,7 +1341,8 @@ function a3Draw(){
   };
   // implementation visuals: the docked renders (cell baked in, true 3D) are
   // the app images themselves — pure crossfades between them, no travel
-  const dimgs=dark?A3.darkD:A3.lightD;
+  const theme=dark?'dark':'light';
+  const dimgs=(A3.D&&A3.D[FF])?A3.D[FF][theme]:null;
   let baseRect=null;
   A3WINS.forEach((w,i)=>{
     const fadeIn=clampL(p,w[0]-0.02,w[0]+0.045);
@@ -1376,23 +1350,23 @@ function a3Draw(){
     const a=Math.min(fadeIn,fadeOut);
     if(a>0){
       const zoom=1.0+0.03*(1-clampL(p,w[0],w[1]));
-      const im=(dimgs[i]&&dimgs[i].width)?dimgs[i]:imgs[i];
+      const im=(dimgs&&dimgs[i]&&dimgs[i].width)?dimgs[i]:imgs[i];
       const r=place(im,a,zoom);if(r)baseRect=r;
     }
   });
   if(!baseRect){const ref=imgs[0]&&imgs[0].width?imgs[0]:(SET.frames[0]&&SET.frames[0].width?SET.frames[0]:null);if(ref)baseRect=rectFor(ref);}
   // intro: blueprint-outline cell, fully faded out before the first vehicle appears
-  const line=dark?A3.darkLine:A3.lightLine;
-  const cut=dark?A3.darkCut:A3.lightCut;
+  const line=A3.line&&A3.line[FF]?A3.line[FF][theme]:null;
+  const cut=A3.cut&&A3.cut[FF]?A3.cut[FF][theme]:null;
   const cf=(line&&line.width)?line:((cut&&cut.width)?cut:(SET.ready?SET.frames[0]:null));
   const cellA=bridgeActive?0:1-clampL(p,0.09,0.135);
   if(cellA>0&&cf&&cf.width&&baseRect){
     const drift=clampL(p,0,0.135);
     const cx=W*0.52,cy=H*0.46+drift*H*0.04;
     const ch=baseRect.dh*0.80*(1-0.15*drift);
-    const sx=cf.width*0.375,sw=cf.width*0.25,sy=0,sh=cf.height*0.97;
-    const cw=ch*(sw/sh);
-    c.save();c.globalAlpha=cellA;c.drawImage(cf,sx,sy,sw,sh,cx-cw/2,cy-ch/2,cw,ch);c.restore();
+    const cr=cellCrop(cf.width,cf.height);
+    const cw=ch*(cr.sw/cr.sh);
+    c.save();c.globalAlpha=cellA;c.drawImage(cf,cr.sx,cr.sy,cr.sw,cr.sh,cx-cw/2,cy-ch/2,cw,ch);c.restore();
   }
 }
 function updateA3(){
@@ -1448,6 +1422,7 @@ if(landing3El){
   }),{threshold:.35});
   io3.observe(document.getElementById('l3stats'));
   updateL3(0);
+  setTimeout(l3Activate,80); // the page now boots directly into a v3 variant
 }
 
 // ================= SIM STUDIO =================
@@ -1843,24 +1818,6 @@ const PAIRS=[
  ['.navlinks a[data-go="library"]',{en:'Cell Library',ko:'셀 라이브러리'}],
  ['.navlinks a[data-go="compare"]',{en:'Compare',ko:'비교'}],
  ['.navcta',{en:'Enter the Lab',ko:'시작하기'}],
- // ---- home v1
- ['#page-home .eyebrow',{en:'Virtual Battery Analysis Platform',ko:'가상 배터리 분석 플랫폼'}],
- ['#heroH1',{html:1,en:'Run electrochemical<br>models <span class="grad">in the browser.</span>',ko:'전기화학 모델을<br><span class="grad">브라우저에서 실행하다.</span>'}],
- ['#page-home .lead',{en:'Pick a cell, set your operating conditions, run a physics-based solver on our servers, and read the results back as voltage curves and thermal contour maps — no install, no setup.',ko:'셀을 선택하고 운전 조건을 설정하면, 서버의 물리 기반 솔버가 실행되어 전압 곡선과 열 분포 맵으로 결과를 보여드립니다 — 설치도, 설정도 필요 없습니다.'}],
- ['#page-home .herocta .btn-primary',{en:'▶ Open Simulator',ko:'▶ 시뮬레이터 열기'}],
- ['#page-home .herocta .btn-ghost',{en:'Browse Cell Library',ko:'셀 라이브러리 보기'}],
- ['#page-home .sec-label',{en:'How it works',ko:'작동 방식'}],
- ['#page-home .sec-title',{en:'From input to insight in three steps',ko:'입력에서 인사이트까지, 세 단계'}],
- ['#page-home .sec-sub',{en:'The interface stays simple while the solver does the heavy lifting on the server. You never touch the compute layer.',ko:'인터페이스는 단순하게, 무거운 계산은 서버의 솔버가 담당합니다. 컴퓨팅 계층은 신경 쓸 필요가 없습니다.'}],
- ['#page-home .fcard:nth-child(1) h3',{en:'Pick & set conditions',ko:'셀 선택 & 조건 설정'}],
- ['#page-home .fcard:nth-child(1) p',{en:'Choose a cell from the library, then set C-rate, ambient temperature, and capacity through the web controls.',ko:'라이브러리에서 셀을 고르고 C-rate, 주변 온도, 용량을 웹 컨트롤로 설정합니다.'}],
- ['#page-home .fcard:nth-child(2) h3',{en:'Run on the server',ko:'서버에서 실행'}],
- ['#page-home .fcard:nth-child(2) p',{en:'A containerized solver — your C, MATLAB, or Python code — receives the parameters, executes, and writes structured results back.',ko:'컨테이너화된 솔버(C, MATLAB, Python 코드)가 파라미터를 받아 실행하고 구조화된 결과를 기록합니다.'}],
- ['#page-home .fcard:nth-child(3) h3',{en:'Read the results',ko:'결과 확인'}],
- ['#page-home .fcard:nth-child(3) p',{en:'Voltage curves and thermal contour plots render in the browser with key metrics. Export the raw data anytime.',ko:'전압 곡선과 열 분포도가 핵심 지표와 함께 브라우저에 렌더링됩니다. 원시 데이터는 언제든 내보낼 수 있습니다.'}],
- ['#contact h2',{html:1,en:'Ready to put your<br>solver online?',ko:'솔버를 온라인으로<br>옮길 준비되셨나요?'}],
- ['#contact p',{en:"Send your current analysis code and a sample case. We'll scope Phase 1 and give you a firm timeline and quote.",ko:'현재 사용 중인 해석 코드와 샘플 케이스를 보내주세요. Phase 1 범위를 산정해 확정 일정과 견적을 드립니다.'}],
- ['#contact .btn-primary',{en:'Try the demo →',ko:'데모 체험하기 →'}],
  // ---- home v2
  ['#page-home2 .eyebrow',{en:'Battery Digital Twin Platform',ko:'배터리 디지털 트윈 플랫폼'}],
  ['#heroH1b',{html:1,en:'Every battery,<br><span class="grad">twinned in software.</span>',ko:'모든 배터리를,<br><span class="grad">소프트웨어로 트윈하다.</span>'}],
@@ -1907,7 +1864,6 @@ const PAIRS=[
  ['#contact2 p',{en:"Send us a cell. We'll test it, tear it down, and hand back a model you can run — with the full report behind it.",ko:'셀을 보내주세요. 시험하고, 분해 분석해서, 실행 가능한 모델과 전체 리포트를 돌려드립니다.'}],
  ['#contact2 .btn-primary',{en:'Try the demo →',ko:'데모 체험하기 →'}],
  // ---- v3 scroll landing
- ['#l3eyebrow',{en:'Next-gen cylindrical cell',ko:'차세대 원통형 셀'}],
  ['#l3sub',{en:'Exploring the architecture of clean energy density.',ko:'청정 에너지 밀도의 아키텍처를 탐구합니다.'}],
  ['#l3c1 .k',{en:'01 GRAPHITE ANODE',ko:'01 흑연 음극'}],
  ['#l3c1 .d',{en:'High-conductivity negative electrode layer for stable electron flow.',ko:'안정적인 전자 흐름을 위한 고전도 음극 층입니다.'}],
