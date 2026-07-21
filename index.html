@@ -345,6 +345,13 @@
   #l3c2{left:82%;top:46%}
   #l3c3{left:80%;top:66%}
   @media(max-width:1100px){#l3c1,#l3c2,#l3c3{left:auto;right:20px;max-width:190px}}
+  /* mobile: text block on top, battery below — no overlap */
+  @media(max-width:760px){
+    .l3content{top:calc(env(safe-area-inset-top,0px) + 92px);transform:none}
+    .l3title{font-size:clamp(36px,11vw,54px)}
+    .l3sub{margin-top:14px;font-size:15px;max-width:88%}
+    #l3c1,#l3c2,#l3c3{display:none}
+  }
   .l3stats{padding-top:80px;padding-bottom:10px;position:relative;z-index:5}
   #bridgecv{position:fixed;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;display:none}
   .statbar3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
@@ -359,7 +366,13 @@
   .a3desc{font-size:clamp(14px,1.6vw,18px);color:var(--mute);margin-top:16px;max-width:400px}
   html[lang="ko"] .a3title{word-break:keep-all}
   .a3scrim{position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(90deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 72%,transparent) 30%,transparent 54%)}
-  @media(max-width:760px){.a3scrim{background:linear-gradient(90deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 60%,transparent) 45%,transparent 78%)}}
+  /* mobile: stacked layout — scrim comes from the top so the text stays readable */
+  @media(max-width:760px){
+    .a3scrim{background:linear-gradient(180deg,var(--bg) 0%,color-mix(in srgb,var(--bg) 55%,transparent) 38%,transparent 60%)}
+    .a3content{top:calc(env(safe-area-inset-top,0px) + 92px);transform:none}
+    .a3title{font-size:clamp(30px,9vw,44px);max-width:100%}
+    .a3desc{max-width:100%;font-size:14px}
+  }
 
   /* ============ CONTACT/FOOTER ============ */
   .contact{text-align:center;padding-top:100px;padding-bottom:100px}
@@ -1021,8 +1034,9 @@ function ffDir(ff,theme){const base=ff==='pouch'?'frames/pouch/':'frames/';retur
 function HFSET(){return HF[FF][document.body.classList.contains('sana')?'light':'dark'];}
 // crop of the closed-cell sprite inside its 16:9 source, per form factor
 function cellCrop(w,h){return FF==='pouch'?{sx:w*0.42,sw:w*0.36,sy:h*0.02,sh:h*0.93}:{sx:w*0.375,sw:w*0.25,sy:0,sh:h*0.97};}
-function loadHFFrames(ff,theme){const S=HF[ff][theme];if(S.frames.length)return;S.ready=false;let done=0;const dir=ffDir(ff,theme);
-  for(let i=1;i<=HF_COUNT;i++){const img=new Image();img.src=dir+'cell_'+String(i).padStart(4,'0')+'.webp';img.onload=()=>{if(++done===HF_COUNT){S.ready=true;drawBattery3(l3p);}};S.frames.push(img);}}
+const HF_COUNTS={cyl:{dark:120,light:145},pouch:{dark:120,light:120}};
+function loadHFFrames(ff,theme){const S=HF[ff][theme];if(S.frames.length)return;S.ready=false;let done=0;const dir=ffDir(ff,theme),N=HF_COUNTS[ff][theme];
+  for(let i=1;i<=N;i++){const img=new Image();img.src=dir+'cell_'+String(i).padStart(4,'0')+'.webp';img.onload=()=>{if(++done===N){S.ready=true;drawBattery3(l3p);}};S.frames.push(img);}}
 function drawBattery3(p){
   if(!l3ctx||!l3w)return;
   const c=l3ctx,W=l3w,H=l3h;
@@ -1032,16 +1046,30 @@ function drawBattery3(p){
   const SET=HFSET();
   if(SET.ready&&SET.frames.length){
     if(bridgeActive)return; // the bridge sprite owns the battery between sections
-    const f=SET.frames[Math.min(SET.frames.length-1,Math.round(pe*(SET.frames.length-1)))];
-    if(f&&f.width){
-      // contain-fit: the whole frame (incl. baked labels) is always visible;
-      // leftover space blends into the page bg, which matches the footage bg.
-      const s=Math.min(W/f.width,H/f.height),dw=f.width*s,dh=f.height*s;
-      const dx=(W-dw)/2,dy=(H-dh)/2;
-      c.drawImage(f,dx,dy,dw,dh);
+    const n=SET.frames.length,fi=pe*(n-1),ref=SET.frames[0];
+    if(ref&&ref.width){
+      // frame backgrounds are normalized to the exact page bg color offline,
+      // so the canvas needs no fills — leftover area just shows the page bg
+      const mobile=W<=760;
+      const rect=im=>{
+        let s=Math.min(W/im.width,H/im.height);
+        if(mobile)s=Math.min(W/im.width*1.2,H*0.52/im.height); // larger cell, kept below the stacked text
+        const dw=im.width*s,dh=im.height*s;
+        return{dx:(W-dw)/2,dy:mobile?H*0.68-dh/2:(H-dh)/2,dw,dh};
+      };
+      const put=(im,a)=>{if(!im||!im.width||a<=0)return;
+        const r=rect(im);c.globalAlpha=Math.min(1,a);c.drawImage(im,r.dx,r.dy,r.dw,r.dh);c.globalAlpha=1;};
+      // cylinder light footage: a generated 25-frame bridge animates an old hard
+      // cut; a short dissolve over its last frames melts a residual artifact
+      const CUT=(FF==='cyl'&&document.body.classList.contains('sana'))?{a:64,b:69}:null;
+      if(CUT&&fi>CUT.a&&fi<CUT.b){
+        const t=(fi-CUT.a)/(CUT.b-CUT.a);
+        put(SET.frames[CUT.a],1);put(SET.frames[CUT.b],t*t*(3-2*t));
+      }else{
+        put(SET.frames[Math.min(n-1,Math.round(fi))],1);
+      }
       if(SET.labeled&&SET.labeled.width){ // labeled still shows at the exploded peak
-        const a=Math.min(clampL(p,0.50,0.58),1-clampL(p,0.70,0.78));
-        if(a>0){c.globalAlpha=a;c.drawImage(SET.labeled,dx,dy,dw,dh);c.globalAlpha=1;}
+        put(SET.labeled,Math.min(clampL(p,0.50,0.58),1-clampL(p,0.70,0.78)));
       }
       return;
     }
@@ -1241,7 +1269,6 @@ function l3Activate(){
   }
   l3Resize();updateL3(0);drawBattery3(0);l3Intro(true);l3OnScroll();
 }
-const HF_COUNT=120;
 // ---- bridge: the cell travels behind the stats strip between sections ----
 const bridgecv=document.getElementById('bridgecv');
 const brctx=bridgecv?bridgecv.getContext('2d'):null;
@@ -1326,9 +1353,12 @@ function a3Draw(){
   const dark=!document.body.classList.contains('sana');
   const imgs=dark?A3.dark:A3.light;
   const SET=HFSET();
-  const rectFor=img=>{ // contain-fit, centered — bg gaps blend with page bg
-    const s=Math.min(W/img.width,H/img.height),dw=img.width*s,dh=img.height*s;
-    return{dx:(W-dw)/2,dy:(H-dh)/2,dw,dh};
+  const mobile=W<=760;
+  const rectFor=img=>{ // contain-fit — bg gaps blend with page bg; stacked below text on mobile
+    let s=Math.min(W/img.width,H/img.height);
+    if(mobile)s=Math.min(W/img.width*1.15,H*0.55/img.height);
+    const dw=img.width*s,dh=img.height*s;
+    return{dx:(W-dw)/2,dy:mobile?H*0.66-dh/2:(H-dh)/2,dw,dh};
   };
   const place=(img,alpha,scale)=>{
     if(!img||!img.width||alpha<=0)return null;
@@ -1366,7 +1396,8 @@ function a3Draw(){
     const ch=baseRect.dh*0.80*(1-0.15*drift);
     const cr=cellCrop(cf.width,cf.height);
     const cw=ch*(cr.sw/cr.sh);
-    c.save();c.globalAlpha=cellA;c.drawImage(cf,cr.sx,cr.sy,cr.sw,cr.sh,cx-cw/2,cy-ch/2,cw,ch);c.restore();
+    c.save();c.globalAlpha=cellA;if(cf===line)c.globalCompositeOperation=dark?'screen':'multiply';
+    c.drawImage(cf,cr.sx,cr.sy,cr.sw,cr.sh,cx-cw/2,cy-ch/2,cw,ch);c.restore();
   }
 }
 function updateA3(){
