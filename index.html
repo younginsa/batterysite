@@ -1046,7 +1046,12 @@ function drawBattery3(p){
   const SET=HFSET();
   if(SET.ready&&SET.frames.length){
     if(bridgeActive)return; // the bridge sprite owns the battery between sections
-    const n=SET.frames.length,fi=pe*(n-1),ref=SET.frames[0];
+    const n=SET.frames.length;
+    // pouch: park the teardown on the exact frame the labeled still was made
+    // from, so labels appear over an unchanging image (frame 110, 0-based 109)
+    const HOLD=FF==='pouch'?109:null;
+    const fiMax=(HOLD!=null&&HOLD<n)?HOLD:n-1;
+    const fi=pe*fiMax,ref=SET.frames[0];
     if(ref&&ref.width){
       // frame backgrounds are normalized to the exact page bg color offline,
       // so the canvas needs no fills — leftover area just shows the page bg
