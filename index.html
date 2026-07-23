@@ -322,7 +322,7 @@
   .landing3,.l3stats{display:none}
   body.v3 .landing3{display:block}
   body.v3 .l3stats{display:block}
-  .landing3{position:relative;height:260vh}
+  .landing3{position:relative;height:320vh}
   .lpin{position:sticky;top:0;height:100vh;overflow:hidden}
   #bat3{position:absolute;inset:0;width:100%;height:100%;display:block}
   .l3gridov{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:64px 64px;opacity:.16;-webkit-mask-image:radial-gradient(ellipse at center,black 30%,transparent 78%);mask-image:radial-gradient(ellipse at center,black 30%,transparent 78%)}
@@ -1031,7 +1031,7 @@ function drawBattery3(p){
   const c=l3ctx,W=l3w,H=l3h;
   c.clearRect(0,0,W,H);
   // timeline: 0→0.55 disassemble · 0.55→0.72 hold (labels shown) · 0.72→1 reassemble
-  const pe=p<0.55?p/0.55:p<0.72?1:Math.max(0,1-(p-0.72)/0.26);
+  const pe=p<0.45?p/0.45:p<0.80?1:Math.max(0,1-(p-0.80)/0.18);
   const dark=!document.body.classList.contains('sana');
   const SET=HFSET();
   const boot=!SET.ready&&SET.frames.length&&SET.frames[0]&&SET.frames[0].width; // first frame while loading
@@ -1047,11 +1047,13 @@ function drawBattery3(p){
       // frame backgrounds are normalized to the exact page bg color offline,
       // so the canvas needs no fills — leftover area just shows the page bg
       const mobile=W<=760;
+      const cellCtr=FF==='pouch'?0.60:0.50; // where the cell sits inside the frame
       const rect=im=>{
         let s=Math.min(W/im.width,H/im.height);
         if(mobile)s=Math.min(W/im.width,H*0.52/im.height); // width-fit below the stacked text — edges never clip
         const dw=im.width*s,dh=im.height*s;
-        return{dx:(W-dw)/2,dy:mobile?H*0.68-dh/2:(H-dh)/2,dw,dh};
+        const shift=mobile?(cellCtr-0.5)*dw:0; // centre the CELL on phones
+        return{dx:(W-dw)/2-shift,dy:mobile?H*0.68-dh/2:(H-dh)/2,dw,dh};
       };
       const put=(im,a)=>{if(!im||!im.width||a<=0)return;
         const r=rect(im);c.globalAlpha=Math.min(1,a);c.drawImage(im,r.dx,r.dy,r.dw,r.dh);c.globalAlpha=1;};
@@ -1065,8 +1067,8 @@ function drawBattery3(p){
       }else{
         put(SET.frames[Math.min(n-1,Math.round(fi))],1);
       }
-      // label window sits strictly inside the parked plateau (p 0.55–0.72)
-      const labelA=Math.min(clampL(p,0.56,0.62),1-clampL(p,0.66,0.71));
+      // label window sits strictly inside the parked plateau (p 0.45–0.80)
+      const labelA=Math.min(clampL(p,0.47,0.53),1-clampL(p,0.74,0.79));
       if(labelA>0){
         if(FF==='pouch'){
           // pouch: labels are drawn in code over the live frozen frame —
@@ -1121,7 +1123,7 @@ function updateL3(p){
   document.getElementById('l3content').style.opacity=1;
   document.getElementById('l3sub').style.opacity=1;
   document.getElementById('l3hint').style.opacity=p>0.04?0:1;
-  const st=p<0.13?0:p<0.30?1:p<0.44?2:p<0.72?3:4;
+  const st=p<0.11?0:p<0.24?1:p<0.36?2:p<0.80?3:4;
   const L=lang==='ko'?['금속 케이싱','X-레이 디졸브','젤리롤 분리','코어 상세 노출','재조립']:['METALLIC CASING','X-RAY DISSOLVE','JELLY-ROLL SEPARATION','FULL DETAILED CORE','REASSEMBLY'];
   document.getElementById('l3state').innerHTML=`<b>0${st+1}</b> — ${L[st]} · ${(p*100).toFixed(0)}%`;
 }
@@ -1206,7 +1208,8 @@ function bridgeUpdate(){
   const left=(W-dw)/2,dy=(H-dh)/2;
   // from: hero battery position within the contain-fit frame · to: apps intro anchor
   const ctrX=FF==='pouch'?0.60:0.50,ctrY=FF==='pouch'?0.50:0.465;
-  const hx=left+ctrX*dw,hy=dy+ctrY*dh,hh=FF==='pouch'?dh*0.88:dh*0.98;
+  const mob=W<=760;
+  const hx=mob?W/2:left+ctrX*dw,hy=mob?H*0.68:dy+ctrY*dh,hh=FF==='pouch'?dh*0.88:dh*0.98;
   const ax=W*0.52,ay=W<=760?H*0.64:H*0.46,ah=dh*0.80;
   const x=hx+(ax-hx)*q,yc=hy+(ay-hy)*q,hgt=hh+(ah-hh)*q;
   const draw=(im,alpha)=>{
