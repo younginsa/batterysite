@@ -41,6 +41,7 @@
   .switcher{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:300;display:flex;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:999px;padding:5px;box-shadow:0 8px 30px rgba(0,0,0,.25)}
   .switcher button{padding:8px 16px;border:none;background:transparent;color:var(--mute);border-radius:999px;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--body);letter-spacing:.02em;transition:all .15s;white-space:nowrap}
   @media(max-width:420px){.switcher button{padding:8px 11px;font-size:11px}}
+  @media(max-width:560px){.switcher{flex-wrap:wrap;justify-content:center;width:calc(100vw - 24px);max-width:400px;border-radius:20px;bottom:12px}}
   .switcher button.on{background:var(--accent);color:var(--accent-ink)}
 
   /* ============ NAV ============ */
@@ -1048,7 +1049,7 @@ function drawBattery3(p){
       const mobile=W<=760;
       const rect=im=>{
         let s=Math.min(W/im.width,H/im.height);
-        if(mobile)s=Math.min(W/im.width*1.2,H*0.52/im.height); // larger cell, kept below the stacked text
+        if(mobile)s=Math.min(W/im.width,H*0.52/im.height); // width-fit below the stacked text — edges never clip
         const dw=im.width*s,dh=im.height*s;
         return{dx:(W-dw)/2,dy:mobile?H*0.68-dh/2:(H-dh)/2,dw,dh};
       };
@@ -1070,7 +1071,7 @@ function drawBattery3(p){
         if(FF==='pouch'){
           // pouch: labels are drawn in code over the live frozen frame —
           // AI-relabeled stills kept drifting from the footage geometry
-          drawPouchLabels(c,rect(ref),labelA,dark);
+          drawPouchLabels(c,rect(ref),labelA,dark,W);
         }else if(SET.labeled&&SET.labeled.width){
           put(SET.labeled,labelA);
         }
@@ -1087,7 +1088,7 @@ const POUCH_LBL=[
  ['NMC CATHODE',0.665,0.755,0.675],
  ['ALUMINIUM',0.775,0.79,0.775],
 ];
-function drawPouchLabels(c,r,alpha,dark){
+function drawPouchLabels(c,r,alpha,dark,W){
   const fs=Math.max(11,r.dh*0.024);
   c.save();c.globalAlpha=alpha;
   c.font=`${fs}px 'IBM Plex Mono',monospace`;
@@ -1095,7 +1096,9 @@ function drawPouchLabels(c,r,alpha,dark){
   const col=dark?'rgba(160,171,187,0.92)':'rgba(71,80,105,0.92)';
   c.fillStyle=col;c.strokeStyle=dark?'rgba(160,171,187,0.55)':'rgba(71,80,105,0.5)';c.lineWidth=1;
   POUCH_LBL.forEach(L=>{
-    const tx=r.dx+r.dw*0.845,ty=r.dy+r.dh*L[1];
+    const textW=c.measureText(L[0]).width;
+    // keep the whole label on screen, whatever the viewport
+    const tx=Math.min(r.dx+r.dw*0.845,(W||r.dx+r.dw)-textW-10),ty=r.dy+r.dh*L[1];
     const ax=r.dx+r.dw*L[2],ay=r.dy+r.dh*L[3];
     c.beginPath();c.arc(ax,ay,2.5,0,7);c.fill();
     c.beginPath();c.moveTo(ax+6,ay);c.lineTo(tx-fs*0.6,ty);c.lineTo(tx-8,ty);c.stroke();
