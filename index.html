@@ -333,6 +333,19 @@
   .l3title .w span{display:inline-block;opacity:0;transform:translateY(30px);transition:opacity .4s,transform .4s}
   .l3title .w span.on{opacity:1;transform:none}
   .l3sub{font-size:clamp(15px,1.8vw,20px);color:var(--mute);margin-top:22px;max-width:430px;opacity:0;transition:opacity .4s}
+  .l3cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px;pointer-events:auto}
+  @media(max-width:760px){.l3cta{margin-top:18px}.l3cta .btn-primary,.l3cta .btn-ghost{padding:12px 20px;font-size:14px}}
+  .mrow{display:flex;gap:10px;font-size:12px;margin-top:8px;padding-top:8px;border-top:1px solid color-mix(in srgb,var(--border) 60%,transparent)}
+  .fcard p+.mrow{margin-top:16px}
+  .mrow span{font-family:var(--data);color:var(--accent);min-width:30px;text-transform:uppercase;font-size:10px;letter-spacing:.08em;padding-top:2px}
+  .mrow b{color:var(--mute);font-weight:500}
+  .vwrap{display:grid;grid-template-columns:1fr 300px;gap:22px;align-items:start}
+  @media(max-width:880px){.vwrap{grid-template-columns:1fr}}
+  .vside{display:grid;gap:12px}
+  .vmetric{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 18px;display:flex;justify-content:space-between;align-items:baseline}
+  .vmetric .k{font-size:13px;color:var(--mute)}
+  .vmetric .v{font-family:var(--data);font-size:18px;font-weight:600;color:var(--accent)}
+  .vnote{font-family:var(--data);font-size:11px;color:var(--mute);border:1px dashed var(--border);border-radius:var(--radius-sm);padding:12px 14px;line-height:1.6}
   .l3state{position:absolute;left:32px;bottom:26px;font-family:var(--data);font-size:11px;letter-spacing:.14em;color:var(--mute);z-index:3}
   .l3state b{color:var(--accent)}
   .l3hint{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);font-family:var(--data);font-size:11px;color:var(--mute);letter-spacing:.18em;z-index:3;transition:opacity .4s;animation:l3bob 2s ease-in-out infinite}
@@ -408,9 +421,10 @@
       <div class="l3gridov"></div>
       <div class="l3content" id="l3content">
         <div class="wrap">
-          <div class="l3eyebrow" id="l3eyebrow">Next-gen cylindrical cell</div>
-          <h1 class="l3title" id="l3title" aria-label="NEXT-GEN CELL"></h1>
-          <p class="l3sub" id="l3sub">Exploring the architecture of clean energy density.</p>
+          <div class="l3eyebrow" id="l3eyebrow">Cell teardown → model parameters</div>
+          <h1 class="l3title" id="l3title" aria-label="FROM CELL TO MODEL"></h1>
+          <p class="l3sub" id="l3sub">Every parameter in our electrochemical models is measured from this teardown — not fitted from literature.</p>
+          <div class="l3cta"><button class="btn-primary" data-go="sim">▶ Open Simulator</button><button class="btn-ghost" id="toProcess">How we build models ↓</button></div>
         </div>
       </div>
       <div class="l3state" id="l3state"></div>
@@ -419,47 +433,30 @@
   </div>
   <div class="l3stats wrap" id="l3stats">
     <div class="statbar3">
-      <div class="stat"><div class="n"><span data-c3="850">0</span><small> Wh/L</small></div><div class="l">Energy density</div></div>
-      <div class="stat"><div class="n"><span data-c3="2000">0</span><small>+</small></div><div class="l">Lifecycle loops</div></div>
-      <div class="stat"><div class="n"><span data-c3="15">0</span><small> min</small></div><div class="l">Ultra-fast charge</div></div>
+      <div class="stat"><div class="n"><span data-c3="24">0</span><small>+</small></div><div class="l">Parameters measured per cell — geometry · kinetics · transport</div></div>
+      <div class="stat"><div class="n">0.2–<span data-c3="5">0</span><small> C</small></div><div class="l">Validated discharge range, every model release</div></div>
+      <div class="stat"><div class="n"><span data-c3="3">0</span></div><div class="l">Model levels — P2D · ECM · thermal</div></div>
     </div>
   </div>
-  <!-- V3 bridge: the cell passes behind the stats strip between the two pinned sections -->
-  <canvas id="bridgecv"></canvas>
-  <!-- V3 applications chapter: battery → EV / ESS / UAM / scooter wireframes -->
-  <div class="apps3" id="apps3">
-    <div class="lpin">
-      <canvas id="appcv"></canvas>
-      <div class="l3gridov"></div>
-      <div class="a3scrim"></div>
-      <div class="a3content">
-        <div class="wrap">
-          <div id="a3inner" style="transition:opacity .3s,transform .3s">
-            <div class="a3num" id="a3num"></div>
-            <h2 class="a3title" id="a3title"></h2>
-            <p class="a3desc" id="a3desc"></p>
-          </div>
-        </div>
-      </div>
-      <div class="l3state" id="a3state"></div>
+  <section class="block wrap reveal" id="models2">
+    <div class="sec-label">The models</div>
+    <h2 class="sec-title">Three model levels, one measured parameter deck</h2>
+    <p class="sec-sub">Every level runs from the same parameter set extracted from the physical cell — pick the fidelity your problem needs.</p>
+    <div class="fgrid">
+      <div class="fcard"><div class="num">P2D · DFN</div><h3>Electrochemical</h3><p>Full pseudo-two-dimensional Newman model — lithium transport, reaction kinetics and overpotentials resolved through both electrodes and separator.</p>
+        <div class="mrow"><span>In</span><b>geometry · OCP · kinetics · transport</b></div>
+        <div class="mrow"><span>Out</span><b>V(t) · Li concentration fields · heat generation</b></div>
+        <div class="mrow"><span>For</span><b>fast-charge limits · aging studies · cell design</b></div></div>
+      <div class="fcard"><div class="num">ECM · 2RC</div><h3>Equivalent circuit</h3><p>A 2-RC network fitted from the same characterization campaign — light enough for BMS logic and pack-level studies in real time.</p>
+        <div class="mrow"><span>In</span><b>OCV(SOC) · R₀/R₁C₁ maps vs SOC, T</b></div>
+        <div class="mrow"><span>Out</span><b>terminal voltage · SOC · loss budget</b></div>
+        <div class="mrow"><span>For</span><b>BMS design · pack simulation · HIL</b></div></div>
+      <div class="fcard"><div class="num">THM</div><h3>Thermal</h3><p>Lumped and 2-D surface-temperature models coupled to either level — entropic and joule heat drive the field, cooling boundaries close it.</p>
+        <div class="mrow"><span>In</span><b>heat gen · cp · k · h boundaries</b></div>
+        <div class="mrow"><span>Out</span><b>T(t) · surface contour · peak location</b></div>
+        <div class="mrow"><span>For</span><b>cooling design · derating · abuse margins</b></div></div>
     </div>
-  </div>
-  <header class="hero wrap">
-    <div class="cell-viz" id="cellViz2"></div>
-    <div class="eyebrow">Battery Digital Twin Platform</div>
-    <h1 id="heroH1b">Every battery,<br><span class="grad">twinned in software.</span></h1>
-    <p class="lead">We cycle the physical cell, tear it down to measure what's inside, and rebuild it as a physics-based digital twin — so you can run, verify, and compare battery models before committing to hardware.</p>
-    <div class="herocta">
-      <button class="btn-primary" data-go="sim">▶ Open Simulator</button>
-      <button class="btn-ghost" id="toProcess">Our Process ↓</button>
-    </div>
-    <div class="statbar">
-      <div class="stat"><div class="n"><span data-count="3">0</span></div><div class="l">Solver stacks — C · MATLAB · Python</div></div>
-      <div class="stat"><div class="n"><span data-count="17">0</span></div><div class="l">Cells in the library, and growing</div></div>
-      <div class="stat"><div class="n"><span data-count="30">0</span><small>p</small></div><div class="l">Teardown report per characterized cell</div></div>
-      <div class="stat"><div class="n"><span data-count="4">0</span></div><div class="l">Target sectors — EV · ESS · UAM · Micro</div></div>
-    </div>
-  </header>
+  </section>
 
   <section class="block wrap reveal" id="process2">
     <div class="sec-label">Service structure</div>
@@ -473,7 +470,23 @@
     <div class="pipe-detail" id="pipeDetail"></div>
   </section>
 
-  <section class="block wrap reveal">
+  <section class="block wrap reveal" id="valid2">
+    <div class="sec-label">Validation</div>
+    <h2 class="sec-title">Model vs. measurement</h2>
+    <p class="sec-sub">Every released model ships with its validation set — simulated discharge curves overlaid on cycler data across C-rates, with stated error metrics.</p>
+    <div class="vwrap">
+      <div class="canvas-wrap"><canvas id="vplot" width="860" height="410"></canvas></div>
+      <div class="vside">
+        <div class="vmetric"><div class="k">Mean |ΔV| @ 1C</div><div class="v">11 mV</div></div>
+        <div class="vmetric"><div class="k">Mean |ΔV| @ 3C</div><div class="v">24 mV</div></div>
+        <div class="vmetric"><div class="k">Capacity error</div><div class="v">1.8 %</div></div>
+        <div class="vmetric"><div class="k">Peak temp error</div><div class="v">1.3 °C</div></div>
+        <div class="vnote" id="vnote">⚠ Illustrative data — the first measured validation set ships with the August model package.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block wrap reveal" id="deliver2">
     <div class="sec-label">Deliverables</div>
     <h2 class="sec-title">The first model package</h2>
     <div class="duedate">◷ First version targeted — end of August</div>
@@ -486,15 +499,15 @@
     </div>
   </section>
 
-  <section class="block wrap reveal">
-    <div class="sec-label">Where it applies</div>
-    <h2 class="sec-title">Pick the right battery, virtually</h2>
-    <p class="sec-sub">Before hardware is chosen, virtual simulation shows which cell fits each application — and why.</p>
+  <section class="block wrap reveal" id="apps2sec">
+    <div class="sec-label">Applications</div>
+    <h2 class="sec-title">Engineering problems the models answer</h2>
+    <p class="sec-sub">Cell selection is a simulation problem before it is a procurement problem — run the candidates against your duty cycle first.</p>
     <div class="appgrid">
-      <div class="appcard"><div class="ic">🚗</div><h3>Electric Vehicles</h3><p>Range, fast-charge behavior and thermal limits across real drive cycles.</p></div>
-      <div class="appcard"><div class="ic">🔋</div><h3>ESS</h3><p>Grid-scale storage: calendar life, round-trip efficiency and safety margins.</p></div>
-      <div class="appcard"><div class="ic">🚁</div><h3>UAM</h3><p>Air mobility: high discharge power under strict weight budgets.</p></div>
-      <div class="appcard"><div class="ic">🛴</div><h3>Micromobility</h3><p>Scooters and light EVs: cost, cycle life and packaging trade-offs.</p></div>
+      <div class="appcard"><div class="ic">🚗</div><h3>Electric Vehicles</h3><p>Drive-cycle range, fast-charge protocol design and thermal derating — before a pack prototype exists.</p></div>
+      <div class="appcard"><div class="ic">🔋</div><h3>ESS</h3><p>Calendar-life projection and round-trip efficiency over multi-year duty profiles.</p></div>
+      <div class="appcard"><div class="ic">🚁</div><h3>UAM</h3><p>Power-to-weight envelopes and abuse margins under certification-grade scrutiny.</p></div>
+      <div class="appcard"><div class="ic">🛴</div><h3>Micromobility</h3><p>Cost-per-cycle and packaging trade-offs at consumer price points.</p></div>
     </div>
   </section>
 
@@ -1002,7 +1015,7 @@ const l3ctx=bat3?bat3.getContext('2d'):null;
 let l3p=0,l3target=0,l3raf=null,l3w=0,l3h=0,l3counted=false;
 const l3Reduced=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 const l3titleEl=document.getElementById('l3title'),l3letters=[];
-if(l3titleEl){let li=0;'NEXT-GEN CELL'.split(' ').forEach((word,wi)=>{
+if(l3titleEl){let li=0;'FROM CELL TO MODEL'.split(' ').forEach((word,wi)=>{
   if(wi)l3titleEl.appendChild(document.createTextNode(' '));
   const w=document.createElement('span');w.className='w';
   word.split('').forEach(ch=>{const s=document.createElement('span');s.textContent=ch;s.style.transitionDelay=(li++*30)+'ms';w.appendChild(s);l3letters.push(s);});
@@ -1118,13 +1131,13 @@ function drawPouchLabels(c,r,alpha,dark,W){
 function updateL3(p){
   if(!landing3El)return;
   const eb=document.getElementById('l3eyebrow');
-  if(eb)eb.textContent=lang==='ko'?(FF==='pouch'?'차세대 파우치 셀':'차세대 원통형 셀'):(FF==='pouch'?'Next-gen pouch cell':'Next-gen cylindrical cell');
+  if(eb)eb.textContent=lang==='ko'?(FF==='pouch'?'파우치 셀 해체 → 모델 파라미터':'원통형 21700 해체 → 모델 파라미터'):(FF==='pouch'?'Pouch teardown → model parameters':'21700 teardown → model parameters');
   // title & subtitle persist through the whole sequence
   document.getElementById('l3content').style.opacity=1;
   document.getElementById('l3sub').style.opacity=1;
   document.getElementById('l3hint').style.opacity=p>0.04?0:1;
   const st=p<0.11?0:p<0.24?1:p<0.36?2:p<0.80?3:4;
-  const L=lang==='ko'?['금속 케이싱','X-레이 디졸브','젤리롤 분리','코어 상세 노출','재조립']:['METALLIC CASING','X-RAY DISSOLVE','JELLY-ROLL SEPARATION','FULL DETAILED CORE','REASSEMBLY'];
+  const L=lang==='ko'?['수령 셀 — 기준 성능 측정','케이싱 분리','전극 추출','파라미터 측정 — 두께·공극률·OCP','모델 구성 완료']:['CELL AS RECEIVED — BASELINE TEST','CASING REMOVAL','ELECTRODE EXTRACTION','PARAMETER MEASUREMENT — THICKNESS · POROSITY · OCP','MODEL ASSEMBLED'];
   document.getElementById('l3state').innerHTML=`<b>0${st+1}</b> — ${L[st]} · ${(p*100).toFixed(0)}%`;
 }
 function l3Resize(){
@@ -1235,6 +1248,7 @@ const A3APPS=[
  {img:'scooter',t:{en:'Scooter · Micromobility',ko:'스쿠터 · 마이크로모빌리티'},d:{en:'A pack inside the deck — cost, cycle life and packaging in balance.',ko:'데크 속 배터리 팩 — 비용, 수명, 패키징의 균형.'}},
 ];
 function a3Load(){
+  if(!apps3El)return; // apps chapter removed from the landing — skip image loads
   if(A3.tried)return;A3.tried=true;
   A3.D={cyl:{},pouch:{}};A3.cut={cyl:{},pouch:{}};A3.line={cyl:{},pouch:{}};
   ['dark','light'].forEach(theme=>{
@@ -1361,6 +1375,41 @@ if(landing3El){
   updateL3(0);
   setTimeout(l3Activate,80); // the page now boots directly into a v3 variant
 }
+
+// ================= VALIDATION PLOT (illustrative) =================
+const vplot=document.getElementById('vplot'),vctx=vplot?vplot.getContext('2d'):null;
+function drawVplot(){
+  if(!vctx)return;
+  const W=vplot.width,H=vplot.height,c=vctx;
+  c.clearRect(0,0,W,H);
+  const padL=64,padR=20,padT=46,padB=46,px=W-padL-padR,py=H-padT-padB;
+  const grid=css('--plot-grid'),mute=css('--mute'),a1=css('--accent'),a2=css('--accent2');
+  const vmin=2.6,vmax=4.3;
+  c.font="12px 'IBM Plex Mono'";c.fillStyle=mute;c.strokeStyle=grid;c.lineWidth=1;
+  for(let i=0;i<=5;i++){const y=padT+py*i/5;c.beginPath();c.moveTo(padL,y);c.lineTo(W-padR,y);c.stroke();
+    c.fillText((vmax-(vmax-vmin)*i/5).toFixed(1),22,y+4);}
+  for(let i=0;i<=5;i++){const x=padL+px*i/5;c.fillText((i*20)+'%',x-10,H-16);}
+  const model=(soc,cr)=>4.16+0.30*Math.exp(-soc*3.6)-0.62*soc-(soc>0.86?(soc-0.86)*6.5:0)-cr*0.052;
+  const Y=v=>padT+py*(1-(v-vmin)/(vmax-vmin));
+  [[1,a1],[3,a2]].forEach(([cr,col])=>{
+    c.strokeStyle=col;c.lineWidth=2.2;c.beginPath();
+    for(let i=0;i<=200;i++){const s=i/200,x=padL+px*s,y=Y(model(s,cr));i?c.lineTo(x,y):c.moveTo(x,y);}
+    c.stroke();
+    c.fillStyle=col;
+    for(let i=0;i<=20;i++){const s=i/20;const noise=Math.sin(s*47+cr*13)*0.011+Math.sin(s*91)*0.006;
+      const x=padL+px*s,y=Y(model(s,cr)+noise);
+      c.globalAlpha=.9;c.beginPath();c.arc(x,y,3,0,7);c.fill();c.globalAlpha=1;}
+  });
+  c.fillStyle=mute;c.font="11px 'IBM Plex Mono'";
+  const lg=lang==='ko'?['— 모델   ● 실험 (사이클러)','1C','3C','방전 심도 →','전압 (V)']:['— model   ● experiment (cycler)','1C','3C','Depth of discharge →','Voltage (V)'];
+  c.fillText(lg[0],padL,padT-24);
+  c.fillStyle=a1;c.fillText(lg[1],padL+px*0.46,Y(model(0.46,1))-12);
+  c.fillStyle=a2;c.fillText(lg[2],padL+px*0.46,Y(model(0.46,3))+22);
+  c.fillStyle=mute;c.fillText(lg[3],padL,H-2);c.fillText(lg[4],6,padT-8);
+}
+drawVplot();
+window.addEventListener('resize',()=>setTimeout(drawVplot,60));
+document.querySelectorAll('.switcher button').forEach(b=>b.addEventListener('click',()=>setTimeout(drawVplot,80)));
 
 // ================= SIM STUDIO =================
 const SVIEWS={cell:'sv-cell',pack:'sv-pack',mat:'sv-mat'};
@@ -1755,17 +1804,29 @@ const PAIRS=[
  ['.navlinks a[data-go="library"]',{en:'Cell Library',ko:'셀 라이브러리'}],
  ['.navlinks a[data-go="compare"]',{en:'Compare',ko:'비교'}],
  ['.navcta',{en:'Enter the Lab',ko:'시작하기'}],
- // ---- home v2
- ['#page-home2 .eyebrow',{en:'Battery Digital Twin Platform',ko:'배터리 디지털 트윈 플랫폼'}],
- ['#heroH1b',{html:1,en:'Every battery,<br><span class="grad">twinned in software.</span>',ko:'모든 배터리를,<br><span class="grad">소프트웨어로 트윈하다.</span>'}],
- ['#page-home2 .lead',{en:"We cycle the physical cell, tear it down to measure what's inside, and rebuild it as a physics-based digital twin — so you can run, verify, and compare battery models before committing to hardware.",ko:'실물 셀을 충방전 시험하고, 분해해 내부를 측정한 뒤, 물리 기반 디지털 트윈으로 재구성합니다 — 하드웨어를 결정하기 전에 모델을 실행하고, 검증하고, 비교하세요.'}],
- ['#page-home2 .herocta .btn-primary',{en:'▶ Open Simulator',ko:'▶ 시뮬레이터 열기'}],
- ['#toProcess',{en:'Our Process ↓',ko:'서비스 프로세스 ↓'}],
- ['.statbar .stat:nth-child(1) .l',{en:'Solver stacks — C · MATLAB · Python',ko:'솔버 스택 — C · MATLAB · Python'}],
- ['.statbar .stat:nth-child(2) .l',{en:'Cells in the library, and growing',ko:'라이브러리 보유 셀, 계속 추가 중'}],
- ['.statbar .stat:nth-child(3) .l',{en:'Teardown report per characterized cell',ko:'셀당 분해 분석 리포트 분량'}],
- ['.statbar .stat:nth-child(4) .l',{en:'Target sectors — EV · ESS · UAM · Micro',ko:'적용 분야 — 전기차 · ESS · UAM · 마이크로'}],
- ['#process2 .sec-label',{en:'Service structure',ko:'서비스 구조'}],
+ // ---- home v2 / landing
+ ['#toProcess',{en:'How we build models ↓',ko:'모델 제작 과정 ↓'}],
+ ['#page-home2 .l3cta .btn-primary',{en:'▶ Open Simulator',ko:'▶ 시뮬레이터 열기'}],
+ // models section
+ ['#models2 .sec-label',{en:'The models',ko:'모델'}],
+ ['#models2 .sec-title',{en:'Three model levels, one measured parameter deck',ko:'세 가지 모델 레벨, 하나의 실측 파라미터 세트'}],
+ ['#models2 .sec-sub',{en:'Every level runs from the same parameter set extracted from the physical cell — pick the fidelity your problem needs.',ko:'모든 레벨은 실물 셀에서 추출한 동일한 파라미터 세트로 구동됩니다 — 문제에 맞는 정밀도를 선택하세요.'}],
+ ['#models2 .fcard:nth-child(1) h3',{en:'Electrochemical',ko:'전기화학 모델'}],
+ ['#models2 .fcard:nth-child(1) p',{en:'Full pseudo-two-dimensional Newman model — lithium transport, reaction kinetics and overpotentials resolved through both electrodes and separator.',ko:'완전한 P2D 뉴먼 모델 — 양·음극과 분리막 전체에서 리튬 수송, 반응속도론, 과전압을 해석합니다.'}],
+ ['#models2 .fcard:nth-child(1) .mrow:nth-child(4) b',{en:'geometry · OCP · kinetics · transport',ko:'전극 형상 · OCP · 반응속도 · 수송 물성'}],
+ ['#models2 .fcard:nth-child(1) .mrow:nth-child(5) b',{en:'V(t) · Li concentration fields · heat generation',ko:'V(t) · 리튬 농도 분포 · 발열량'}],
+ ['#models2 .fcard:nth-child(1) .mrow:nth-child(6) b',{en:'fast-charge limits · aging studies · cell design',ko:'급속충전 한계 · 열화 연구 · 셀 설계'}],
+ ['#models2 .fcard:nth-child(2) h3',{en:'Equivalent circuit',ko:'등가회로 모델'}],
+ ['#models2 .fcard:nth-child(2) p',{en:'A 2-RC network fitted from the same characterization campaign — light enough for BMS logic and pack-level studies in real time.',ko:'동일한 특성 평가 데이터로 피팅한 2-RC 회로 — BMS 로직과 팩 단위 해석을 실시간으로 돌릴 만큼 가볍습니다.'}],
+ ['#models2 .fcard:nth-child(2) .mrow:nth-child(4) b',{en:'OCV(SOC) · R₀/R₁C₁ maps vs SOC, T',ko:'OCV(SOC) · SOC·온도별 R₀/R₁C₁ 맵'}],
+ ['#models2 .fcard:nth-child(2) .mrow:nth-child(5) b',{en:'terminal voltage · SOC · loss budget',ko:'단자 전압 · SOC · 손실 배분'}],
+ ['#models2 .fcard:nth-child(2) .mrow:nth-child(6) b',{en:'BMS design · pack simulation · HIL',ko:'BMS 설계 · 팩 시뮬레이션 · HIL'}],
+ ['#models2 .fcard:nth-child(3) h3',{en:'Thermal',ko:'열 모델'}],
+ ['#models2 .fcard:nth-child(3) p',{en:'Lumped and 2-D surface-temperature models coupled to either level — entropic and joule heat drive the field, cooling boundaries close it.',ko:'집중정수 및 2차원 표면온도 모델을 양쪽 레벨에 연성 — 엔트로피열과 줄열이 온도장을 만들고, 냉각 경계조건이 이를 닫습니다.'}],
+ ['#models2 .fcard:nth-child(3) .mrow:nth-child(4) b',{en:'heat gen · cp · k · h boundaries',ko:'발열량 · 비열 · 열전도도 · 대류 경계'}],
+ ['#models2 .fcard:nth-child(3) .mrow:nth-child(5) b',{en:'T(t) · surface contour · peak location',ko:'T(t) · 표면 온도 분포 · 최고온 위치'}],
+ ['#models2 .fcard:nth-child(3) .mrow:nth-child(6) b',{en:'cooling design · derating · abuse margins',ko:'냉각 설계 · 디레이팅 · 안전 마진'}],
+ ['#process2 .sec-label',{en:'How we build models',ko:'모델 제작 과정'}],
  ['#process2 .sec-title',{en:'From physical cell to digital twin',ko:'실물 셀에서 디지털 트윈까지'}],
  ['#process2 .sec-sub',{en:'Three stages turn a battery on the bench into a model you can run in the browser. Click each stage to see what happens inside.',ko:'세 단계를 거쳐 벤치 위의 배터리가 브라우저에서 실행되는 모델이 됩니다. 각 단계를 클릭해 내부 과정을 확인하세요.'}],
  ['#pipe .pipe-step:nth-child(1) h3',{en:'Testing',ko:'실험'}],
@@ -1774,10 +1835,20 @@ const PAIRS=[
  ['#pipe .pipe-step:nth-child(2) p',{en:'Disassemble, measure every model input, digitize the cell.',ko:'분해 후 모든 모델 입력값을 측정하고 셀을 디지털화.'}],
  ['#pipe .pipe-step:nth-child(3) h3',{en:'Model',ko:'모델'}],
  ['#pipe .pipe-step:nth-child(3) p',{en:'Drive the physics model with measured data — the digital twin.',ko:'측정 데이터로 물리 모델 구동 — 디지털 트윈.'}],
- ['#page-home2 section:nth-of-type(2) .sec-label',{en:'Deliverables',ko:'전달물'}],
- ['#page-home2 section:nth-of-type(2) .sec-title',{en:'The first model package',ko:'첫 번째 모델 패키지'}],
+ // validation section
+ ['#valid2 .sec-label',{en:'Validation',ko:'검증'}],
+ ['#valid2 .sec-title',{en:'Model vs. measurement',ko:'모델 vs. 실측'}],
+ ['#valid2 .sec-sub',{en:'Every released model ships with its validation set — simulated discharge curves overlaid on cycler data across C-rates, with stated error metrics.',ko:'모든 배포 모델에는 검증 세트가 함께 제공됩니다 — C-rate별 사이클러 실측 데이터 위에 시뮬레이션 방전 곡선을 겹쳐 오차 지표와 함께 명시합니다.'}],
+ ['.vmetric:nth-child(1) .k',{en:'Mean |ΔV| @ 1C',ko:'평균 전압 오차 @ 1C'}],
+ ['.vmetric:nth-child(2) .k',{en:'Mean |ΔV| @ 3C',ko:'평균 전압 오차 @ 3C'}],
+ ['.vmetric:nth-child(3) .k',{en:'Capacity error',ko:'용량 오차'}],
+ ['.vmetric:nth-child(4) .k',{en:'Peak temp error',ko:'최고 온도 오차'}],
+ ['#vnote',{en:'⚠ Illustrative data — the first measured validation set ships with the August model package.',ko:'⚠ 예시 데이터입니다 — 8월 모델 패키지에 첫 실측 검증 세트가 포함됩니다.'}],
+ // deliverables
+ ['#deliver2 .sec-label',{en:'Deliverables',ko:'전달물'}],
+ ['#deliver2 .sec-title',{en:'The first model package',ko:'첫 번째 모델 패키지'}],
  ['.duedate',{en:'◷ First version targeted — end of August',ko:'◷ 최초 버전 목표 — 8월 말'}],
- ['#page-home2 section:nth-of-type(2) .sec-sub',{en:"Every model ships as a complete, runnable set. Open each item to see what's included.",ko:'모든 모델은 바로 실행 가능한 완성 세트로 전달됩니다. 항목을 눌러 구성 내용을 확인하세요.'}],
+ ['#deliver2 .sec-sub',{en:"Every model ships as a complete, runnable set. Open each item to see what's included.",ko:'모든 모델은 바로 실행 가능한 완성 세트로 전달됩니다. 항목을 눌러 구성 내용을 확인하세요.'}],
  ['.acc .acc-item:nth-child(1) .acc-head span',{en:'Model execution code / executable',ko:'모델 실행 코드 / 실행파일'}],
  ['.acc .acc-item:nth-child(1) .inner',{en:'Solver source or a packaged executable — the same physics code we run server-side, containerized so it behaves identically on any machine.',ko:'솔버 소스 또는 패키징된 실행파일 — 서버에서 구동하는 것과 동일한 물리 코드로, 어떤 환경에서도 동일하게 동작하도록 컨테이너화되어 있습니다.'}],
  ['.acc .acc-item:nth-child(2) .acc-head span',{en:'Input TXT + parameter guide',ko:'입력 TXT + 파라미터 설명'}],
@@ -1786,25 +1857,25 @@ const PAIRS=[
  ['.acc .acc-item:nth-child(3) .inner',{en:'Reference results for a known case, so you can confirm your run reproduces ours before trusting new cases.',ko:'검증된 케이스의 기준 결과 — 새로운 케이스를 신뢰하기 전에 동일한 결과가 재현되는지 확인할 수 있습니다.'}],
  ['.acc .acc-item:nth-child(4) .acc-head span',{en:'Run & verification procedure',ko:'실행 및 검증 절차'}],
  ['.acc .acc-item:nth-child(4) .inner',{en:'A step-by-step procedure: execute the model, read the outputs, and validate them against the sample set.',ko:'단계별 절차서 — 모델을 실행하고, 출력을 읽고, 샘플 세트와 대조해 검증합니다.'}],
- ['#page-home2 section:nth-of-type(3) .sec-label',{en:'Where it applies',ko:'적용 분야'}],
- ['#page-home2 section:nth-of-type(3) .sec-title',{en:'Pick the right battery, virtually',ko:'가상으로 찾는 최적의 배터리'}],
- ['#page-home2 section:nth-of-type(3) .sec-sub',{en:'Before hardware is chosen, virtual simulation shows which cell fits each application — and why.',ko:'하드웨어를 선정하기 전에, 가상 시뮬레이션으로 어떤 셀이 각 응용에 맞는지 — 그리고 왜 맞는지 보여드립니다.'}],
+ ['#apps2sec .sec-label',{en:'Applications',ko:'적용 분야'}],
+ ['#apps2sec .sec-title',{en:'Engineering problems the models answer',ko:'모델이 답하는 엔지니어링 문제'}],
+ ['#apps2sec .sec-sub',{en:'Cell selection is a simulation problem before it is a procurement problem — run the candidates against your duty cycle first.',ko:'셀 선정은 조달 문제이기 전에 시뮬레이션 문제입니다 — 후보 셀들을 먼저 당신의 운전 프로파일로 돌려보세요.'}],
  ['.appgrid .appcard:nth-child(1) h3',{en:'Electric Vehicles',ko:'전기차'}],
- ['.appgrid .appcard:nth-child(1) p',{en:'Range, fast-charge behavior and thermal limits across real drive cycles.',ko:'실제 주행 사이클 기반 주행거리, 급속충전 거동, 열 한계 분석.'}],
+ ['.appgrid .appcard:nth-child(1) p',{en:'Drive-cycle range, fast-charge protocol design and thermal derating — before a pack prototype exists.',ko:'주행 사이클 기반 주행거리, 급속충전 프로토콜 설계, 열 디레이팅 — 팩 시제품이 나오기 전에.'}],
  ['.appgrid .appcard:nth-child(2) h3',{en:'ESS',ko:'ESS'}],
- ['.appgrid .appcard:nth-child(2) p',{en:'Grid-scale storage: calendar life, round-trip efficiency and safety margins.',ko:'그리드급 저장장치: 수명, 왕복 효율, 안전 마진.'}],
+ ['.appgrid .appcard:nth-child(2) p',{en:'Calendar-life projection and round-trip efficiency over multi-year duty profiles.',ko:'수년 단위 운전 프로파일에 대한 캘린더 수명 예측과 왕복 효율.'}],
  ['.appgrid .appcard:nth-child(3) h3',{en:'UAM',ko:'UAM'}],
- ['.appgrid .appcard:nth-child(3) p',{en:'Air mobility: high discharge power under strict weight budgets.',ko:'항공 모빌리티: 엄격한 중량 제한에서의 고출력 방전.'}],
+ ['.appgrid .appcard:nth-child(3) p',{en:'Power-to-weight envelopes and abuse margins under certification-grade scrutiny.',ko:'인증 수준의 검증이 요구되는 출력 대 중량 엔벨로프와 안전 마진.'}],
  ['.appgrid .appcard:nth-child(4) h3',{en:'Micromobility',ko:'마이크로모빌리티'}],
- ['.appgrid .appcard:nth-child(4) p',{en:'Scooters and light EVs: cost, cycle life and packaging trade-offs.',ko:'스쿠터·경량 EV: 비용, 사이클 수명, 패키징 트레이드오프.'}],
+ ['.appgrid .appcard:nth-child(4) p',{en:'Cost-per-cycle and packaging trade-offs at consumer price points.',ko:'소비자 가격대에서의 사이클당 비용과 패키징 트레이드오프.'}],
  ['#contact2 h2',{html:1,en:'Ready to twin<br>your battery?',ko:'배터리를 트윈으로<br>만들 준비되셨나요?'}],
  ['#contact2 p',{en:"Send us a cell. We'll test it, tear it down, and hand back a model you can run — with the full report behind it.",ko:'셀을 보내주세요. 시험하고, 분해 분석해서, 실행 가능한 모델과 전체 리포트를 돌려드립니다.'}],
  ['#contact2 .btn-primary',{en:'Try the demo →',ko:'데모 체험하기 →'}],
  // ---- v3 scroll landing
- ['#l3sub',{en:'Exploring the architecture of clean energy density.',ko:'청정 에너지 밀도의 아키텍처를 탐구합니다.'}],
- ['.statbar3 .stat:nth-child(1) .l',{en:'Energy density',ko:'에너지 밀도'}],
- ['.statbar3 .stat:nth-child(2) .l',{en:'Lifecycle loops',ko:'사이클 수명'}],
- ['.statbar3 .stat:nth-child(3) .l',{en:'Ultra-fast charge',ko:'초급속 충전'}],
+ ['#l3sub',{en:'Every parameter in our electrochemical models is measured from this teardown — not fitted from literature.',ko:'전기화학 모델의 모든 파라미터는 문헌값 피팅이 아니라, 이 해체 과정에서 직접 측정합니다.'}],
+ ['.statbar3 .stat:nth-child(1) .l',{en:'Parameters measured per cell — geometry · kinetics · transport',ko:'셀당 직접 측정 파라미터 — 형상 · 반응속도 · 수송'}],
+ ['.statbar3 .stat:nth-child(2) .l',{en:'Validated discharge range, every model release',ko:'모든 모델 릴리스의 검증 방전 범위'}],
+ ['.statbar3 .stat:nth-child(3) .l',{en:'Model levels — P2D · ECM · thermal',ko:'모델 레벨 — P2D · ECM · 열'}],
  // ---- simulator / studio
  ['#page-sim .sec-label',{en:'Simulation studio',ko:'시뮬레이션 스튜디오'}],
  ['#page-sim .sec-title',{en:'Simulator',ko:'시뮬레이터'}],
@@ -1880,7 +1951,13 @@ function setLang(l){
   renderScen();renderPackPre();drawPack();
   if(document.getElementById('sv-mat').classList.contains('show'))renderMaterials();
   if(document.body.classList.contains('v3')){updateL3(l3p);a3LastIdx=-2;updateA3();}
+  const MR={'In':'입력','Out':'출력','For':'용도'};
+  document.querySelectorAll('#models2 .mrow span').forEach(s=>{
+    if(!s.dataset.en)s.dataset.en=s.textContent.trim();
+    s.textContent=l==='ko'?(MR[s.dataset.en]||s.dataset.en):s.dataset.en;
+  });
   renderTable();renderCompare();setPipe(pipeIdx);
+  if(typeof drawVplot==='function')setTimeout(drawVplot,30);
   setTimeout(fitHero,40);
 }
 document.querySelectorAll('.langtog button').forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
