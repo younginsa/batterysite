@@ -1095,6 +1095,7 @@ function drawPouchLabels(c,r,alpha,dark,W){
   if('letterSpacing' in c)c.letterSpacing='0.14em';
   const col=dark?'rgba(160,171,187,0.92)':'rgba(71,80,105,0.92)';
   c.fillStyle=col;c.strokeStyle=dark?'rgba(160,171,187,0.55)':'rgba(71,80,105,0.5)';c.lineWidth=1;
+  const pill=dark?'rgba(10,14,20,0.78)':'rgba(247,248,250,0.82)';
   POUCH_LBL.forEach(L=>{
     const textW=c.measureText(L[0]).width;
     // keep the whole label on screen, whatever the viewport
@@ -1102,6 +1103,12 @@ function drawPouchLabels(c,r,alpha,dark,W){
     const ax=r.dx+r.dw*L[2],ay=r.dy+r.dh*L[3];
     c.beginPath();c.arc(ax,ay,2.5,0,7);c.fill();
     c.beginPath();c.moveTo(ax+6,ay);c.lineTo(tx-fs*0.6,ty);c.lineTo(tx-8,ty);c.stroke();
+    // bg-colored pill keeps the text readable even when it sits over the cell
+    c.fillStyle=pill;
+    const ph=fs*1.5;c.beginPath();
+    if(c.roundRect)c.roundRect(tx-6,ty-ph/2,textW+12,ph,ph/2);else c.rect(tx-6,ty-ph/2,textW+12,ph);
+    c.fill();
+    c.fillStyle=col;
     c.fillText(L[0],tx,ty+fs*0.34);
   });
   c.restore();
