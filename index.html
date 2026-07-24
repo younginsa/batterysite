@@ -386,10 +386,21 @@
   footer{border-top:1px solid var(--border);padding:32px;text-align:center;color:var(--mute);font-size:13px;font-family:var(--data)}
   html[lang="ko"] .hero h1,html[lang="ko"] .sec-title,html[lang="ko"] .contact h2{word-break:keep-all}
   html[lang="ko"] body{word-break:keep-all}
+  .lic,svg.lucide{width:1em;height:1em;display:inline-block;vertical-align:-0.14em;stroke-width:2}
+  .btn-primary svg.lucide,.btn-ghost svg.lucide,.run-btn svg.lucide,.navcta svg.lucide{vertical-align:-0.16em}
+  .appcard .ic{color:var(--accent2)}
+  .appcard .ic svg.lucide{width:26px;height:26px}
+  .acts svg.lucide,.acts .lic{width:17px;height:17px;vertical-align:-0.2em}
+  thead th .arr{opacity:.4}
+  thead th .arr svg.lucide,.arr.lic{width:12px;height:12px}
+  .chev svg.lucide{width:18px;height:18px}
+  @keyframes licspin{to{transform:rotate(360deg)}}
+  .lic-spin{animation:licspin .8s linear infinite}
   .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
   .reveal.show{opacity:1;transform:none}
   @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
 </style>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body class="lab v2 v3">
 
@@ -424,11 +435,11 @@
           <div class="l3eyebrow" id="l3eyebrow">Cell teardown → model parameters</div>
           <h1 class="l3title" id="l3title" aria-label="FROM CELL TO MODEL"></h1>
           <p class="l3sub" id="l3sub">Every parameter in our electrochemical models is measured from this teardown — not fitted from literature.</p>
-          <div class="l3cta"><button class="btn-primary" data-go="sim">▶ Open Simulator</button><button class="btn-ghost" id="toProcess">How we build models ↓</button></div>
+          <div class="l3cta"><button class="btn-primary" data-go="sim"><i data-lucide="play"></i> Open Simulator</button><button class="btn-ghost" id="toProcess">How we build models <i data-lucide="arrow-down"></i></button></div>
         </div>
       </div>
       <div class="l3state" id="l3state"></div>
-      <div class="l3hint" id="l3hint">SCROLL ▾</div>
+      <div class="l3hint" id="l3hint">SCROLL <i data-lucide="chevron-down" class="lic"></i></div>
     </div>
   </div>
   <div class="l3stats wrap" id="l3stats">
@@ -481,7 +492,7 @@
         <div class="vmetric"><div class="k">Mean |ΔV| @ 3C</div><div class="v">24 mV</div></div>
         <div class="vmetric"><div class="k">Capacity error</div><div class="v">1.8 %</div></div>
         <div class="vmetric"><div class="k">Peak temp error</div><div class="v">1.3 °C</div></div>
-        <div class="vnote" id="vnote">⚠ Illustrative data — the first measured validation set ships with the August model package.</div>
+        <div class="vnote" id="vnote"><i data-lucide="triangle-alert" class="lic"></i> Illustrative data — the first measured validation set ships with the August model package.</div>
       </div>
     </div>
   </section>
@@ -489,13 +500,13 @@
   <section class="block wrap reveal" id="deliver2">
     <div class="sec-label">Deliverables</div>
     <h2 class="sec-title">The first model package</h2>
-    <div class="duedate">◷ First version targeted — end of August</div>
+    <div class="duedate"><i data-lucide="clock"></i> First version targeted — end of August</div>
     <p class="sec-sub">Every model ships as a complete, runnable set. Open each item to see what's included.</p>
     <div class="acc" id="acc">
-      <div class="acc-item"><div class="acc-head"><span><span class="k">01</span>Model execution code / executable</span><span class="chev">▾</span></div><div class="acc-body"><div class="inner">Solver source or a packaged executable — the same physics code we run server-side, containerized so it behaves identically on any machine.</div></div></div>
-      <div class="acc-item"><div class="acc-head"><span><span class="k">02</span>Input TXT + parameter guide</span><span class="chev">▾</span></div><div class="acc-body"><div class="inner">A plain-text input deck listing every parameter with its meaning, unit, and valid range — edit values, rerun, and compare.</div></div></div>
-      <div class="acc-item"><div class="acc-head"><span><span class="k">03</span>Sample output set</span><span class="chev">▾</span></div><div class="acc-body"><div class="inner">Reference results for a known case, so you can confirm your run reproduces ours before trusting new cases.</div></div></div>
-      <div class="acc-item"><div class="acc-head"><span><span class="k">04</span>Run &amp; verification procedure</span><span class="chev">▾</span></div><div class="acc-body"><div class="inner">A step-by-step procedure: execute the model, read the outputs, and validate them against the sample set.</div></div></div>
+      <div class="acc-item"><div class="acc-head"><span><span class="k">01</span>Model execution code / executable</span><i data-lucide="chevron-down" class="chev"></i></div><div class="acc-body"><div class="inner">Solver source or a packaged executable — the same physics code we run server-side, containerized so it behaves identically on any machine.</div></div></div>
+      <div class="acc-item"><div class="acc-head"><span><span class="k">02</span>Input TXT + parameter guide</span><i data-lucide="chevron-down" class="chev"></i></div><div class="acc-body"><div class="inner">A plain-text input deck listing every parameter with its meaning, unit, and valid range — edit values, rerun, and compare.</div></div></div>
+      <div class="acc-item"><div class="acc-head"><span><span class="k">03</span>Sample output set</span><i data-lucide="chevron-down" class="chev"></i></div><div class="acc-body"><div class="inner">Reference results for a known case, so you can confirm your run reproduces ours before trusting new cases.</div></div></div>
+      <div class="acc-item"><div class="acc-head"><span><span class="k">04</span>Run &amp; verification procedure</span><i data-lucide="chevron-down" class="chev"></i></div><div class="acc-body"><div class="inner">A step-by-step procedure: execute the model, read the outputs, and validate them against the sample set.</div></div></div>
     </div>
   </section>
 
@@ -504,17 +515,17 @@
     <h2 class="sec-title">Engineering problems the models answer</h2>
     <p class="sec-sub">Cell selection is a simulation problem before it is a procurement problem — run the candidates against your duty cycle first.</p>
     <div class="appgrid">
-      <div class="appcard"><div class="ic">🚗</div><h3>Electric Vehicles</h3><p>Drive-cycle range, fast-charge protocol design and thermal derating — before a pack prototype exists.</p></div>
-      <div class="appcard"><div class="ic">🔋</div><h3>ESS</h3><p>Calendar-life projection and round-trip efficiency over multi-year duty profiles.</p></div>
-      <div class="appcard"><div class="ic">🚁</div><h3>UAM</h3><p>Power-to-weight envelopes and abuse margins under certification-grade scrutiny.</p></div>
-      <div class="appcard"><div class="ic">🛴</div><h3>Micromobility</h3><p>Cost-per-cycle and packaging trade-offs at consumer price points.</p></div>
+      <div class="appcard"><div class="ic"><i data-lucide="car"></i></div><h3>Electric Vehicles</h3><p>Drive-cycle range, fast-charge protocol design and thermal derating — before a pack prototype exists.</p></div>
+      <div class="appcard"><div class="ic"><i data-lucide="battery-charging"></i></div><h3>ESS</h3><p>Calendar-life projection and round-trip efficiency over multi-year duty profiles.</p></div>
+      <div class="appcard"><div class="ic"><i data-lucide="plane-takeoff"></i></div><h3>UAM</h3><p>Power-to-weight envelopes and abuse margins under certification-grade scrutiny.</p></div>
+      <div class="appcard"><div class="ic"><i data-lucide="bike"></i></div><h3>Micromobility</h3><p>Cost-per-cycle and packaging trade-offs at consumer price points.</p></div>
     </div>
   </section>
 
   <section class="contact wrap reveal" id="contact2">
     <h2>Ready to twin<br>your battery?</h2>
     <p>Send us a cell. We'll test it, tear it down, and hand back a model you can run — with the full report behind it.</p>
-    <button class="btn-primary" data-go="sim">Try the demo →</button>
+    <button class="btn-primary" data-go="sim">Try the demo <i data-lucide="arrow-right"></i></button>
   </section>
   <footer>VOLTSCAPE — digital twin concept · 2026</footer>
 </div>
@@ -551,14 +562,14 @@
               <div class="field"><label style="margin-bottom:12px">Chemistry</label>
                 <div class="seg" id="chem"><button class="active" data-c="NMC">NMC</button><button data-c="LFP">LFP</button><button data-c="LTO">LTO</button></div>
               </div>
-              <button class="run-btn" id="run">▶ Run analysis</button>
+              <button class="run-btn" id="run"><i data-lucide="play"></i> Run analysis</button>
               <div class="stack-note">Production target: <b>FastAPI</b> + job queue<br>Solver: <b>Python / MATLAB / C</b> container<br>Plots: <b>WebGL</b> + server PNG fallback</div>
             </div>
             <div class="sim-output">
               <div class="out-tabs"><button class="active" data-tab="voltage">voltage_curve</button><button data-tab="contour">thermal_contour</button></div>
               <div class="canvas-wrap"><canvas id="plot" width="720" height="380"></canvas></div>
               <div class="timeline">
-                <button class="tl-btn" id="tlPlay" disabled>▶</button>
+                <button class="tl-btn" id="tlPlay" disabled><i data-lucide="play"></i></button>
                 <input type="range" id="tlScrub" min="0" max="1000" value="1000" disabled>
                 <span class="tl-time" id="tlTime">t = — / — min</span>
                 <span class="tl-key">SPACE</span>
@@ -588,7 +599,7 @@
               <div class="field"><label style="margin-bottom:12px">Chemistry</label>
                 <div class="seg" id="pchem"><button class="active" data-c="NMC">NMC</button><button data-c="LFP">LFP</button><button data-c="LTO">LTO</button></div>
               </div>
-              <button class="run-btn" id="prun">▶ Solve pack</button>
+              <button class="run-btn" id="prun"><i data-lucide="play"></i> Solve pack</button>
               <div class="stack-note" id="pkNote"></div>
             </div>
             <div class="sim-output">
@@ -601,7 +612,7 @@
               </div>
               <div class="canvas-wrap"><canvas id="packcv" width="720" height="380"></canvas></div>
               <div class="timeline">
-                <button class="tl-btn" id="ptlPlay" disabled>▶</button>
+                <button class="tl-btn" id="ptlPlay" disabled><i data-lucide="play"></i></button>
                 <input type="range" id="ptlScrub" min="0" max="1000" value="0" disabled>
                 <span class="tl-time" id="ptlTime">t = — / — min</span>
                 <span class="tl-key">SPACE</span>
@@ -657,13 +668,13 @@
       <div class="tablewrap">
         <table>
           <thead><tr>
-            <th data-sort="manufacturer">Manufacturer <span class="arr">▲▼</span></th>
-            <th data-sort="model">Model <span class="arr">▲▼</span></th>
-            <th data-sort="formFactor">Form Factor <span class="arr">▲▼</span></th>
-            <th data-sort="nominalVoltage">Nom. V <span class="arr">▲▼</span></th>
-            <th data-sort="energy">Energy [Wh] <span class="arr">▲▼</span></th>
-            <th data-sort="capacity">Cap. [Ah] <span class="arr">▲▼</span></th>
-            <th data-sort="maxDischargeA">Max Discharge [A] <span class="arr">▲▼</span></th>
+            <th data-sort="manufacturer">Manufacturer <i data-lucide="chevrons-up-down" class="arr lic"></i></th>
+            <th data-sort="model">Model <i data-lucide="chevrons-up-down" class="arr lic"></i></th>
+            <th data-sort="formFactor">Form Factor <i data-lucide="chevrons-up-down" class="arr lic"></i></th>
+            <th data-sort="nominalVoltage">Nom. V <i data-lucide="chevrons-up-down" class="arr lic"></i></th>
+            <th data-sort="energy">Energy [Wh] <i data-lucide="chevrons-up-down" class="arr lic"></i></th>
+            <th data-sort="capacity">Cap. [Ah] <i data-lucide="chevrons-up-down" class="arr lic"></i></th>
+            <th data-sort="maxDischargeA">Max Discharge [A] <i data-lucide="chevrons-up-down" class="arr lic"></i></th>
             <th>Simulate</th><th>Actions</th>
           </tr></thead>
           <tbody id="tbody"></tbody>
@@ -673,14 +684,14 @@
     </div>
 
     <div id="lib-detail" style="display:none">
-      <div class="backbtn" id="back">← Back to Cell Library</div>
+      <div class="backbtn" id="back"><i data-lucide="arrow-left"></i> Back to Cell Library</div>
       <div class="detail-grid">
         <div class="cellcard">
           <div class="cellpic" id="d-pic"></div>
           <h2 id="d-model">—</h2>
           <div class="sub" id="d-mfr">—</div>
           <div class="statwrap"><span id="d-status" class="badge coming">Coming Soon</span></div>
-          <div class="acts"><span title="Favorite">☆</span><span title="Add to compare" id="d-addcmp">＋</span></div>
+          <div class="acts"><span title="Favorite"><i data-lucide="star"></i></span><span title="Add to compare" id="d-addcmp"><i data-lucide="plus"></i></span></div>
         </div>
         <div class="speccol">
           <div class="specgroup"><h3><span>Overview</span></h3>
@@ -733,9 +744,9 @@
         </div>
       </div>
       <div class="simbanner">
-        <h3>✦ Simulate this cell</h3>
+        <h3><i data-lucide="sparkles"></i> Simulate this cell</h3>
         <p>Load this cell's parameters into the simulator and run a discharge analysis.</p>
-        <button class="btn-primary" id="simbtn">▶ Run in Simulator</button>
+        <button class="btn-primary" id="simbtn"><i data-lucide="play"></i> Run in Simulator</button>
       </div>
     </div>
   </div>
@@ -831,9 +842,9 @@ function renderTable(){
   if(sortKey)rows.sort((a,b)=>{let x=a.c[sortKey],y=b.c[sortKey];return typeof x==='string'?x.localeCompare(y)*sortDir:(x-y)*sortDir;});
   tbody.innerHTML=rows.map(({c,i})=>{
     const badge='<span class="badge '+c.status+'">'+BDG[c.status][lang]+'</span>';
-    return `<tr data-i="${i}"><td class="mfr">${c.manufacturer}</td><td class="model">${c.model}</td><td>${c.formFactor}</td><td class="num">${c.nominalVoltage.toFixed(2)}</td><td class="num">${c.energy}</td><td class="num">${c.capacity.toFixed(2)}</td><td class="num">${c.maxDischargeA}</td><td>${badge}</td><td><div class="acts"><span title="Favorite">☆</span><span title="Add to compare" data-cmp="${i}">＋</span></div></td></tr>`;
+    return `<tr data-i="${i}"><td class="mfr">${c.manufacturer}</td><td class="model">${c.model}</td><td>${c.formFactor}</td><td class="num">${c.nominalVoltage.toFixed(2)}</td><td class="num">${c.energy}</td><td class="num">${c.capacity.toFixed(2)}</td><td class="num">${c.maxDischargeA}</td><td>${badge}</td><td><div class="acts"><span title="Favorite"><i data-lucide="star"></i></span><span title="Add to compare" data-cmp="${i}"><i data-lucide="plus"></i></span></div></td></tr>`;
   }).join('');
-  rowcount.textContent=lang==='ko'?`${rows.length}개 셀`:`${rows.length} cells`;
+  rowcount.textContent=lang==='ko'?`${rows.length}개 셀`:`${rows.length} cells`;licons();
   tbody.querySelectorAll('tr').forEach(tr=>tr.onclick=e=>{
     if(e.target.dataset.cmp!==undefined){toggleCompare(+e.target.dataset.cmp);e.stopPropagation();e.target.style.color='var(--accent)';setTimeout(()=>e.target.style.color='',600);return;}
     openDetail(+tr.dataset.i);
@@ -878,7 +889,7 @@ function loadCellIntoSim(i){
   cap.value=Math.min(160,Math.max(2,c.capacity));capVal.textContent=cap.value+' Ah';
   chem=['NMC','LFP','LTO'].includes(c.chem)?c.chem:'NMC';
   document.querySelectorAll('#chem button').forEach(x=>x.classList.toggle('active',x.dataset.c===chem));
-  const lc=document.getElementById('loadedCell');lc.classList.add('show');lc.innerHTML=`▣ loaded: <b>${c.manufacturer} ${c.model}</b><br>${c.nominalVoltage}V · ${c.capacity}Ah · ${c.chem}`;
+  const lc=document.getElementById('loadedCell');lc.classList.add('show');lc.innerHTML=`<i data-lucide="box" class="lic"></i> loaded: <b>${c.manufacturer} ${c.model}</b><br>${c.nominalVoltage}V · ${c.capacity}Ah · ${c.chem}`;
 }
 const NOMINAL={NMC:3.7,LFP:3.2,LTO:2.4};
 const cv=$('plot'),ctx=cv.getContext('2d');
@@ -931,10 +942,10 @@ function hexRGB(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(x=>x+x)
 function mix(a,b,k){return [a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k,a[2]+(b[2]-a[2])*k];}
 const run=$('run'),runlog=$('runlog');
 run.onclick=()=>{
-  run.disabled=true;run.textContent=lang==='ko'?'⟳ 해석 중…':'⟳ Running…';
+  run.disabled=true;run.innerHTML=lang==='ko'?'<i data-lucide="loader-circle" class="lic-spin"></i> 해석 중…':'<i data-lucide="loader-circle" class="lic-spin"></i> Running…';licons();
   const steps=['→ POST /api/solve','→ queued job #'+(Math.random()*9000+1000|0),'→ solver: '+chem+' model','→ writing results…'];
   let i=0;runlog.textContent='';
-  const iv=setInterval(()=>{runlog.textContent=steps[i]||runlog.textContent;if(++i>=steps.length){clearInterval(iv);lastResult=compute();$('mEnergy').textContent=lastResult.energy+' kWh';$('mTime').textContent=lastResult.runtime+' min';$('mPeak').textContent=lastResult.peak+' °C';runlog.textContent='✓ done — result rendered ('+lastResult.energy+' kWh)';run.disabled=false;run.textContent=lang==='ko'?'▶ 해석 실행':'▶ Run analysis';cellTL.enable(+lastResult.runtime);cellTL.set(0,true);cellTL.play();}},340);
+  const iv=setInterval(()=>{runlog.textContent=steps[i]||runlog.textContent;if(++i>=steps.length){clearInterval(iv);lastResult=compute();$('mEnergy').textContent=lastResult.energy+' kWh';$('mTime').textContent=lastResult.runtime+' min';$('mPeak').textContent=lastResult.peak+' °C';runlog.textContent='✓ done — result rendered ('+lastResult.energy+' kWh)';run.disabled=false;run.innerHTML=lang==='ko'?'<i data-lucide="play"></i> 해석 실행':'<i data-lucide="play"></i> Run analysis';licons();cellTL.enable(+lastResult.runtime);cellTL.set(0,true);cellTL.play();}},340);
 };
 lastResult=compute();draw();$('mEnergy').textContent=lastResult.energy+' kWh';$('mTime').textContent=lastResult.runtime+' min';$('mPeak').textContent=lastResult.peak+' °C';
 
@@ -1431,10 +1442,10 @@ function mkTimeline(playId,scrubId,timeId,onFrame){
   T.label=()=>{tm.textContent=`t = ${(T.p*T.total).toFixed(1)} / ${T.total.toFixed(0)} min`;};
   T.set=(p,skip)=>{T.p=Math.min(1,Math.max(0,p));sc.value=T.p*1000|0;T.label();if(!skip)onFrame(T.p);};
   T.enable=total=>{btn.disabled=false;sc.disabled=false;T.total=total;};
-  T.pause=()=>{T.playing=false;btn.textContent='▶';cancelAnimationFrame(T.raf);};
+  T.pause=()=>{T.playing=false;btn.innerHTML='<i data-lucide="play"></i>';licons();cancelAnimationFrame(T.raf);};
   T.play=()=>{
     if(btn.disabled)return;
-    T.playing=true;btn.textContent='❚❚';
+    T.playing=true;btn.innerHTML='<i data-lucide="pause"></i>';licons();
     const t0=performance.now(),p0=T.p>=1?0:T.p;
     const step=n=>{if(!T.playing)return;const p=p0+(n-t0)/T.dur;if(p>=1){T.set(1);T.pause();return;}T.set(p);T.raf=requestAnimationFrame(step);};
     T.raf=requestAnimationFrame(step);
@@ -1608,12 +1619,12 @@ document.querySelectorAll('#pmodeTabs button').forEach(b=>b.onclick=()=>{documen
 document.querySelectorAll('#pviewTabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#pviewTabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');pviewMode=b.dataset.v;drawPack();});
 const prun=$('prun');
 prun.onclick=()=>{
-  prun.disabled=true;prun.textContent=lang==='ko'?'⟳ 해석 중…':'⟳ Solving…';
+  prun.disabled=true;prun.innerHTML=lang==='ko'?'<i data-lucide="loader-circle" class="lic-spin"></i> 해석 중…':'<i data-lucide="loader-circle" class="lic-spin"></i> Solving…';licons();
   const steps=['→ POST /api/pack/solve','→ building '+ps.value+'S'+pp.value+'P network','→ per-cell lumped P2D model','→ writing results…'];
   let i=0;const el=$('pinspect');el.textContent='';
   const iv=setInterval(()=>{el.textContent=steps[i]||el.textContent;if(++i>=steps.length){clearInterval(iv);
     packSolved=true;packTL.enable(60/+pc.value*0.9);packTL.set(0,true);packTL.play();
-    prun.disabled=false;prun.textContent=lang==='ko'?'▶ 팩 해석':'▶ Solve pack';
+    prun.disabled=false;prun.innerHTML=lang==='ko'?'<i data-lucide="play"></i> 팩 해석':'<i data-lucide="play"></i> Solve pack';licons();
     el.textContent=lang==='ko'?'✓ 팩 해석 완료 — 셀을 클릭해 확인하세요':'✓ pack solved — click any cell to inspect';
   }},300);
 };
@@ -1719,7 +1730,7 @@ function renderMatDetail(){
     [lang==='ko'?'비에너지 (활물질)':'Specific energy (active)',Math.round(m.cap*m.vavg)+' Wh/kg'],
     [lang==='ko'?'시뮬레이터 매핑':'Simulator mapping',m.simChem+' model'],
   ];
-  det.innerHTML=`<div class="backbtn" id="matBack">${lang==='ko'?'← 소재 목록으로':'← Back to materials'}</div>
+  det.innerHTML=`<div class="backbtn" id="matBack"><i data-lucide="arrow-left" class="lic"></i> ${lang==='ko'?'소재 목록으로':'Back to materials'}</div>
   <div class="mat-detail-grid">
     <div class="matplot">
       <h3 style="font-family:var(--display);font-size:22px;margin-bottom:2px">${m.name}</h3>
@@ -1747,7 +1758,7 @@ function renderMatDetail(){
     chem=m.simChem;
     document.querySelectorAll('#chem button').forEach(x=>x.classList.toggle('active',x.dataset.c===chem));
     const lc=$('loadedCell');lc.classList.add('show');
-    lc.innerHTML=`▣ material: <b>${m.name}</b> — ${lang==='ko'?'매핑 모델':'mapped model'}: ${m.simChem}`;
+    lc.innerHTML=`<i data-lucide="box" class="lic"></i> material: <b>${m.name}</b> — ${lang==='ko'?'매핑 모델':'mapped model'}: ${m.simChem}`;
     goStudio('cell');window.scrollTo(0,0);
   };
 }
@@ -1786,6 +1797,7 @@ document.addEventListener('keydown',e=>{
 // ---- studio init ----
 renderScen();renderPackPre();seedPack();drawPack();
 
+function licons(){try{window.lucide&&window.lucide.createIcons();}catch(e){}}
 // ================= I18N =================
 const LEAF={ // spec/table leaf labels, EN → KO
  'Manufacturer':'제조사','Model':'모델','Form Factor':'폼팩터','Nom. V':'공칭 전압','Energy [Wh]':'에너지 [Wh]','Cap. [Ah]':'용량 [Ah]','Max Discharge [A]':'최대 방전 [A]','Simulate':'시뮬레이션','Actions':'동작',
@@ -1805,8 +1817,8 @@ const PAIRS=[
  ['.navlinks a[data-go="compare"]',{en:'Compare',ko:'비교'}],
  ['.navcta',{en:'Enter the Lab',ko:'시작하기'}],
  // ---- home v2 / landing
- ['#toProcess',{en:'How we build models ↓',ko:'모델 제작 과정 ↓'}],
- ['#page-home2 .l3cta .btn-primary',{en:'▶ Open Simulator',ko:'▶ 시뮬레이터 열기'}],
+ ['#toProcess',{en:'How we build models ',ko:'모델 제작 과정 '}],
+ ['#page-home2 .l3cta .btn-primary',{en:' Open Simulator',ko:' 시뮬레이터 열기'}],
  // models section
  ['#models2 .sec-label',{en:'The models',ko:'모델'}],
  ['#models2 .sec-title',{en:'Three model levels, one measured parameter deck',ko:'세 가지 모델 레벨, 하나의 실측 파라미터 세트'}],
@@ -1843,11 +1855,11 @@ const PAIRS=[
  ['.vmetric:nth-child(2) .k',{en:'Mean |ΔV| @ 3C',ko:'평균 전압 오차 @ 3C'}],
  ['.vmetric:nth-child(3) .k',{en:'Capacity error',ko:'용량 오차'}],
  ['.vmetric:nth-child(4) .k',{en:'Peak temp error',ko:'최고 온도 오차'}],
- ['#vnote',{en:'⚠ Illustrative data — the first measured validation set ships with the August model package.',ko:'⚠ 예시 데이터입니다 — 8월 모델 패키지에 첫 실측 검증 세트가 포함됩니다.'}],
+ ['#vnote',{html:1,en:'<i data-lucide="triangle-alert" class="lic"></i> Illustrative data — the first measured validation set ships with the August model package.',ko:'<i data-lucide="triangle-alert" class="lic"></i> 예시 데이터입니다 — 8월 모델 패키지에 첫 실측 검증 세트가 포함됩니다.'}],
  // deliverables
  ['#deliver2 .sec-label',{en:'Deliverables',ko:'전달물'}],
  ['#deliver2 .sec-title',{en:'The first model package',ko:'첫 번째 모델 패키지'}],
- ['.duedate',{en:'◷ First version targeted — end of August',ko:'◷ 최초 버전 목표 — 8월 말'}],
+ ['.duedate',{en:' First version targeted — end of August',ko:' 최초 버전 목표 — 8월 말'}],
  ['#deliver2 .sec-sub',{en:"Every model ships as a complete, runnable set. Open each item to see what's included.",ko:'모든 모델은 바로 실행 가능한 완성 세트로 전달됩니다. 항목을 눌러 구성 내용을 확인하세요.'}],
  ['.acc .acc-item:nth-child(1) .acc-head span',{en:'Model execution code / executable',ko:'모델 실행 코드 / 실행파일'}],
  ['.acc .acc-item:nth-child(1) .inner',{en:'Solver source or a packaged executable — the same physics code we run server-side, containerized so it behaves identically on any machine.',ko:'솔버 소스 또는 패키징된 실행파일 — 서버에서 구동하는 것과 동일한 물리 코드로, 어떤 환경에서도 동일하게 동작하도록 컨테이너화되어 있습니다.'}],
@@ -1870,7 +1882,7 @@ const PAIRS=[
  ['.appgrid .appcard:nth-child(4) p',{en:'Cost-per-cycle and packaging trade-offs at consumer price points.',ko:'소비자 가격대에서의 사이클당 비용과 패키징 트레이드오프.'}],
  ['#contact2 h2',{html:1,en:'Ready to twin<br>your battery?',ko:'배터리를 트윈으로<br>만들 준비되셨나요?'}],
  ['#contact2 p',{en:"Send us a cell. We'll test it, tear it down, and hand back a model you can run — with the full report behind it.",ko:'셀을 보내주세요. 시험하고, 분해 분석해서, 실행 가능한 모델과 전체 리포트를 돌려드립니다.'}],
- ['#contact2 .btn-primary',{en:'Try the demo →',ko:'데모 체험하기 →'}],
+ ['#contact2 .btn-primary',{en:'Try the demo ',ko:'데모 체험하기 '}],
  // ---- v3 scroll landing
  ['#l3sub',{en:'Every parameter in our electrochemical models is measured from this teardown — not fitted from literature.',ko:'전기화학 모델의 모든 파라미터는 문헌값 피팅이 아니라, 이 해체 과정에서 직접 측정합니다.'}],
  ['.statbar3 .stat:nth-child(1) .l',{en:'Parameters measured per cell — geometry · kinetics · transport',ko:'셀당 직접 측정 파라미터 — 형상 · 반응속도 · 수송'}],
@@ -1920,10 +1932,10 @@ const PAIRS=[
  ['#lib-list .sec-title',{en:'Cell Library',ko:'셀 라이브러리'}],
  ['.subtabs button[data-go="library"]',{en:'Cell Library',ko:'셀 라이브러리'}],
  ['.subtabs button[data-go="compare"]',{en:'Compare Cells',ko:'셀 비교'}],
- ['#back',{en:'← Back to Cell Library',ko:'← 셀 라이브러리로 돌아가기'}],
- ['.simbanner h3',{en:'✦ Simulate this cell',ko:'✦ 이 셀 시뮬레이션하기'}],
+ ['#back',{en:' Back to Cell Library',ko:' 셀 라이브러리로 돌아가기'}],
+ ['.simbanner h3',{en:' Simulate this cell',ko:' 이 셀 시뮬레이션하기'}],
  ['.simbanner p',{en:"Load this cell's parameters into the simulator and run a discharge analysis.",ko:'이 셀의 파라미터를 시뮬레이터에 로드해 방전 해석을 실행합니다.'}],
- ['#simbtn',{en:'▶ Run in Simulator',ko:'▶ 시뮬레이터에서 실행'}],
+ ['#simbtn',{en:' Run in Simulator',ko:' 시뮬레이터에서 실행'}],
  // ---- compare
  ['#page-compare .sec-label',{en:'Side by side',ko:'나란히 비교'}],
  ['#page-compare .sec-title',{en:'Compare Cells',ko:'셀 비교'}],
@@ -1945,8 +1957,8 @@ function setLang(l){
   });
   $('q').placeholder=l==='ko'?'셀 검색…':'Search cells…';
   if(/^\/\/ (idle|대기)/.test(runlog.textContent))runlog.textContent=l==='ko'?'// 대기 중 — 해석 실행을 누르세요':'// idle — press Run analysis';
-  if(!run.disabled)run.textContent=l==='ko'?'▶ 해석 실행':'▶ Run analysis';
-  if(!prun.disabled)prun.textContent=l==='ko'?'▶ 팩 해석':'▶ Solve pack';
+  if(!run.disabled)run.innerHTML=l==='ko'?'<i data-lucide="play"></i> 해석 실행':'<i data-lucide="play"></i> Run analysis';
+  if(!prun.disabled)prun.innerHTML=l==='ko'?'<i data-lucide="play"></i> 팩 해석':'<i data-lucide="play"></i> Solve pack';
   if(/^\/\//.test($('pinspect').textContent))$('pinspect').textContent=l==='ko'?'// 셀을 클릭하면 상세 정보가 표시됩니다':'// click a cell to inspect it';
   renderScen();renderPackPre();drawPack();
   if(document.getElementById('sv-mat').classList.contains('show'))renderMaterials();
@@ -1957,11 +1969,13 @@ function setLang(l){
     s.textContent=l==='ko'?(MR[s.dataset.en]||s.dataset.en):s.dataset.en;
   });
   renderTable();renderCompare();setPipe(pipeIdx);
+  licons();
   if(typeof drawVplot==='function')setTimeout(drawVplot,30);
   setTimeout(fitHero,40);
 }
 document.querySelectorAll('.langtog button').forEach(b=>b.onclick=()=>setLang(b.dataset.lang));
 setLang(lang);
+licons();window.addEventListener('load',licons);
 
 // ================= HERO TITLE AUTO-FIT (어떤 폭에서도 글자 안 잘리게) =================
 function fitOne(h1){
