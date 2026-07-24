@@ -409,6 +409,8 @@
   <button data-style="sana" data-ff="cyl">Cylinder (light)</button>
   <button data-style="lab" data-ff="pouch">Pouch (dark)</button>
   <button data-style="sana" data-ff="pouch">Pouch (light)</button>
+  <button data-style="lab" data-ff="prism">Prismatic (dark)</button>
+  <button data-style="sana" data-ff="prism">Prismatic (light)</button>
 </div>
 
 <nav>
@@ -1042,12 +1044,13 @@ const clampL=(p,a,b)=>Math.min(1,Math.max(0,(p-a)/(b-a)));
 //   loadHiggsfieldFrames('frames/cell_####.webp',120)
 // and the scrub swaps from the procedural render to the real frames.
 const HF={cyl:{dark:{frames:[],ready:false},light:{frames:[],ready:false},tried:false},
-          pouch:{dark:{frames:[],ready:false},light:{frames:[],ready:false},tried:false}};
-function ffDir(ff,theme){const base=ff==='pouch'?'frames/pouch/':'frames/';return theme==='light'?base+'clean/':base;}
+          pouch:{dark:{frames:[],ready:false},light:{frames:[],ready:false},tried:false},
+          prism:{dark:{frames:[],ready:false},light:{frames:[],ready:false},tried:false}};
+function ffDir(ff,theme){const base=ff==='pouch'?'frames/pouch/':ff==='prism'?'frames/prismatic/':'frames/';return theme==='light'?base+'clean/':base;}
 function HFSET(){return HF[FF][document.body.classList.contains('sana')?'light':'dark'];}
 // crop of the closed-cell sprite inside its 16:9 source, per form factor
-function cellCrop(w,h){return FF==='pouch'?{sx:w*0.42,sw:w*0.36,sy:h*0.02,sh:h*0.93}:{sx:w*0.375,sw:w*0.25,sy:0,sh:h*0.97};}
-const HF_COUNTS={cyl:{dark:120,light:145},pouch:{dark:120,light:120}};
+function cellCrop(w,h){if(FF==='pouch')return{sx:w*0.42,sw:w*0.36,sy:h*0.02,sh:h*0.93};if(FF==='prism')return{sx:w*0.40,sw:w*0.40,sy:h*0.02,sh:h*0.94};return{sx:w*0.375,sw:w*0.25,sy:0,sh:h*0.97};}
+const HF_COUNTS={cyl:{dark:120,light:145},pouch:{dark:120,light:120},prism:{dark:120,light:120}};
 function loadHFFrames(ff,theme){const S=HF[ff][theme];if(S.frames.length)return;S.ready=false;let done=0;const dir=ffDir(ff,theme),N=HF_COUNTS[ff][theme];
   for(let i=1;i<=N;i++){const img=new Image();img.src=dir+'cell_'+String(i).padStart(4,'0')+'.webp';img.onload=()=>{if(++done===N){S.ready=true;drawBattery3(l3p);}else if(i===1)drawBattery3(l3p);};S.frames.push(img);}}
 function drawBattery3(p){
@@ -1064,14 +1067,14 @@ function drawBattery3(p){
     const n=SET.frames.length;
     // pouch: park the teardown on the exact frame the labeled still was made
     // from, so labels appear over an unchanging image (frame 110, 0-based 109)
-    const HOLD=FF==='pouch'?109:null;
+    const HOLD=FF==='pouch'?109:FF==='prism'?114:null;
     const fiMax=(HOLD!=null&&HOLD<n)?HOLD:n-1;
     const fi=pe*fiMax,ref=SET.frames[0];
     if(ref&&ref.width){
       // frame backgrounds are normalized to the exact page bg color offline,
       // so the canvas needs no fills — leftover area just shows the page bg
       const mobile=W<=760;
-      const cellCtr=FF==='pouch'?0.60:0.50; // where the cell sits inside the frame
+      const cellCtr=(FF==='pouch'||FF==='prism')?0.60:0.50; // where the cell sits inside the frame
       const rect=im=>{
         let s=Math.min(W/im.width,H/im.height);
         if(mobile)s=Math.min(W/im.width,H*0.52/im.height); // width-fit below the stacked text — edges never clip
@@ -1094,10 +1097,10 @@ function drawBattery3(p){
       // label window sits strictly inside the parked plateau (p 0.45–0.80)
       const labelA=Math.min(clampL(p,0.47,0.53),1-clampL(p,0.74,0.79));
       if(labelA>0){
-        if(FF==='pouch'){
-          // pouch: labels are drawn in code over the live frozen frame —
+        if(FF==='pouch'||FF==='prism'){
+          // labels are drawn in code over the live frozen frame —
           // AI-relabeled stills kept drifting from the footage geometry
-          drawPouchLabels(c,rect(ref),labelA,dark,W);
+          drawCellLabels(c,rect(ref),labelA,dark,W,FF==='prism'?PRISM_LBL:POUCH_LBL);
         }else if(SET.labeled&&SET.labeled.width){
           put(SET.labeled,labelA);
         }
@@ -1114,7 +1117,14 @@ const POUCH_LBL=[
  ['NMC CATHODE',0.665,0.755,0.675],
  ['ALUMINIUM',0.775,0.79,0.775],
 ];
-function drawPouchLabels(c,r,alpha,dark,W){
+const PRISM_LBL=[
+ ['TOP CAP',0.13,0.660,0.13],
+ ['AL FILM',0.23,0.660,0.23],
+ ['JELLY ROLL',0.35,0.670,0.36],
+ ['CU FILM',0.50,0.645,0.52],
+ ['AL CAN',0.68,0.655,0.70],
+];
+function drawCellLabels(c,r,alpha,dark,W,LBL){
   const fs=Math.max(11,r.dh*0.024);
   c.save();c.globalAlpha=alpha;
   c.font=`${fs}px 'IBM Plex Mono',monospace`;
@@ -1122,7 +1132,7 @@ function drawPouchLabels(c,r,alpha,dark,W){
   const col=dark?'rgba(160,171,187,0.92)':'rgba(71,80,105,0.92)';
   c.fillStyle=col;c.strokeStyle=dark?'rgba(160,171,187,0.55)':'rgba(71,80,105,0.5)';c.lineWidth=1;
   const pill=dark?'rgba(10,14,20,0.78)':'rgba(247,248,250,0.82)';
-  POUCH_LBL.forEach(L=>{
+  (LBL||POUCH_LBL).forEach(L=>{
     const textW=c.measureText(L[0]).width;
     // keep the whole label on screen, whatever the viewport
     const tx=Math.min(r.dx+r.dw*0.845,(W||r.dx+r.dw)-textW-10),ty=r.dy+r.dh*L[1];
@@ -1142,7 +1152,7 @@ function drawPouchLabels(c,r,alpha,dark,W){
 function updateL3(p){
   if(!landing3El)return;
   const eb=document.getElementById('l3eyebrow');
-  if(eb)eb.textContent=lang==='ko'?(FF==='pouch'?'파우치 셀 해체 → 모델 파라미터':'원통형 21700 해체 → 모델 파라미터'):(FF==='pouch'?'Pouch teardown → model parameters':'21700 teardown → model parameters');
+  if(eb)eb.textContent=lang==='ko'?(FF==='pouch'?'파우치 셀 해체 → 모델 파라미터':FF==='prism'?'각형 셀 해체 → 모델 파라미터':'원통형 21700 해체 → 모델 파라미터'):(FF==='pouch'?'Pouch teardown → model parameters':FF==='prism'?'Prismatic teardown → model parameters':'21700 teardown → model parameters');
   // title & subtitle persist through the whole sequence
   document.getElementById('l3content').style.opacity=1;
   document.getElementById('l3sub').style.opacity=1;
@@ -1191,9 +1201,11 @@ function l3Activate(){
       const probe=new Image();
       probe.onload=()=>loadHFFrames(ff,theme);
       probe.src=dir+'cell_0001.webp';
-      const im=new Image();
-      im.onload=()=>{HF[ff][theme].labeled=im;};
-      im.src=dir+'end_labeled.webp';
+      if(ff==='cyl'){ // only the cylinder uses a baked labeled still
+        const im=new Image();
+        im.onload=()=>{HF[ff][theme].labeled=im;};
+        im.src=dir+'end_labeled.webp';
+      }
     });
   }
   l3Resize();updateL3(0);drawBattery3(0);l3Intro(true);l3OnScroll();
@@ -1231,9 +1243,9 @@ function bridgeUpdate(){
   const s=Math.min(W/src.width,H/src.height),dw=src.width*s,dh=src.height*s;
   const left=(W-dw)/2,dy=(H-dh)/2;
   // from: hero battery position within the contain-fit frame · to: apps intro anchor
-  const ctrX=FF==='pouch'?0.60:0.50,ctrY=FF==='pouch'?0.50:0.465;
+  const ctrX=(FF==='pouch'||FF==='prism')?0.60:0.50,ctrY=FF==='cyl'?0.465:0.50;
   const mob=W<=760;
-  const hx=mob?W/2:left+ctrX*dw,hy=mob?H*0.68:dy+ctrY*dh,hh=FF==='pouch'?dh*0.88:dh*0.98;
+  const hx=mob?W/2:left+ctrX*dw,hy=mob?H*0.68:dy+ctrY*dh,hh=FF==='cyl'?dh*0.98:dh*0.88;
   const ax=W*0.52,ay=W<=760?H*0.64:H*0.46,ah=dh*0.80;
   const x=hx+(ax-hx)*q,yc=hy+(ay-hy)*q,hgt=hh+(ah-hh)*q;
   const draw=(im,alpha)=>{
@@ -1261,15 +1273,16 @@ const A3APPS=[
 function a3Load(){
   if(!apps3El)return; // apps chapter removed from the landing — skip image loads
   if(A3.tried)return;A3.tried=true;
-  A3.D={cyl:{},pouch:{}};A3.cut={cyl:{},pouch:{}};A3.line={cyl:{},pouch:{}};
+  A3.D={cyl:{},pouch:{},prism:{}};A3.cut={cyl:{},pouch:{},prism:{}};A3.line={cyl:{},pouch:{},prism:{}};
   ['dark','light'].forEach(theme=>{
     const dir=theme==='dark'?'frames/apps/':'frames/apps/clean/';
     A3[theme]=A3APPS.map(a=>{const im=new Image();im.onload=()=>a3Draw();im.src=dir+a.img+'.webp';return im;});
     // docked variants per form factor (cell baked in at true 3D position)
     A3.D.cyl[theme]=A3APPS.map(a=>{const im=new Image();im.onload=()=>a3Draw();im.src=dir+a.img+'_docked.webp';return im;});
     A3.D.pouch[theme]=A3APPS.map(a=>{const im=new Image();im.onload=()=>a3Draw();im.src=dir+a.img+'_docked_pouch.webp';return im;});
+    A3.D.prism[theme]=A3APPS.map(a=>{const im=new Image();im.onload=()=>a3Draw();im.src=dir+a.img+'_docked_prism.webp';return im;});
     // sprites per form factor
-    ['cyl','pouch'].forEach(ff=>{
+    ['cyl','pouch','prism'].forEach(ff=>{
       const sdir=ffDir(ff,theme);
       const cut=new Image();cut.onload=()=>a3Draw();cut.src=sdir+'cell_cut.png';A3.cut[ff][theme]=cut;
       const line=new Image();line.onload=()=>a3Draw();line.src=sdir+'cell_line.webp';A3.line[ff][theme]=line;
